@@ -8,13 +8,9 @@ import axios from 'axios'
 import 'flowbite'
 import $ from 'jquery'
 import select2 from 'select2'
-import Alpine from 'alpinejs'
 
 window.$ = $
 window.axios = axios
-window.Alpine = Alpine
-
-Alpine.start()
 select2()
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'

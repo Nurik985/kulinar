@@ -3,19 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreIngredientRequest;
-use App\Http\Requests\UpdateIngredientRequest;
-use App\Models\Ingredient;
-use Illuminate\View\View;
+use App\Http\Requests\StoreKitchenRequest;
+use App\Http\Requests\UpdateKitchenRequest;
+use App\Models\Kitchen;
 
-class IngredientController extends Controller
+class KitchenController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        return view('admin.spiski.ingredients.index');
+        return view('admin.spiski.kitchens.index');
     }
 
     /**
@@ -23,13 +22,13 @@ class IngredientController extends Controller
      */
     public function create()
     {
-        return view('admin.spiski.ingredients.create');
+        return view('admin.spiski.kitchens.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreIngredientRequest $request)
+    public function store(StoreKitchenRequest $request)
     {
         //
     }
@@ -37,7 +36,7 @@ class IngredientController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Ingredient $ing)
+    public function show(Kitchen $kitchen)
     {
         //
     }
@@ -45,15 +44,15 @@ class IngredientController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Ingredient $ing) : View
+    public function edit(Kitchen $kitchen)
     {
-        return view('admin.spiski.ingredients.edit', ['ing' => $ing]);
+        return view('admin.spiski.kitchens.edit', ['kitchen' => $kitchen]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateIngredientRequest $request, Ingredient $ing)
+    public function update(UpdateKitchenRequest $request, Kitchen $kitchen)
     {
         //
     }
@@ -61,7 +60,7 @@ class IngredientController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Ingredient $ing)
+    public function destroy(Kitchen $kitchen)
     {
         //
     }

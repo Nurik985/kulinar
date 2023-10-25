@@ -24,15 +24,15 @@
                     </div>
                     <div
                         class="flex w-full flex-shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0">
-                        <a href=""
-                            class="flex items-center justify-center rounded-[4px] bg-green-500 px-4 py-2 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-                            <svg class="mr-2 h-3.5 w-3.5" fill="currentColor" viewbox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                <path clip-rule="evenodd" fill-rule="evenodd"
-                                    d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
-                            </svg>
-                            Добавить раздел
-                        </a>
+                            <a href="{{ route('spisok.ings.create') }}"
+                               class="flex items-center justify-center text-white bg-green-500 hover:bg-green-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+                                <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20"
+                                     xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                    <path clip-rule="evenodd" fill-rule="evenodd"
+                                          d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
+                                </svg>
+                                Добавить ингредиент
+                            </a>
                         <div class="flex w-full items-center space-x-3 md:w-auto">
                             <select wire:model.live="perPage"
                                 class="flex w-full items-center justify-center rounded-[4px] border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:w-auto">
@@ -49,10 +49,10 @@
                     <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
                         <thead class="bg-gray-200 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
-                                <th scope="col" class="px-4 py-3">
+                                <th scope="col" class="px-4 py-3 border border-gray-400 border-l-0">
                                     <div class="flex items-center">
-                                        Загаловок
-                                        <a wire:click="setSortBy('h1')" class="cursor-pointer">
+                                        Название
+                                        <a wire:click="setSortBy('name')" class="cursor-pointer">
                                             <svg class="ml-1.5 h-3 w-3" aria-hidden="true"
                                                 xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                                 viewBox="0 0 24 24">
@@ -62,17 +62,78 @@
                                         </a>
                                     </div>
                                 </th>
-                                <th scope="col" class="px-4 py-3">ЧПУ</th>
-                                <th scope="col" class="px-4 py-3">Создан</th>
-                                <th scope="col" class="px-4 py-3">
+                                <th scope="col" class="px-4 py-3 text-xs border border-gray-400">Ккал</th>
+                                <th scope="col" class="px-4 py-3 text-xs border border-gray-400">Белки</th>
+                                <th scope="col" class="px-4 py-3 text-xs border border-gray-400">Жиры</th>
+                                <th scope="col" class="px-4 py-3 text-xs border border-gray-400">Углеводы</th>
+                                <th scope="col" class="px-4 py-3 text-xs border border-gray-400">Пищевые волокна</th>
+                                <th scope="col" class="px-4 py-3 text-xs border border-gray-400">Вода</th>
+                                <th scope="col" class="px-4 py-3 text-xs border border-gray-400">Рецептов</th>
+                                <th scope="col" class="px-4 py-3 border border-gray-400 border-r-0">
                                     <span class="sr-only"></span>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-
+                        @if(count($ingredients) > 0)
+                            @foreach ($ingredients as $k => $ingredient)
+                                <tr wire:key="{{ $ingredient->id }}"
+                                    class="border-b dark:border-gray-700 text-gray-900 font-medium">
+                                    <td class="px-4 py-3 w-full">{{ $ingredient->name }}</td>
+                                    <td class="px-4 py-3 w-fit border text-gray-500 text-center">{{ $ingredient->kkal ?? 0  }}</td>
+                                    <td class="px-4 py-3 w-fit border text-gray-500 text-center">{{ $ingredient->protein ?? 0  }}</td>
+                                    <td class="px-4 py-3 w-fit border text-gray-500 text-center">{{ $ingredient->fat ?? 0  }}</td>
+                                    <td class="px-4 py-3 w-fit border text-gray-500 text-center">{{ $ingredient->carbohydrates ?? 0  }}</td>
+                                    <td class="px-4 py-3 w-fit border text-gray-500 text-center">{{ $ingredient->fiber ?? 0  }}</td>
+                                    <td class="px-4 py-3 w-fit border text-gray-500 text-center">{{ $ingredient->water ?? 0  }}</td>
+                                    <td class="px-4 py-3 w-fit border text-gray-500 text-center">0</td>
+                                    <td class="px-4 py-3 flex items-center justify-end w-fit">
+                                        <a href="{{ route('spisok.ings.edit', $ingredient->id) }}" class=" www btn btn-sm btn-icon item-edit mr-2"><i
+                                                class="text-green-500 ti ti-pencil"></i></a>
+                                        <a href="#" class="btn btn-sm btn-icon item-edit mr-2"><i
+                                                class="text-purple-500 ti ti-eye"></i></a>
+                                        <span wire:click="openDelModal({{$ingredient->id }}, '{{$ingredient->name}}')"
+                                              class="btn btn-sm btn-icon item-edit cursor-pointer"><i
+                                                class="text-red-800 ti ti-trash"></i></span>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="9" class="p-5 text-center text-sm text-red-400">Поиск не дал никаких
+                                    результатов</td>
+                            </tr>
+                        @endif
                         </tbody>
                     </table>
+                </div>
+                {{ $ingredients->links() }}
+            </div>
+        </div>
+
+        <div wire:ignore.self id="delMod" tabindex="-1" aria-hidden="true"
+             class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
+            <div class="relative p-4 w-full max-w-md h-full md:h-auto">
+                <div class="relative p-4 text-center bg-white rounded-lg shadow dark:bg-gray-800 sm:p-5">
+                    <svg class="text-red-600 dark:text-gray-500 w-11 h-11 mb-3.5 mx-auto" aria-hidden="true"
+                         fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd"
+                              d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                              clip-rule="evenodd"></path>
+                    </svg>
+                    <p class="mb-4 text-gray-500  dark:text-gray-300">Вы точно хотите удалить ингредиент <br>
+                        <span wire:model="modText" class="text-lg font-medium">{{ $modText }}</span>?
+                    </p>
+                    <div class="flex justify-center items-center space-x-4">
+                        <button wire:click="closeDelModal" type="button"
+                                class="w-20 py-2 px-3 text-sm font-medium text-white bg-gray-500 rounded-lg border border-gray-200 hover:bg-gray-400 focus:ring-4 focus:outline-none focus:ring-primary-300 hover:text-white focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+                            Нет
+                        </button>
+                        <button wire:click="destroy()" wire:loading.attr="disabled" type="button"
+                                class="w-20 py-2 px-3 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
+                            Да
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

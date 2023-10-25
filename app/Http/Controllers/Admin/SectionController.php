@@ -32,18 +32,7 @@ class SectionController extends Controller
      */
     public function store(StoreSectionRequest $request): RedirectResponse
     {
-        $inputs = $request->all();
-
-        if ($request->fade_home == 'on') {
-            $inputs['fade_home'] = 'on';
-        } else {
-            $inputs['fade_home'] = 'off';
-        }
-
-        Section::create($inputs);
-
-        return redirect()->route('razdel.index')
-            ->withSuccess('Новый раздел успешно добавлен');
+        //
     }
 
     /**
@@ -57,9 +46,9 @@ class SectionController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Section $section)
+    public function edit(Section $razdel): View
     {
-        //
+        return view('admin.sections.edit', ['razdel' => $razdel]);
     }
 
     /**

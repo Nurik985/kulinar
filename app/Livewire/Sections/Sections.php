@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Livewire\Spiski\Ingredients;
+namespace App\Livewire\Sections;
 
-use App\Models\Ingredient;
+use App\Models\Section;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class Ingredients extends Component
+class Sections extends Component
 {
     use WithPagination;
 
@@ -68,15 +68,16 @@ class Ingredients extends Component
 
     public function destroy()
     {
-        Ingredient::destroy($this->selectedItem);
+        Section::destroy($this->selectedItem);
         $this->dispatch('closeDelModal');
     }
 
+
     public function render()
     {
-        return view('livewire.spiski.ingredients.ingredients',
+        return view('livewire.sections.sections',
             [
-                'ingredients' => Ingredient::search($this->search)
+                'sections' => Section::search($this->search)
                     ->orderBy($this->sortBy, $this->sortDir)
                     ->paginate($this->perPage)
             ]

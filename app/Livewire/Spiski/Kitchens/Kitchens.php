@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Spiski\Kitchens;
 
-use App\Models\Section;
-use Livewire\Attributes\Url;
+use App\Models\Kitchen;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-
-class SectionsTable extends Component
+class Kitchens extends Component
 {
     use WithPagination;
 
@@ -25,24 +23,19 @@ class SectionsTable extends Component
     public $perPage = 10;
 
     public $selectedItem = 0;
+    public $modText;
 
     public function paginationView()
     {
         return 'vendor.pagination.tailwind';
     }
 
-    public function openDelModal($sectionId, $title)
-    {
-        $this->selectedItem = $sectionId;
-        $this->dispatch('openDelModal', title: $title);
-    }
-
-    public function closeDelModal()
-    {
-        $this->dispatch('closeDelModal');
-    }
-
     public function updatedSearch()
+    {
+        $this->resetPage();
+    }
+
+    public function updatedPerPage()
     {
         $this->resetPage();
     }
@@ -59,18 +52,30 @@ class SectionsTable extends Component
         $this->sortDir = 'DESC';
     }
 
+    public function openDelModal($sectionId, $text)
+    {
+        $this->selectedItem = $sectionId;
+        $this->modText = $text;
+
+        $this->dispatch('openDelModal');
+    }
+
+    public function closeDelModal()
+    {
+        $this->dispatch('closeDelModal');
+    }
+
     public function destroy()
     {
-        Section::destroy($this->selectedItem);
+        Kitchen::destroy($this->selectedItem);
         $this->dispatch('closeDelModal');
     }
 
     public function render()
     {
-        return view(
-            'livewire.sections-table',
+        return view('livewire.spiski.kitchens.kitchens',
             [
-                'sections' => Section::search($this->search)
+                'kitchens' => Kitchen::search($this->search)
                     ->orderBy($this->sortBy, $this->sortDir)
                     ->paginate($this->perPage)
             ]

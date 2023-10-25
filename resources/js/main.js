@@ -14,7 +14,6 @@ window.onload = function () {
 
 window.addEventListener('openDelModal', function (e) {
     modal.toggle()
-    document.getElementById('mTitle').innerHTML = e.detail.title
 })
 
 window.addEventListener('closeDelModal', function (e) {

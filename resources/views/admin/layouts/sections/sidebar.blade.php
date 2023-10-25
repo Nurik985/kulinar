@@ -82,7 +82,7 @@
                                 @endphp
                                 <li ss {{ $sActive }} {{ $activeClass }}>
                                     <a href="{{ isset($submenu->url) ? url($submenu->url) : 'javascript:void(0)' }}"
-                                        class="{{ $activeClass == 'active' ? 'bg-gray-100 dark:bg-gray-700' : 'hover:bg-gray-100 dark:hover:bg-gray-700 ' }} group flex w-full items-center rounded-lg pb-1 pl-7 pt-1 text-sm text-gray-500 transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                                        class="{{ $activeClass == 'active' ? 'bg-gray-100 dark:bg-gray-700 text-black' : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500' }} group flex w-full items-center rounded-lg pb-1 pl-7 pt-1 text-sm  transition duration-75 hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
                                         @if (isset($submenu->icon))
                                             <i class="{{ $submenu->icon }} mr-3"></i>
                                         @endif
@@ -94,7 +94,7 @@
                     </li>
                 @else
                     <li> <a href="{{ isset($menu->url) ? url($menu->url) : 'javascript:void(0);' }}"
-                            class="{{ $activeClass == 'active' ? 'bg-gray-100 dark:bg-gray-700' : 'hover:bg-gray-100 dark:hover:bg-gray-700 ' }} group flex items-center rounded-lg p-2 text-gray-900 dark:text-white">
+                            class="{{ $activeClass == 'active' ? 'bg-gray-100 dark:bg-gray-700 text-black' : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-900 ' }} group flex items-center rounded-lg p-2  dark:text-white">
                             @isset($menu->icon)
                                 <i class="{{ $menu->icon }}"></i>
                             @endisset

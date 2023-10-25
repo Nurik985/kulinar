@@ -1,10 +1,10 @@
 @php
-    $data = [['name' => 'Домой', 'link' => route('admin')], ['name' => 'Списки'], ['name' => 'Ингредиенты']];
+    $data = [['name' => 'Домой', 'link' => route('admin')], ['name' => 'Списки'], ['name' => 'Кухни']];
 @endphp
 
 @extends('admin/layouts/authLayout')
 
-@section('title', 'Ингредиенты')
+@section('title', 'Кухни')
 
 @section('page-style')
     @livewireStyles
@@ -14,7 +14,7 @@
     <div class="min-h-screen p-4 lg:ml-64">
         @include('admin.layouts.sections.breadcrumb', $data)
         @include('admin.layouts.sections.successAlert')
-        <livewire:spiski.ingredients.ingredients />
+        <livewire:spiski.kitchens.kitchens />
     </div>
 @endsection
 @section('page-script')
