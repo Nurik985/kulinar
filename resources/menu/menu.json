@@ -1,0 +1,119 @@
+{
+    "menu": [
+        {
+            "url": "/admin",
+            "name": "Главная",
+            "icon": "menu-icon tf-icons ti ti-smart-home",
+            "slug": "admin"
+        },
+        {
+            "url": "admin/razdel",
+            "name": "Разделы",
+            "icon": "menu-icon tf-icons ti ti-notes",
+            "slug": "razdel.index"
+        },
+        {
+            "url": "admin/rubrica",
+            "name": "Рубрики",
+            "icon": "menu-icon tf-icons ti ti-files",
+            "slug": "rubrica"
+        },
+        {
+            "url": "admin/recipe",
+            "name": "Рецепты",
+            "icon": "menu-icon tf-icons ti ti-color-swatch",
+            "slug": "recipe"
+        },
+        {
+            "url": "admin/coment",
+            "name": "Комментарии",
+            "icon": "menu-icon tf-icons ti ti-messages",
+            "slug": "coment"
+        },
+        {
+            "url": "admin/message",
+            "name": "Сообщения",
+            "icon": "menu-icon ti ti-message-2-code",
+            "slug": "message"
+        },
+        {
+            "name": "Списки",
+            "icon": "menu-icon tf-icons ti ti-smart-home",
+            "slug": "spisok",
+            "submenu": [
+                {
+                    "url": "admin/spisok/ings",
+                    "icon": "ti ti-minus",
+                    "name": "Ингредиенты",
+                    "slug": "spisok-ings"
+                },
+                {
+                    "url": "admin/spisok/kitchen",
+                    "icon": "ti ti-minus",
+                    "name": "Кухни",
+                    "slug": "spisok-kitchen"
+                },
+                {
+                    "url": "admin/spisok/method",
+                    "icon": "ti ti-minus",
+                    "name": "Способ приготов-я",
+                    "slug": "spisok-method"
+                },
+                {
+                    "url": "admin/spisok/w_cook",
+                    "icon": "ti ti-minus",
+                    "name": "Что готовим",
+                    "slug": "spisok-w_cook"
+                },
+                {
+                    "url": "admin/spisok/units",
+                    "icon": "ti ti-minus",
+                    "name": "Единицы измерения",
+                    "slug": "spisok-units"
+                },
+                {
+                    "url": "admin/spisok/portions",
+                    "icon": "ti ti-minus",
+                    "name": "Порции",
+                    "slug": "spisok-portions"
+                },
+                {
+                    "url": "admin/spisok/calc",
+                    "icon": "ti ti-minus",
+                    "name": "Калькулятор",
+                    "slug": "spisok-calc"
+                },
+                {
+                    "url": "admin/spisok/minerals",
+                    "icon": "ti ti-minus",
+                    "name": "Минералы/Витамины",
+                    "slug": "spisok-minerals"
+                },
+                {
+                    "url": "admin/spisok/day_norm",
+                    "icon": "ti ti-minus",
+                    "name": "Дневная норма",
+                    "slug": "spisok-day_norm"
+                }
+            ]
+        },
+        {
+            "url": "admin/reklama",
+            "name": "Реклама",
+            "icon": "menu-icon ti ti-clipboard-text",
+            "slug": "reklama"
+        },
+        {
+            "url": "admin/rubricator",
+            "name": "Рубрикатор",
+            "icon": "menu-icon ti ti-news",
+            "slug": "rubricator"
+        },
+        {
+            "url": "admin/redirects",
+            "name": "Редиректы",
+            "icon": "menu-icon ti ti-arrows-left-right",
+            "slug": "redirects"
+        }
+    ]
+}

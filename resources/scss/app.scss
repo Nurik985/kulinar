@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "tabler/tabler-icons";
+
+
+.ck-editor__editable_inline {
+    min-height: 200px;
+}
