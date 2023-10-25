@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\SectionController;
 use App\Http\Controllers\Admin\HeadingController;
+use App\Http\Controllers\Admin\IngredientController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -14,6 +15,8 @@ Route::group(['prefix' => 'admin', 'name' => 'admin.', 'middleware' => ['auth', 
   Route::view('/', 'admin.index')->name('admin');
 
   Route::resource('razdel', SectionController::class);
+
+  Route::resource('spisok/ings', IngredientController::class, ['as' => 'spisok']);
 
   Route::get('rubrica', [HeadingController::class, 'index'])->name('rubrica.index');
   Route::post('rubrica', [HeadingController::class, 'store'])->name('rubrica.store');
