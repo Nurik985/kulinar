@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(IngredientSeeder::class);
         $this->call(KitchenSeeder::class);
         $this->call(MethodSeeder::class);
+        $this->call(CookSeeder::class);
         User::factory()->create([
             'name' => 'nurik',
             'email' => 'nurik@mail.ru',

@@ -60,10 +60,10 @@
                     "slug": "spisok-method"
                 },
                 {
-                    "url": "admin/spisok/w_cook",
+                    "url": "admin/spisok/cook",
                     "icon": "ti ti-minus",
                     "name": "Что готовим",
-                    "slug": "spisok-w_cook"
+                    "slug": "spisok-cook"
                 },
                 {
                     "url": "admin/spisok/units",

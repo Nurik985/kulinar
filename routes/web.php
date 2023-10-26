@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\MethodController;
 use App\Http\Controllers\Admin\SectionController;
 use App\Http\Controllers\Admin\HeadingController;
 use App\Http\Controllers\Admin\IngredientController;
+use App\Http\Controllers\Admin\CookController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,7 @@ Route::group(['prefix' => 'admin', 'name' => 'admin.', 'middleware' => ['auth', 
   Route::resource('spisok/ings', IngredientController::class, ['as' => 'spisok']);
   Route::resource('spisok/kitchen', KitchenController::class, ['as' => 'spisok']);
   Route::resource('spisok/method', MethodController::class, ['as' => 'spisok']);
+  Route::resource('spisok/cook', CookController::class, ['as' => 'spisok']);
 
   Route::get('rubrica', [HeadingController::class, 'index'])->name('rubrica.index');
   Route::post('rubrica', [HeadingController::class, 'store'])->name('rubrica.store');
