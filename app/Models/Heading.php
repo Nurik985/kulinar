@@ -11,6 +11,13 @@ class Heading extends Model
 
     protected $guarded = [];
 
+
+
+    public function sections(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Section::class);
+    }
+
     public function scopeSearch($query, $value)
     {
         $query->where('name', 'like', "%{$value}%");

@@ -18,7 +18,13 @@ class Section extends Model
         'fade_home',
     ];
 
-    public function scopeSearch($query, $value){
+    public function headings(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    {
+        return $this->belongsToMany(Heading::class);
+    }
+
+    public function scopeSearch($query, $value): void
+    {
         $query->where('h1','like',"%{$value}%")->orWhere('url','like',"%{$value}%");
     }
 }

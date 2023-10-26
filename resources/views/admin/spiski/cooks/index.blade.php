@@ -14,6 +14,7 @@
     <div class="min-h-screen p-4 lg:ml-64">
         @include('admin.layouts.sections.breadcrumb', $data)
         @include('admin.layouts.sections.successAlert')
+        <livewire:spiski.cooks.cooks />
     </div>
 @endsection
 @section('page-script')

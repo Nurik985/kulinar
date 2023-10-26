@@ -66,7 +66,11 @@
 @push('scripts')
     <script>
         ClassicEditor
-            .create( document.querySelector( '#editor' ) )
+            .create( document.querySelector( '#editor' ), {
+                language: 'ru',
+                toolbar: ['heading', '|', 'bold', 'italic', '|', 'link', 'bulletedList', 'numberedList']
+                }
+            )
             .then( editor => {
                 editor.model.document.on('change:data', () => {
                     @this.set('text', editor.getData());

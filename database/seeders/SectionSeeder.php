@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Heading;
 use App\Models\Section;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;

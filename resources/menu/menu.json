@@ -90,10 +90,10 @@
                     "slug": "spisok-minerals"
                 },
                 {
-                    "url": "admin/spisok/day_norm",
+                    "url": "admin/spisok/norms",
                     "icon": "ti ti-minus",
                     "name": "Дневная норма",
-                    "slug": "spisok-day_norm"
+                    "slug": "spisok-norms"
                 }
             ]
         },

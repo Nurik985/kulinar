@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\Headings;
 
 use App\Models\Heading;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class HeadingsTable extends Component
+class Headings extends Component
 {
     use WithPagination;
 
@@ -31,7 +31,7 @@ class HeadingsTable extends Component
     public function render()
     {
         return view(
-            'livewire.headings-table',
+            'livewire.headings.headings',
             [
                 'headings' => Heading::search($this->search)
                     ->orderBy($this->sortBy, $this->sortDir)
