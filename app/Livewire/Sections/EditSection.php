@@ -17,18 +17,19 @@ class EditSection extends Component
     public $h1;
     public $description;
     public $text;
-    public $fade_home = 'off';
+    public $fade_home;
 
     protected function rules()
     {
         return [
-            'url' => 'required|min:3|regex:/^[a-zA-Z-]+$/u|unique:'.Section::class.',url,' . $this->id,
+            'url' => 'required|min:3|regex:/^[a-zA-Z-]+$/u|unique:' . Section::class . ',url,' . $this->id,
             'title' => 'required',
             'h1' => 'required',
         ];
     }
 
-    public function generateSlug(){
+    public function generateSlug()
+    {
         $this->url = Str::slug($this->h1);
     }
 
@@ -43,7 +44,8 @@ class EditSection extends Component
         ];
     }
 
-    public function mount($secId){
+    public function mount($secId)
+    {
         $this->id = $secId;
         $sec = Section::findOrFail($secId);
         $this->url = $sec->url;
@@ -54,14 +56,15 @@ class EditSection extends Component
         $this->fade_home = $sec->fade_home;
     }
 
-    public function updateIngredient(){
+    public function updateIngredient()
+    {
 
         $this->validate();
 
-        if($this->fade_home == null){
-            $this->fade_home = 'off';
+        if ($this->fade_home == null) {
+            $this->fade_home = 'false';
         } else {
-            $this->fade_home = 'on';
+            $this->fade_home = 'true';
         }
 
         $ing = Section::find($this->id);

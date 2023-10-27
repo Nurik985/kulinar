@@ -29,10 +29,11 @@ Route::get('/clear', function () {
   return "Кэш очищен.";
 });
 
-Route::get('test', function(){
-   $heading = Heading::find(1)->Sections;
-   $section = Section::find(3)->Headings;
-   dd($section);
+Route::get('stest', function () {
+  $heading = Heading::find(4658);;
+  //$heading = Heading::find(4658)->Sections;
+  //$section = Section::find(3)->Headings;
+  dd($heading->Sections);
 });
 
 Route::group(['prefix' => 'admin', 'name' => 'admin.', 'middleware' => ['auth', 'auth.session']], function () {

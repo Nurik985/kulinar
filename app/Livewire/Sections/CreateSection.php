@@ -16,7 +16,7 @@ class CreateSection extends Component
     #[Rule('required', message: 'Пожалуйста заполните обязательное поле')]
     #[Rule('min:3', message: 'Поле должен содержать мин 3 символа')]
     #[Rule('regex:/^[a-zA-Z-]+$/u', message: 'ЧПУ должен содержать только латиницу')]
-    #[Rule('unique:'.Section::class.',url', message: 'Такой URL уже существует. Измените его')]
+    #[Rule('unique:' . Section::class . ',url', message: 'Такой URL уже существует. Измените его')]
     public $url;
 
     #[Rule('required', message: 'Пожалуйста заполните обязательное поле')]
@@ -26,18 +26,20 @@ class CreateSection extends Component
     public $text;
     public $fade_home;
 
-    public function generateSlug(){
+    public function generateSlug()
+    {
         $this->url = Str::slug($this->h1);
     }
 
-    public function saveSection(){
+    public function saveSection()
+    {
 
         $this->validate();
 
-        if($this->fade_home == null){
-            $this->fade_home = 'off';
+        if ($this->fade_home == null) {
+            $this->fade_home = 'false';
         } else {
-            $this->fade_home = 'on';
+            $this->fade_home = 'true';
         }
 
         Section::create([
