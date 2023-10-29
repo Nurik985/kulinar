@@ -19,3 +19,5 @@ window.addEventListener('openDelModal', function (e) {
 window.addEventListener('closeDelModal', function (e) {
     modal.toggle()
 })
+
+window.csrf = document.querySelector('meta[name="csrf-token"]').content;

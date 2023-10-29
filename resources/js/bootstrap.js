@@ -6,10 +6,11 @@
 
 import axios from 'axios'
 import 'flowbite'
-import $ from 'jquery'
+import jQuery from 'jquery';
 import select2 from 'select2'
 
-window.$ = $
+window.$ = jQuery;
+window.jQuery = jQuery;
 window.axios = axios
 select2()
 

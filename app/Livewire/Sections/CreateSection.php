@@ -29,6 +29,8 @@ class CreateSection extends Component
     public function generateSlug()
     {
         $this->url = Str::slug($this->h1);
+
+        $this->validate();
     }
 
     public function saveSection()

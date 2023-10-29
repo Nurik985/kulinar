@@ -94,6 +94,12 @@
                     "icon": "ti ti-minus",
                     "name": "Дневная норма",
                     "slug": "spisok-norms"
+                },
+                {
+                    "url": "admin/spisok/authors",
+                    "icon": "ti ti-minus",
+                    "name": "Авторы",
+                    "slug": "spisok-authors"
                 }
             ]
         },

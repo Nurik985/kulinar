@@ -23,6 +23,8 @@ class DatabaseSeeder extends Seeder
         $this->call(PortionSeeder::class);
         $this->call(NormSeeder::class);
         $this->call(RedirectSeeder::class);
+        $this->call(AuthorSeeder::class);
+        $this->call(RecipeSeeder::class);
         User::factory()->create([
             'name' => 'nurik',
             'email' => 'nurik@mail.ru',

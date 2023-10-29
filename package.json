@@ -10,6 +10,7 @@
         "alpinejs-slug": "^1.1.2",
         "autoprefixer": "^10.4.16",
         "axios": "^1.1.2",
+        "daisyui": "^3.9.4",
         "flowbite": "^1.8.1",
         "jquery": "^3.7.1",
         "laravel-vite-plugin": "^0.8.0",

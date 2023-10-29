@@ -21,7 +21,7 @@ $isFront = ($isFront ?? '') == true ? 'Front' : '';
     @include('admin/layouts/sections/scriptsIncludes' . $isFront)
 </head>
 
-<body class="bg-gray-500">
+<body class="bg-white">
     <?php if(!$isFront): ?>
     <div id="preloader" class="fixed w-screen h-screen bg-white z-50 overflow-hidden">
         <div class="flex  w-screen h-screen items-center justify-center">

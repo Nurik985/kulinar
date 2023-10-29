@@ -69,19 +69,20 @@ use App\Models\Section;
                                     <tr wire:key="{{ $heading->id }}"
                                         class="border-b font-medium text-gray-900 dark:border-gray-700">
                                         <td class="w-1/2 px-4 py-3">{{ $heading->name }}</td>
-                                        <td class="w-1/5 border px-4 py-3 text-center">
+                                        <td class="w-1/5 border px-4 py-3 text-left">
                                             @php
-                                                foreach ($heading->sections as $key => $value) {
-                                                    echo $value->pivot->created_at;
-                                                }
-                                                /*$sections = json_decode($heading->parent_sect);
 
-                                                if ($sections) {
-                                                    foreach ($sections as $key => $value) {
-                                                        $section = Section::find($value);
-                                                        echo '<p class="text-[12px]">' . $section->h1 . '</p>';
-                                                    }
-                                                }*/
+                                                foreach ($heading->sections as $key => $value) {
+                                                    echo $value->h1.'<br>';
+                                                }
+//                                                $sections = json_decode($heading->parent_sect);
+//
+//                                                if ($sections) {
+//                                                    foreach ($sections as $key => $value) {
+//                                                        $section = Section::find($value);
+//                                                        echo '<p class="text-[12px]">' . $section->h1 . '</p>';
+//                                                    }
+//                                                }
                                             @endphp
                                         </td>
                                         <td class="border px-4 py-3 text-center">{{ $heading->col_recipe }}</td>
