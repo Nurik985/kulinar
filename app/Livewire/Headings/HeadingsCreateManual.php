@@ -36,6 +36,7 @@ class HeadingsCreateManual extends Component
     public $excIngr  = [];
     public $method = [];
     public $fadeMenu;
+    public $recieps = [];
     public $storedImage;
 
     public $rubImg;
@@ -190,7 +191,7 @@ class HeadingsCreateManual extends Component
     {
         if($this->recipSearchText != ''){
             $results = '';
-            $res = DB::table('recipe')->select("id","name")->whereNotIn('id', $this->recipSearchRemoveIds)->where('name','LIKE',"%$this->recipSearchText%")->orderBy('name', 'ASC')->limit(50)->get();
+            $res = DB::table('recipes')->select("id","name")->whereNotIn('id', $this->recipSearchRemoveIds)->where('name','LIKE',"%$this->recipSearchText%")->orderBy('name', 'ASC')->limit(50)->get();
             if($res){
                 foreach ($res as $r) {
                     $results .= '<li wire:click="recipLiClick('.$r->id.', \''.$r->name.'\')" class="py-1 px-2" id="' . $r->id . '">' . $r->name . '</li>';
@@ -207,7 +208,7 @@ class HeadingsCreateManual extends Component
             $this->recipSearchRemoveIds[$id] = $id;
             $this->recipSearchResults = '';
             $this->recipSearchText = '';
-            $this->parentBread[$id] = $id;
+            $this->recieps[$id] = $id;
         }
     }
 
@@ -217,7 +218,7 @@ class HeadingsCreateManual extends Component
             $this->recipSearchResults = '';
             unset($this->recipSelecteds[$id]);
             unset($this->recipSearchRemoveIds[$id]);
-            unset($this->parentBread[$id]);
+            unset($this->recieps[$id]);
         }
     }
 
@@ -291,6 +292,13 @@ class HeadingsCreateManual extends Component
             }
         }
 
+        $recieps = [];
+        if($this->recieps){
+            foreach ($this->recieps as $p){
+                $recieps[] = $p;
+            }
+        }
+
         Heading::create([
             'name' => $this->name,
             'url' => $this->url,
@@ -304,7 +312,7 @@ class HeadingsCreateManual extends Component
             'fade' => $this->fadeMenu,
             'link_razdel' => 'false',
             'parent' => json_encode($parentRub),
-            'recept' => null,
+            'recept' => json_encode($recieps),
             'col_recipe' => null,
             'parent_sect' => json_encode($parentSec),
             'col_public_recipe' => 77,

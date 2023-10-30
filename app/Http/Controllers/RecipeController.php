@@ -13,7 +13,7 @@ class RecipeController extends Controller
      */
     public function index()
     {
-        return view('admin.recipes.indiex');
+        return view('admin.recipes.index');
     }
 
     /**
