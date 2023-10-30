@@ -113,7 +113,7 @@
                     </p>
                     <div class="flex items-center justify-center space-x-4">
                         <button wire:click="closeDelModal" type="button"
-                                class="w-20 rounded-lg border border-gray-200 bg-gray-500 px-3 py-2 text-sm font-medium text-white hover:bg-gray-400 hover:text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-600">
+                                class="w-20 rounded-lg border border-gray-200 bg-gray-700 px-3 py-2 text-sm font-medium text-white hover:bg-gray-500 hover:text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-600">
                             Нет
                         </button>
                         <button wire:click="destroy()" wire:loading.attr="disabled" type="button"

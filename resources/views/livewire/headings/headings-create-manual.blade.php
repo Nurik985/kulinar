@@ -112,12 +112,12 @@
                         </div>
 
                         <div wire:ignore class="sm:col-span-2">
-                            <label wire:model="firstText" for="editorFirst" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Текст в начале рубрики</label>
-                            <textarea id="editorFirst" name="editorFirst" rows="8" name="text" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-[4px] border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="">{{ old('text', '') }}</textarea>
+                            <label for="editorFirst" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Текст в начале рубрики</label>
+                            <textarea wire:model="firstText" id="editorFirst" name="editorFirst" rows="8" name="text" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-[4px] border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder=""></textarea>
                         </div>
                         <div wire:ignore class="sm:col-span-2">
-                            <label wire:model="lastText" for="editorLast" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Текст в конце рубрики</label>
-                            <textarea id="editorLast" name="editorLast" rows="8" name="text" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-[4px] border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="">{{ old('text', '') }}</textarea>
+                            <label for="editorLast" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Текст в конце рубрики</label>
+                            <textarea wire:model="lastText" id="editorLast" name="editorLast" rows="8" name="text" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-[4px] border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="">{{ old('text', '') }}</textarea>
                         </div>
                         <div class="sm:col-span-2">
                             <div class="mb-2 block text-sm font-medium">Изображение записи @if ($rubImg) <sdpan wire:click="delRubImg" class="text-red-500 cursor-pointer ">удалить?</sdpan>@endif</div>
@@ -188,6 +188,9 @@
         ClassicEditor
             .create( document.querySelector( '#editorFirst' ) )
             .then( editor => {
+                editor.model.document.on('change:data', () => {
+                    @this.set('firstText', editor.getData());
+                })
             } )
             .catch( error => {
             } );
@@ -195,6 +198,9 @@
         ClassicEditor
             .create( document.querySelector( '#editorLast' ) )
             .then( editor => {
+                editor.model.document.on('change:data', () => {
+                    @this.set('lastText', editor.getData());
+                })
             } )
             .catch( error => {
             } );

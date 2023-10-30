@@ -2,7 +2,7 @@
     <div class="flex  w-full justify-center">
         <div class="w-full rounded-[4px] border bg-white dark:bg-gray-700">
             <div class="px-6 py-6 lg:px-8">
-                <form wire:submit="saveHeading" class="space-y-6">
+                <form wire:submit="saveHeading" class="space-y-6" onkeydown="return event.key != 'Enter';">
                     <div class="grid gap-2 sm:grid-cols-2 sm:gap-4">
                         <div class="sm:col-span-2">
                             <label for="name"
@@ -112,12 +112,12 @@
                         </div>
 
                         <div wire:ignore class="sm:col-span-2">
-                            <label wire:model="firstText" for="editorFirst" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Текст в начале рубрики</label>
-                            <textarea id="editorFirst" name="editorFirst" rows="8" name="text" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-[4px] border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="">{{ old('text', '') }}</textarea>
+                            <label  for="editorFirst" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Текст в начале рубрики</label>
+                            <textarea wire:model="firstText" id="editorFirst" name="editorFirst" rows="8" name="text" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-[4px] border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="">{{ old('text', '') }}</textarea>
                         </div>
                         <div wire:ignore class="sm:col-span-2">
-                            <label wire:model="lastText" for="editorLast" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Текст в конце рубрики</label>
-                            <textarea id="editorLast" name="editorLast" rows="8" name="text" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-[4px] border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="">{{ old('text', '') }}</textarea>
+                            <label  for="editorLast" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Текст в конце рубрики</label>
+                            <textarea wire:model="lastText" id="editorLast" name="editorLast" rows="8" name="text" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-[4px] border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="">{{ old('text', '') }}</textarea>
                         </div>
                         <div class="sm:col-span-2">
                             <div class="mb-2 block text-sm font-medium">Изображение записи @if ($rubImg) <sdpan wire:click="delRubImg" class="text-red-500 cursor-pointer ">удалить?</sdpan>@endif</div>
@@ -141,14 +141,14 @@
                                             @endforeach
                                         @endif
                                     </div>
-                                    <input wire:click="cookShowCheck" wire:keyup="cookSearchFunc" wire:model="cookSearchText"  type="text" name="url" class="findRub inpt_text block w-full rounded-[4px] border-[#ccc] m-0 h-10 border-1 p-2 mt-2  text-sm text-gray-900">
+                                    <input wire:keydown.enter="cookAdd" wire:click="cookShowCheck" wire:keyup="cookSearchFunc" wire:model="cookSearchText"  type="text" name="url" class="findRub inpt_text block w-full rounded-[4px] border-[#ccc] m-0 h-10 border-1 p-2 mt-2  text-sm text-gray-900">
                                 </div>
                                 <div class="relative">
                                     <div class="abs-items absolute search z-10 bg-[lightgray] rounded-[4px] top-1 shadow w-full dark:bg-gray-700">
                                         @if($cookShow)
                                         <div class="check-lab">
-                                            <input wire:model="cookCheck" name="cookCheck" type="checkbox" class="check-logic">
-                                            <div>или</div>
+                                            <input id="cookChekLabel" wire:model="cookCheck" name="cookCheck" type="checkbox" class="check-logic cursor-pointer">
+                                            <label for="cookChekLabel" class="cursor-pointer"><div>или</div></label>
                                         </div>
                                         @endif
                                         @if($cookSearchResults)
@@ -172,14 +172,14 @@
                                             @endforeach
                                         @endif
                                     </div>
-                                    <input wire:click="incIngrShowCheck" wire:keyup="incIngrSearchFunc" wire:model="incIngrSearchText"  type="text" name="url" class="findRub inpt_text block w-full rounded-[4px] border-[#ccc] m-0 h-10 border-1 p-2 mt-2  text-sm text-gray-900">
+                                    <input wire:keydown.enter="incIngrAdd" wire:click="incIngrShowCheck" wire:keyup="incIngrSearchFunc" wire:model="incIngrSearchText"  type="text" name="url" class="findRub inpt_text block w-full rounded-[4px] border-[#ccc] m-0 h-10 border-1 p-2 mt-2  text-sm text-gray-900">
                                 </div>
                                 <div class="relative">
                                     <div class="abs-items absolute search z-10 bg-[lightgray] rounded-[4px] top-1 shadow w-full dark:bg-gray-700">
                                         @if($incIngrShow)
                                             <div class="check-lab">
-                                                <input wire:model="incIngrCheck" name="incIngrCheck" type="checkbox" class="check-logic">
-                                                <div>или</div>
+                                                <input id="incIngrChekLabel" wire:model="incIngrCheck" name="incIngrCheck" type="checkbox" class="check-logic cursor-pointer">
+                                                <label for="incIngrChekLabel" class="cursor-pointer"><div>или</div></label>
                                             </div>
                                         @endif
                                         @if($incIngrSearchResults)
@@ -203,14 +203,14 @@
                                             @endforeach
                                         @endif
                                     </div>
-                                    <input wire:click="excIngrShowCheck" wire:keyup="excIngrSearchFunc" wire:model="excIngrSearchText"  type="text" name="url" class="findRub inpt_text block w-full rounded-[4px] border-[#ccc] m-0 h-10 border-1 p-2 mt-2  text-sm text-gray-900">
+                                    <input wire:keydown.enter="excIngrAdd" wire:click="excIngrShowCheck" wire:keyup="excIngrSearchFunc" wire:model="excIngrSearchText"  type="text" name="url" class="findRub inpt_text block w-full rounded-[4px] border-[#ccc] m-0 h-10 border-1 p-2 mt-2  text-sm text-gray-900">
                                 </div>
                                 <div class="relative">
                                     <div class="abs-items absolute search z-10 bg-[lightgray] rounded-[4px] top-1 shadow w-full dark:bg-gray-700">
                                         @if($excIngrShow)
                                             <div class="check-lab">
-                                                <input wire:model="excIngrCheck" name="excIngrCheck" type="checkbox" class="check-logic">
-                                                <div>или</div>
+                                                <input id="excIngrCheckLabel" wire:model="excIngrCheck" name="excIngrCheck" type="checkbox" class="check-logic cursor-pointer">
+                                                <label for="excIngrCheckLabel" class="cursor-pointer"><div>или</div></label>
                                             </div>
                                         @endif
                                         @if($excIngrSearchResults)
@@ -234,14 +234,14 @@
                                             @endforeach
                                         @endif
                                     </div>
-                                    <input wire:click="methodShowCheck" wire:keyup="methodSearchFunc" wire:model="methodSearchText"  type="text" name="url" class="findRub inpt_text block w-full rounded-[4px] border-[#ccc] m-0 h-10 border-1 p-2 mt-2  text-sm text-gray-900">
+                                    <input wire:keydown.enter="methodAdd" wire:click="methodShowCheck" wire:keyup="methodSearchFunc" wire:model="methodSearchText"  type="text" name="url" class="findRub inpt_text block w-full rounded-[4px] border-[#ccc] m-0 h-10 border-1 p-2 mt-2  text-sm text-gray-900">
                                 </div>
                                 <div class="relative">
                                     <div class="abs-items absolute search z-10 bg-[lightgray] rounded-[4px] top-1 shadow w-full dark:bg-gray-700">
                                         @if($methodShow)
                                             <div class="check-lab">
-                                                <input wire:model="methodCheck" name="methodCheck" type="checkbox" class="check-logic">
-                                                <div>или</div>
+                                                <input id="methodCheckLabel" wire:model="methodCheck" name="methodCheck" type="checkbox" class="check-logic cursor-pointer">
+                                                <label for="methodCheckLabel" class="cursor-pointer"><div>или</div></label>
                                             </div>
                                         @endif
                                         @if($methodSearchResults)
@@ -287,6 +287,9 @@
         ClassicEditor
             .create( document.querySelector( '#editorFirst' ) )
             .then( editor => {
+                editor.model.document.on('change:data', () => {
+                    @this.set('firstText', editor.getData());
+                })
             } )
             .catch( error => {
             } );
@@ -294,6 +297,9 @@
         ClassicEditor
             .create( document.querySelector( '#editorLast' ) )
             .then( editor => {
+                editor.model.document.on('change:data', () => {
+                    @this.set('lastText', editor.getData());
+                })
             } )
             .catch( error => {
             } );

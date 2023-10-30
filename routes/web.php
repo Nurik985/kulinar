@@ -10,11 +10,10 @@ use App\Http\Controllers\Admin\KitchenController;
 use App\Http\Controllers\Admin\MethodController;
 use App\Http\Controllers\Admin\NormController;
 use App\Http\Controllers\Admin\PortionController;
+use App\Http\Controllers\Admin\RecipeController;
 use App\Http\Controllers\Admin\RedirectController;
 use App\Http\Controllers\Admin\SectionController;
 use App\Http\Controllers\Admin\UnitController;
-use App\Http\Controllers\RecipeController;
-use App\Models\Heading;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -32,16 +31,18 @@ Route::get('/clear', function () {
 
 
 Route::get('stest', function () {
-    $headings = Heading::all();
 
-    foreach ($headings as $v) {
-        $sections = json_decode($v->parent_sect);
-//        foreach ($sections as $key => $value) {
-//            $section = Section::find($value);
-//            Heading::find($v->id)->sections()->attach([$section->id]);
-//        }
-        Heading::find($v->id)->sections()->attach($sections);
-    }
+
+//    $headings = Heading::all();
+//
+//    foreach ($headings as $v) {
+//        $sections = json_decode($v->parent_sect);
+////        foreach ($sections as $key => $value) {
+////            $section = Section::find($value);
+////            Heading::find($v->id)->sections()->attach([$section->id]);
+////        }
+//        Heading::find($v->id)->sections()->attach($sections);
+//    }
 
 
 //    $heading = Heading::find(4658);
@@ -86,6 +87,7 @@ Route::group(['prefix' => 'admin', 'name' => 'admin.', 'middleware' => ['auth', 
 
     Route::view('rubrica/param', 'admin.headings.param-create')->name('rubrica.param-create');
     Route::view('rubrica/manual', 'admin.headings.manual-create')->name('rubrica.manual-create');
+    Route::get('coment', [CategoryController::class, 'index']);
 
     Route::post('/get-rubrics', [HeadingController::class, 'getRubrics'])->name('get-rubrics');
     Route::post('/get-sections', [HeadingController::class, 'getSections'])->name('get-sections');

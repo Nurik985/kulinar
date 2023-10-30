@@ -22,7 +22,7 @@ class HeadingsCreateManual extends Component
 
     #[Rule('required', message: 'Пожалуйста заполните обязательное поле')]
     #[Rule('min:3', message: 'Поле должен содержать мин 3 символа')]
-    #[Rule('regex:/^[a-zA-Z-]+$/u', message: 'ЧПУ должен содержать только латиницу')]
+    #[Rule('regex:/^[a-zA-Z1-9-]+$/u', message: 'ЧПУ должен содержать только латиницу')]
     #[Rule('unique:' . Heading::class . ',url', message: 'Такой URL уже существует. Измените его')]
     public $url;
 
@@ -299,7 +299,9 @@ class HeadingsCreateManual extends Component
             }
         }
 
-        Heading::create([
+        $osn_section = array_first($this->parentSec);
+
+        $newHeading = Heading::create([
             'name' => $this->name,
             'url' => $this->url,
             'title' => $this->title,
@@ -308,7 +310,7 @@ class HeadingsCreateManual extends Component
             'ingredients_accept' => $incIngr,
             'ingredients_block' => $excIngr,
             'cooking_m' => $method,
-            'type' => 1,
+            'type' => 2,
             'fade' => $this->fadeMenu,
             'link_razdel' => 'false',
             'parent' => json_encode($parentRub),
@@ -317,10 +319,14 @@ class HeadingsCreateManual extends Component
             'parent_sect' => json_encode($parentSec),
             'col_public_recipe' => 77,
             'img' => $this->storedImage,
-            'osn_section' => 1,
+            'osn_section' => $osn_section,
             'parent_bread' => json_encode($parentBread),
             'firsttext' => $this->lastText,
         ]);
+
+        $heading = Heading::find($newHeading->id);
+        $heading->sections()->attach($parentSec);
+        forceRecipe($newHeading->id);
 
         session()->flash('success', "Раздел успшено создан");
 

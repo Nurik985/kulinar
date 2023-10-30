@@ -22,6 +22,9 @@
                     </div>
                 </div>
             </div>
+            @php
+
+            @endphp
         </section>
     </div>
 @endsection

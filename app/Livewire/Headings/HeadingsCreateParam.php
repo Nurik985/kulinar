@@ -2,7 +2,11 @@
 
 namespace App\Livewire\Headings;
 
+
+use App\Models\Method;
+use App\Models\Cook;
 use App\Models\Heading;
+use App\Models\Ingredient;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Rule;
@@ -22,7 +26,7 @@ class HeadingsCreateParam extends Component
 
     #[Rule('required', message: 'Пожалуйста заполните обязательное поле')]
     #[Rule('min:3', message: 'Поле должен содержать мин 3 символа')]
-    #[Rule('regex:/^[a-zA-Z-]+$/u', message: 'ЧПУ должен содержать только латиницу')]
+    #[Rule('regex:/^[a-zA-Z1-9-]+$/u', message: 'ЧПУ должен содержать только латиницу')]
     #[Rule('unique:' . Heading::class . ',url', message: 'Такой URL уже существует. Измените его')]
     public $url;
 
@@ -88,7 +92,6 @@ class HeadingsCreateParam extends Component
         $this->url = Str::slug($this->name);
         $this->validate();
     }
-
 
     /********************************** RUBRICS ******************************/
 
@@ -240,8 +243,34 @@ class HeadingsCreateParam extends Component
         }
     }
 
+    public function cookAdd(){
+        $res = Cook::where('name', '=', $this->cookSearchText)->first();
+
+        if($res == null){
+            $name = $this->cookSearchText;
+            $id = rand(9000, 9999);
+        } else {
+            $name = $res->name;
+            $id = $res->id;
+        }
+
+        $dop = 'и';
+        if($this->cookCheck){
+            $dop = 'или';
+        }
+
+        $this->cookSelecteds[$id] = '<div class="flex items-center"><div class="text-[16px] mr-2">'.$dop.'</div><div class="block-item w-fit bg-gray-300 text-black border border-black p-1.5 select-none rounded-[2px]"><div class="item flex text-[16px]"><span id="'.$id.'">'.$name.'</span><i wire:click="cookRemoveItemId('.$id.')" class="ti removeItem ti-square-letter-x ml-2 cursor-pointer text-red-600"></i></div></div></div>';
+        $this->cookSearchResults = '';
+        $this->cookSearchText = '';
+        $this->cookShow = false;
+        $this->cook[$id] = (count($this->cook) > 0) ? ' | '.$dop .' / '.$name : $dop .' / '.$name  ;
+    }
+
     public function cookShowCheck(){
         $this->cookShow = true;
+        $this->incIngrShow = false;
+        $this->excIngrShow = false;
+        $this->methodShow = false;
     }
 
     public function cookRemoveItemId($id): void
@@ -289,17 +318,52 @@ class HeadingsCreateParam extends Component
         }
     }
 
+    public function incIngrAdd(){
+
+        $res = Ingredient::where('name', '=', $this->incIngrSearchText)->first();
+
+        if($res == null){
+            $name = $this->incIngrSearchText;
+            $id = rand(9000, 9999);
+        } else {
+            $name = $res->name;
+            $id = $res->id;
+        }
+
+        $dop = 'и';
+        if($this->incIngrCheck){
+            $dop = 'или';
+        }
+
+        $this->incIngrSelecteds[$id] = '<div class="flex items-center"><div class="text-[16px] mr-2">'.$dop.'</div><div class="block-item w-fit bg-gray-300 text-black border border-black p-1.5 select-none rounded-[2px]"><div class="item flex text-[16px]"><span id="'.$id.'">'.$name.'</span><i wire:click="incIngrRemoveItemId('.$id.')" class="ti removeItem ti-square-letter-x ml-2 cursor-pointer text-red-600"></i></div></div></div>';
+        $this->incIngrSearchResults = '';
+        $this->incIngrSearchText = '';
+        $this->incIngrShow = false;
+        $this->incIngr[$id] = (count($this->incIngr) > 0) ? ' | '.$dop .' / '.$name : $dop .' / '.$name  ;
+    }
+
     public function incIngrShowCheck(){
+        $this->cookShow = false;
         $this->incIngrShow = true;
+        $this->excIngrShow = false;
+        $this->methodShow = false;
     }
 
     public function incIngrRemoveItemId($id): void
     {
         if($id){
             $this->incIngrSearchResults = '';
-            unset($this->incIngrSelecteds[$id]);
-            unset($this->incIngrSearchRemoveIds[$id]);
-            unset($this->incIngr[$id]);
+            if (array_key_exists($id, $this->incIngrSelecteds)) {
+                unset($this->incIngrSelecteds[$id]);
+            }
+
+            if (array_key_exists($id, $this->incIngrSearchRemoveIds)) {
+                unset($this->incIngrSelecteds[$id]);
+            }
+
+            if (array_key_exists($id, $this->incIngr)) {
+                unset($this->incIngr[$id]);
+            }
         }
     }
 
@@ -338,8 +402,34 @@ class HeadingsCreateParam extends Component
         }
     }
 
+    public function excIngrAdd(){
+        $res = Ingredient::where('name', '=', $this->excIngrSearchText)->first();
+
+        if($res == null){
+            $name = $this->excIngrSearchText;
+            $id = rand(9000, 9999);
+        } else {
+            $name = $res->name;
+            $id = $res->id;
+        }
+
+        $dop = 'и';
+        if($this->excIngrCheck){
+            $dop = 'или';
+        }
+
+        $this->excIngrSelecteds[$id] = '<div class="flex items-center"><div class="text-[16px] mr-2">'.$dop.'</div><div class="block-item w-fit bg-gray-300 text-black border border-black p-1.5 select-none rounded-[2px]"><div class="item flex text-[16px]"><span id="'.$id.'">'.$name.'</span><i wire:click="excIngrRemoveItemId('.$id.')" class="ti removeItem ti-square-letter-x ml-2 cursor-pointer text-red-600"></i></div></div></div>';
+        $this->excIngrSearchResults = '';
+        $this->excIngrSearchText = '';
+        $this->excIngrShow = false;
+        $this->excIngr[$id] = (count($this->excIngr) > 0) ? ' | '.$dop .' / '.$name : $dop .' / '.$name  ;
+    }
+
     public function excIngrShowCheck(){
+        $this->cookShow = false;
+        $this->incIngrShow = false;
         $this->excIngrShow = true;
+        $this->methodShow = false;
     }
 
     public function excIngrRemoveItemId($id): void
@@ -387,7 +477,33 @@ class HeadingsCreateParam extends Component
         }
     }
 
+    public function methodAdd(){
+        $res = Method::where('name', '=', $this->methodSearchText)->first();
+
+        if($res == null){
+            $name = $this->methodSearchText;
+            $id = rand(9000, 9999);
+        } else {
+            $name = $res->name;
+            $id = $res->id;
+        }
+
+        $dop = 'и';
+        if($this->methodCheck){
+            $dop = 'или';
+        }
+
+        $this->methodSelecteds[$id] = '<div class="flex items-center"><div class="text-[16px] mr-2">'.$dop.'</div><div class="block-item w-fit bg-gray-300 text-black border border-black p-1.5 select-none rounded-[2px]"><div class="item flex text-[16px] capitalize"><span id="'.$id.'" class="capitalize">'.$name.'</span><i wire:click="methodRemoveItemId('.$id.')" class="ti removeItem ti-square-letter-x ml-2 cursor-pointer text-red-600"></i></div></div></div>';
+        $this->methodSearchResults = '';
+        $this->methodSearchText = '';
+        $this->methodShow = false;
+        $this->method[$id] = (count($this->method) > 0) ? ' | '.$dop .' / '.$name : $dop .' / '.$name  ;
+    }
+
     public function methodShowCheck(){
+        $this->cookShow = false;
+        $this->incIngrShow = false;
+        $this->excIngrShow = false;
         $this->methodShow = true;
     }
 
@@ -469,7 +585,9 @@ class HeadingsCreateParam extends Component
             }
         }
 
-        Heading::create([
+        $osn_section = array_first($this->parentSec);
+
+        $newHeading = Heading::create([
             'name' => $this->name,
             'url' => $this->url,
             'title' => $this->title,
@@ -485,12 +603,17 @@ class HeadingsCreateParam extends Component
             'recept' => null,
             'col_recipe' => null,
             'parent_sect' => json_encode($parentSec),
-            'col_public_recipe' => 77,
+            'col_public_recipe' => null,
             'img' => $this->storedImage,
-            'osn_section' => 1,
+            'osn_section' => $osn_section,
             'parent_bread' => json_encode($parentBread),
             'firsttext' => $this->lastText,
         ]);
+
+        $heading = Heading::find($newHeading->id);
+        $heading->Sections()->detach();
+        $heading->sections()->attach($parentSec);
+        forceRecipe($newHeading->id);
 
         session()->flash('success', "Раздел успшено создан");
 
