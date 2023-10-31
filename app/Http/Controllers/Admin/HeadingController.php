@@ -55,9 +55,9 @@ class HeadingController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Heading $heading)
+    public function edit(Heading $id)
     {
-        //
+        return view('admin.headings.edit', ['heading' => $id]);
     }
 
     /**

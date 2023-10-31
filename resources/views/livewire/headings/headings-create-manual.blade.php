@@ -111,6 +111,15 @@
                             </div>
                         </div>
 
+                        <div class="sm:col-span-2">
+                            <input wire:model="linkAddSection" id="linkAddSection" name="linkAddSection" type="checkbox" class="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="linkAddSection" class="ml-2 cursor-pointer text-sm font-medium text-gray-900 dark:text-gray-300">Добавить ссылку в раздел</label>
+                        </div>
+                        <div class="sm:col-span-2">
+                            <input wire:model="fadeMenu" id="fadeMenu" name="fadeMenu" type="checkbox" class="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                            <label for="fadeMenu" class="ml-2 cursor-pointer text-sm font-medium text-gray-900 dark:text-gray-300">Вывести в верхнее меню</label>
+                        </div>
+
                         <div wire:ignore class="sm:col-span-2">
                             <label for="editorFirst" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Текст в начале рубрики</label>
                             <textarea wire:model="firstText" id="editorFirst" name="editorFirst" rows="8" name="text" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-[4px] border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder=""></textarea>
@@ -157,24 +166,18 @@
 
 
                     </div>
-                    <div class="flex items-center align-middle justify-between">
-                        <div class="flex items-center">
-                            <input wire:model="fadeMenu" id="fadeMenu" name="fadeMenu" type="checkbox" class="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                            <label for="fadeMenu" class="ml-2 cursor-pointer text-sm font-medium text-gray-900 dark:text-gray-300">Вывести в верхнее меню</label>
+                    <div class="flex justify-between items-center">
+                        <div class="flex  mr-4">
+                            <a href="{{ route('rubrica.index') }}" class="inline-flex items-center  justify-center px-5 py-2.5 text-sm font-medium text-center text-white bg-green-600 rounded-[4px] focus:ring-4 focus:ring-gray-200 dark:focus:ring-primary-900 hover:bg-gray-800">
+                                <i class="ti ti-arrow-badge-left"></i>
+                                Вернуться назад
+                            </a>
                         </div>
-                        <div class="flex justify-between items-center">
-                            <div class="flex  mr-4">
-                                <a href="{{ route('rubrica.index') }}" class="inline-flex items-center  justify-center px-5 py-2.5 text-sm font-medium text-center text-white bg-green-600 rounded-[4px] focus:ring-4 focus:ring-gray-200 dark:focus:ring-primary-900 hover:bg-gray-800">
-                                    <i class="ti ti-arrow-badge-left"></i>
-                                    Вернуться назад
-                                </a>
-                            </div>
-                            <div class="flex">
-                                <button type="submit" class="inline-flex items-center  justify-center px-5 py-2.5 text-sm font-medium text-center text-white bg-green-600 rounded-[4px] focus:ring-4 focus:ring-gray-200 dark:focus:ring-primary-900 hover:bg-gray-800">
-                                    <i class="ti ti-device-floppy mr-1"></i>
-                                    Добавить рубрику
-                                </button>
-                            </div>
+                        <div class="flex">
+                            <button type="submit" class="inline-flex items-center  justify-center px-5 py-2.5 text-sm font-medium text-center text-white bg-green-600 rounded-[4px] focus:ring-4 focus:ring-gray-200 dark:focus:ring-primary-900 hover:bg-gray-800">
+                                <i class="ti ti-device-floppy mr-1"></i>
+                                Добавить рубрику
+                            </button>
                         </div>
                     </div>
                 </form>

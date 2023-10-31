@@ -40,6 +40,7 @@ class HeadingsCreateParam extends Component
     public $excIngr  = [];
     public $method = [];
     public $fadeMenu;
+    public $linkAddSection;
     public $storedImage;
 
     public $rubImg;
@@ -216,6 +217,7 @@ class HeadingsCreateParam extends Component
     {
         if($this->cookSearchText != ''){
             $results = '';
+            //$res = DB::table('cooks')->select("id","name")->whereNotIn('id', $this->cookSearchRemoveIds)->where('name','LIKE',"%$this->cookSearchText%")->orderBy('name', 'ASC')->limit(50)->get();
             $res = DB::table('cooks')->select("id","name")->whereNotIn('id', $this->cookSearchRemoveIds)->where('name','LIKE',"%$this->cookSearchText%")->orderBy('name', 'ASC')->limit(50)->get();
             if($res){
                 foreach ($res as $r) {
@@ -534,10 +536,17 @@ class HeadingsCreateParam extends Component
             $this->fadeMenu = 'true';
         }
 
+        if ($this->linkAddSection == null) {
+            $this->linkAddSection = 'false';
+        } else {
+            $this->linkAddSection = 'true';
+        }
+
 
         if($this->rubImg){
             //$this->rubImg->store('rubrica');
-            $this->storedImage = $this->rubImg->store('rubrica');
+            //$this->storedImage = $this->rubImg->store('public/rubrica');
+            $this->storedImage = $this->rubImg->store('rubrics', 'public');
         }
 
         if($this->cook){
@@ -598,7 +607,7 @@ class HeadingsCreateParam extends Component
             'cooking_m' => $method,
             'type' => 1,
             'fade' => $this->fadeMenu,
-            'link_razdel' => 'false',
+            'link_razdel' => $this->linkAddSection,
             'parent' => json_encode($parentRub),
             'recept' => null,
             'col_recipe' => null,
@@ -615,7 +624,7 @@ class HeadingsCreateParam extends Component
         $heading->sections()->attach($parentSec);
         forceRecipe($newHeading->id);
 
-        session()->flash('success', "Раздел успшено создан");
+        session()->flash('success', "Рубрика успшено создан");
 
         return redirect()->to(route('rubrica.index'));
     }

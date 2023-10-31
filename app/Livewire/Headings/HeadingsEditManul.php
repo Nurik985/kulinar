@@ -4,25 +4,40 @@ namespace App\Livewire\Headings;
 
 use App\Models\Heading;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
-class HeadingsCreateManual extends Component
+class HeadingsEditManul extends Component
 {
     use WithFileUploads;
 
-    #[Rule('required', message: 'Пожалуйста заполните обязательное поле')]
+    public $id;
+
+    protected function rules()
+    {
+        return [
+            'url' => 'required|min:3|regex:/^[a-zA-Z1-9-]+$/u|unique:' . Heading::class . ',url,' . $this->id,
+            'title' => 'required',
+            'name' => 'required',
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'url.required' => 'Пожалуйста заполните обязательное поле',
+            'url.min' => 'Название должен содержать мин 3 символа',
+            'url.regex' => 'URL должен содержать только латиницу',
+            'title.required' => 'Пожалуйста заполните обязательное поле',
+            'name.required' => 'Пожалуйста заполните обязательное поле',
+        ];
+    }
+
     public $name;
-
-    #[Rule('required', message: 'Пожалуйста заполните обязательное поле')]
     public $title;
-
-    #[Rule('required', message: 'Пожалуйста заполните обязательное поле')]
-    #[Rule('min:3', message: 'Поле должен содержать мин 3 символа')]
-    #[Rule('regex:/^[a-zA-Z1-9-]+$/u', message: 'ЧПУ должен содержать только латиницу')]
-    #[Rule('unique:' . Heading::class . ',url', message: 'Такой URL уже существует. Измените его')]
     public $url;
 
     public $parentRub = [];
@@ -40,6 +55,7 @@ class HeadingsCreateManual extends Component
     public $storedImage;
 
     public $rubImg;
+    public $rubImgPatch;
 
     public $rubricSearchText = '';
     public $rubricSearchResults = '';
@@ -61,6 +77,75 @@ class HeadingsCreateManual extends Component
     public $recipSelecteds = [];
     public $recipSearchRemoveIds = [];
 
+    public $temporaryUrl = false;
+
+    public function mount($headingId)
+    {
+        $this->id = $headingId;
+        $heading = Heading::findOrFail($headingId);
+        $this->name = $heading->name;
+        $this->title = $heading->title;
+        $this->url = $heading->url;
+
+        $parentRubs = json_decode($heading->parent);
+        if($parentRubs){
+            $parentRubs = DB::table('headings')->select("id","name")->whereIn('id', $parentRubs)->get();
+            foreach ($parentRubs as $parentRub) {
+                $this->rubricSelecteds[$parentRub->id] = $parentRub->name;
+                $this->parentRub[$parentRub->id] = $parentRub->id;
+            }
+        }
+
+        $parentSecs = json_decode($heading->parent_sect);
+        if($parentSecs){
+            $parentSecs = DB::table('sections')->select("id","h1")->whereIn('id', $parentSecs)->get();
+            foreach ($parentSecs as $parentSec) {
+                $this->sectionSelecteds[$parentSec->id] = $parentSec->h1;
+                $this->parentSec[$parentSec->id] = $parentSec->id;
+            }
+        }
+
+        $parentBreads = json_decode($heading->parent_bread);
+        if($parentBreads){
+            $parentBreads = DB::table('headings')->select("id","name")->whereIn('id', $parentBreads)->get();
+            foreach ($parentBreads as $parentBread) {
+                $this->breadcrumbSelecteds[$parentBread->id] = $parentBread->name;
+                $this->parentBread[$parentBread->id] = $parentBread->id;
+            }
+        }
+
+        if($heading->fade == 'true'){
+            $this->fadeMenu = true;
+        }
+
+        if($heading->link_razdel == 'true'){
+            $this->linkAddSection = true;
+        }
+
+        if($heading->text){
+            $this->firstText = $heading->text;
+        }
+
+        if($heading->firsttext){
+            $this->lastText = $heading->firsttext;
+        }
+
+        if($heading->img){
+            $this->rubImg = $heading->img;
+        } else {
+            $this->temporaryUrl = true;
+        }
+
+        $recepts = json_decode($heading->recept);
+        if($recepts){
+            $recepts = DB::table('recipes')->select("id","name")->whereIn('id', $recepts)->get();
+            foreach ($recepts as $recept) {
+                $this->recipSelecteds[$recept->id] = $recept->name;
+                $this->recieps[$recept->id] = $recept->id;
+            }
+        }
+    }
+
     public function generateSlug()
     {
         $this->url = Str::slug($this->name);
@@ -70,8 +155,8 @@ class HeadingsCreateManual extends Component
     public function delRubImg(): void
     {
         $this->rubImg = '';
+        $this->temporaryUrl = true;
     }
-
 
     /********************************** RUBRICS ******************************/
 
@@ -229,7 +314,7 @@ class HeadingsCreateManual extends Component
 
     /********************************** RECIP END ******************************/
 
-    public function saveHeading()
+    public function updateHeading()
     {
         $this->validate();
 
@@ -245,10 +330,10 @@ class HeadingsCreateManual extends Component
             $this->linkAddSection = 'true';
         }
 
-        if($this->rubImg){
-            //$this->rubImg->store('rubrica');
-            //$this->storedImage = $this->rubImg->store('public/rubrica');
+        if($this->temporaryUrl && $this->rubImg != ''){
             $this->storedImage = $this->rubImg->store('rubrics', 'public');
+        } else {
+            $this->storedImage = $this->rubImg;
         }
 
         if($this->cook){
@@ -305,7 +390,9 @@ class HeadingsCreateManual extends Component
 
         $osn_section = array_first($this->parentSec);
 
-        $newHeading = Heading::create([
+        $heading = Heading::find($this->id);
+
+        $heading->update([
             'name' => $this->name,
             'url' => $this->url,
             'title' => $this->title,
@@ -328,17 +415,19 @@ class HeadingsCreateManual extends Component
             'firsttext' => $this->lastText,
         ]);
 
-        $heading = Heading::find($newHeading->id);
+        $heading->sections()->detach();
         $heading->sections()->attach($parentSec);
-        forceRecipe($newHeading->id);
+        forceRecipe($this->id);
 
-        session()->flash('success', "Рубрика успшено создан");
+        session()->flash('success', "Рубрика успшено изменен");
 
         return redirect()->to(route('rubrica.index'));
     }
 
+
+
     public function render()
     {
-        return view('livewire.headings.headings-create-manual');
+        return view('livewire.headings.headings-edit-manul');
     }
 }

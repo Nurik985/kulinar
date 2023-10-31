@@ -3,6 +3,7 @@
 namespace App\Livewire\Headings;
 
 use App\Models\Heading;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -68,8 +69,12 @@ class Headings extends Component
 
     public function destroy()
     {
-        Heading::destroy($this->selectedItem);
+        $heading = Heading::find($this->selectedItem);
+        Storage::delete($heading->img);
+        $heading->delete();
         $this->dispatch('closeDelModal');
+        session()->flash('success', "Рубрика успшено удален");
+        $this->resetPage();
     }
 
     public function render()

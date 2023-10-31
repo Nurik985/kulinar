@@ -22,7 +22,7 @@ class EditSection extends Component
     protected function rules()
     {
         return [
-            'url' => 'required|min:3|regex:/^[a-zA-Z-]+$/u|unique:' . Section::class . ',url,' . $this->id,
+            'url' => 'required|min:3|regex:/^[a-zA-Z1-9-]+$/u|unique:' . Section::class . ',url,' . $this->id,
             'title' => 'required',
             'h1' => 'required',
         ];

@@ -6,7 +6,11 @@ use Illuminate\Support\Facades\DB;
 function forceRecipe($id){
     $result = Heading::findOrFail($id);
 
-    $row_search = '';
+    $col_public_recipe = 0;
+    $col_recipe = 0;
+    $arr_recipe = [];
+
+    $row_search = false;
 
     if ($result->type == 1) {
 
@@ -26,11 +30,12 @@ function forceRecipe($id){
         $res = DB::table('recipes');
 
         if (!empty($items)) {
+
             foreach ($items as $key => $value) {
                 $value = explode(' или ', $value);
 
                 if (!empty($value[0])) {
-
+                    $row_search = true;
                     $res->where(function ($query) use ($value){
                         foreach ($value as $key1 => $value1) {
                             $value1 = preg_replace('/или (.*)/', '$1', $value1);
@@ -54,7 +59,7 @@ function forceRecipe($id){
                 $value = explode(' или ', $value);
 
                 if (!empty($value[0])) {
-
+                    $row_search = true;
                     $res->where(function ($query) use ($value){
                         foreach ($value as $key1 => $value1) {
                             $value1 = preg_replace('/или (.*)/', '$1', $value1);
@@ -79,7 +84,7 @@ function forceRecipe($id){
                 $value = explode(' или ', $value);
 
                 if (!empty($value[0])) {
-
+                    $row_search = true;
                     $res->where(function ($query) use ($value){
                         foreach ($value as $key1 => $value1) {
                             $value1 = preg_replace('/или (.*)/', '$1', $value1);
@@ -104,7 +109,7 @@ function forceRecipe($id){
                 $value = explode(' или ', $value);
 
                 if (!empty($value[0])) {
-
+                    $row_search = true;
                     $res->where(function ($query) use ($value){
                         foreach ($value as $key1 => $value1) {
                             $value1 = preg_replace('/или (.*)/', '$1', $value1);
@@ -124,18 +129,23 @@ function forceRecipe($id){
             }
         }
 
-        $col_recipe = $res->select('id', 'status')->get();
-        $col_public_recipe = $col_recipe->where('status', '=', 1);
-        $arr_recipe = $col_public_recipe->pluck('id');
-        $col_recipe = $col_recipe->count();
-        $col_public_recipe = $col_public_recipe->count();
+        if($row_search){
+            $col_recipe = $res->select('id', 'status')->get();
+            $col_public_recipe = $col_recipe->where('status', '=', 1);
+            $arr_recipe = $col_public_recipe->pluck('id');
+            $col_recipe = $col_recipe->count();
+            $col_public_recipe = $col_public_recipe->count();
+        }
+
         $arr_recipe = json_encode($arr_recipe);
 
     } elseif ($result->type == 2) {
         $recipe_all = json_decode($result->recept, true);
         if (!empty($recipe_all)) {
+            $arr_recipe = $result->recept;
             $col_recipe = count($recipe_all);
-            $query = DB::table('recipes')->select("id","status")->whereIn('id', $recipe_all)->where('status', 1)->get();
+            $col_public = DB::table('recipes')->select("id","status")->whereIn('id', $recipe_all)->where('status', 1)->get();
+            $col_public_recipe = count($col_public);
         }
     }
 
@@ -148,15 +158,4 @@ function array_first($array, $default = null)
         return $item;
     }
     return $default;
-}
-
-if (!function_exists('mb_ucfirst') && extension_loaded('mbstring'))
-{
-    function mb_ucfirst($str, $encoding='UTF-8')
-    {
-        $str = mb_ereg_replace('^[\ ]+', '', $str);
-        $str = mb_strtoupper(mb_substr($str, 0, 1, $encoding), $encoding).
-            mb_substr($str, 1, mb_strlen($str), $encoding);
-        return $str;
-    }
 }
