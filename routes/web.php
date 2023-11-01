@@ -87,6 +87,7 @@ Route::group(['prefix' => 'admin', 'name' => 'admin.', 'middleware' => ['auth', 
 
     Route::view('rubrica/param', 'admin.headings.param-create')->name('rubrica.param-create');
     Route::view('rubrica/manual', 'admin.headings.manual-create')->name('rubrica.manual-create');
+    Route::get('test', [CategoryController::class, 'index']);
 
     Route::post('/get-rubrics', [HeadingController::class, 'getRubrics'])->name('get-rubrics');
     Route::post('/get-sections', [HeadingController::class, 'getSections'])->name('get-sections');

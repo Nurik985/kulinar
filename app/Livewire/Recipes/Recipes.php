@@ -3,6 +3,7 @@
 namespace App\Livewire\Recipes;
 
 use App\Models\Recipe;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -26,6 +27,11 @@ class Recipes extends Component
     public $selectedItem = 0;
     public $modText;
 
+    public $statusDraft = 0; // status - 2
+    public $statusPending = 0; // status - 6
+    public $statusPublished = 0; // status - 1
+    public $statusBasket = 0; // status - 4
+
     public $rowSows = [
         [
             'name' => 'Заголовок',
@@ -36,7 +42,7 @@ class Recipes extends Component
             'status' => true
         ],
         [
-            'name' => 'Изменено',
+            'name' => 'Дата изменения',
             'status' => true
         ],
         [
@@ -96,6 +102,15 @@ class Recipes extends Component
             'status' => false
         ]
     ];
+
+    public function mount(){
+        $recipes = DB::table('recipes')->select('id', 'status')->get();
+        $this->statusDraft = $recipes->where('status', '=', 2)->count();
+        $this->statusPending = $recipes->where('status', '=', 6)->count();
+        $this->statusPublished = $recipes->where('status', '=', 1)->count();
+        $this->statusBasket = $recipes->where('status', '=', 4)->count();
+
+    }
 
     public function rowShowRender($row){
         if($this->rowSows[$row]['status']){
@@ -157,6 +172,7 @@ class Recipes extends Component
             [
                 'recipes' => Recipe::search($this->search)
                     ->orderBy($this->sortBy, $this->sortDir)
+                    //->whereIn('status', [1,2,6,4])
                     ->paginate($this->perPage)
             ]
         );

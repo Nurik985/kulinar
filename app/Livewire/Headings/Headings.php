@@ -70,7 +70,9 @@ class Headings extends Component
     public function destroy()
     {
         $heading = Heading::find($this->selectedItem);
-        Storage::delete($heading->img);
+        if($heading->img){
+            Storage::delete($heading->img);
+        }
         $heading->delete();
         $this->dispatch('closeDelModal');
         session()->flash('success', "Рубрика успшено удален");

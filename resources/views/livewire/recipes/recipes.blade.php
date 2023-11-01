@@ -1,25 +1,43 @@
 <div>
     <section class="bg-white dark:bg-gray-900">
         <div class="mx-auto max-w-screen-xl">
-            <!-- Start coding here -->
-            <button wire:ignore id="dropdownCheckboxButton" data-dropdown-toggle="dropdownDefaultCheckbox" class="flex items-center justify-center rounded-lg bg-gray-500 px-4 py-2 text-sm mb-5 font-medium text-white hover:bg-gray-800 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800" type="button"><i class="ti ti-columns mr-2"></i> Выбрать столбцы <svg class="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                </svg>
-            </button>
-            <!-- Dropdown menu -->
-            <div wire:ignore id="dropdownDefaultCheckbox" class="z-50 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
-
-                <ul class="p-3 bg-gray-300 space-y-3 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownCheckboxButton">
-                    @foreach($rowSows as $key => $rowSow)
-                        <li>
-                            <div class="flex items-center">
-                                <input wire:click="rowShowRender({{$key}})" id="checkbox-item-{{$key}}" type="checkbox" @if($rowSows[$key]['status']) checked @endif value="" class="cursor-pointer  h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                <label for="checkbox-item-{{$key}}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300 cursor-pointer">{{$rowSows[$key]['name']}}</label>
-                            </div>
-                        </li>
-                    @endforeach
-                </ul>
+            <div class="flex justify-between mb-5">
+                <!-- Start coding here -->
+                <div>
+                    <button wire:ignore id="dropdownCheckboxButton" data-dropdown-toggle="dropdownDefaultCheckbox" class="flex items-center justify-center rounded-[4px] border bg-gray-100 px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-200 hover:text-gray-700 focus:bg-gray-200 focus:text-gray-700" type="button"><i class="ti ti-columns mr-2"></i> Выбрать столбцы <svg class="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                        </svg>
+                    </button>
+                    <!-- Dropdown menu -->
+                    <div wire:ignore id="dropdownDefaultCheckbox" class="z-50 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
+                        <ul class="p-3 bg-gray-300 space-y-3 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownCheckboxButton">
+                            @foreach($rowSows as $key => $rowSow)
+                                <li>
+                                    <div class="flex items-center">
+                                        <input wire:click="rowShowRender({{$key}})" id="checkbox-item-{{$key}}" type="checkbox" @if($rowSows[$key]['status']) checked @endif value="" class="cursor-pointer  h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
+                                        <label for="checkbox-item-{{$key}}" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300 cursor-pointer">{{$rowSows[$key]['name']}}</label>
+                                    </div>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+                <div class="flex">
+                    <button type="button" class="inline-flex items-center border px-4 py-2 mr-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-[4px] hover:bg-gray-200 hover:text-gray-700 focus:bg-gray-200 focus:text-gray-700 dark:bg-blue-600 dark:hover:bg-blue-700 ">
+                        Черновик <span class="text-xs ml-1 text-gray-500"> {{$statusDraft}}</span>
+                    </button>
+                    <button type="button" class="inline-flex items-center border px-4 py-2 mr-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-[4px] hover:bg-gray-200 hover:text-gray-700 focus:bg-gray-200 focus:text-gray-700 dark:bg-blue-600 dark:hover:bg-blue-700">
+                        На утверждении <span class="text-xs ml-1 text-gray-500"> {{$statusPending}}</span>
+                    </button>
+                    <button type="button" class="inline-flex items-center border px-4 py-2 mr-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-[4px] hover:bg-gray-200 hover:text-gray-700 focus:bg-gray-200 focus:text-gray-700 dark:bg-blue-600 dark:hover:bg-blue-700">
+                        Опубликован <span class="text-xs ml-1 text-gray-500"> {{$statusPublished}}</span>
+                    </button>
+                    <button type="button" class="inline-flex items-center border px-4 py-2 mr-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-[4px] hover:bg-gray-200 hover:text-gray-700 focus:bg-gray-200 focus:text-gray-700 dark:bg-blue-600 dark:hover:bg-blue-700">
+                        Корзина <span class="text-xs ml-1 text-gray-500"> {{$statusBasket}}</span>
+                    </button>
+                </div>
             </div>
+
             <div class="relative overflow-hidden rounded-lg border bg-white dark:bg-gray-800">
                 <div
                     class="flex flex-col items-center justify-between space-y-3 p-4 md:flex-row md:space-x-4 md:space-y-0">
@@ -101,9 +119,9 @@
                                         @if($rowSows[$key]['name'] == 'Заголовок' && $rowSows[$key]['status'] == true)
                                             <td class="w-1/3 px-4 py-3">{{ $recipe->name }}</td>
                                         @elseif($rowSows[$key]['name'] == 'Дата публикации' && $rowSows[$key]['status'] == true)
-                                            <td class="w-min-[80px] border px-4 py-3">{{ $recipe->created_at->format('d-m-Y') }}</td>
-                                        @elseif($rowSows[$key]['name'] == 'Изменено' && $rowSows[$key]['status'] == true)
-                                            <td style="width: 130px !important;"  class=" border px-4 py-3">{{ $recipe->updated_at->format('d-m-Y') }}</td>
+                                            <td class="w-fit border px-4 py-3">{{ $recipe->created_at->format('d-m-Y') }}</td>
+                                        @elseif($rowSows[$key]['name'] == 'Дата изменения' && $rowSows[$key]['status'] == true)
+                                            <td class="w-fit border px-4 py-3">{{ $recipe->updated_at->format('d-m-Y') }}</td>
                                         @elseif($rowSows[$key]['name'] == 'Рейтинг' && $rowSows[$key]['status'] == true)
                                             <td class="w-min-[80px] border px-4 py-3"><span class="text-green-500">{{ $recipe->positive_rating }}</span> / <span class="text-red-500">{{ $recipe->negative_rating }}</span></td>
                                         @elseif($rowSows[$key]['name'] == 'Количество шагов' && $rowSows[$key]['status'] == true)
@@ -162,7 +180,7 @@
                             @endforeach
                         @else
                             <tr>
-                                <td colspan="4" class="p-5 text-center text-sm text-red-400">Поиск не дал никаких
+                                <td colspan="6" class="p-5 text-center text-sm text-red-400">Поиск не дал никаких
                                     результатов
                                 </td>
                             </tr>

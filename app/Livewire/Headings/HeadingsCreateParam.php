@@ -17,7 +17,6 @@ class HeadingsCreateParam extends Component
 {
     use WithFileUploads;
 
-
     #[Rule('required', message: 'Пожалуйста заполните обязательное поле')]
     public $name;
 
@@ -63,30 +62,34 @@ class HeadingsCreateParam extends Component
     public $cookSearchText = '';
     public $cookSearchResults = '';
     public $cookSelecteds = [];
-    public $cookSearchRemoveIds = [];
+    public $cookSearchRemove = [];
     public $cookShow = false;
     public $cookCheck;
+    public $cookSearchId = 1;
 
     public $incIngrSearchText = '';
     public $incIngrSearchResults = '';
     public $incIngrSelecteds = [];
-    public $incIngrSearchRemoveIds = [];
+    public $incIngrSearchRemove = [];
     public $incIngrShow = false;
     public $incIngrCheck;
+    public $incIngrSearchId = 1;
 
     public $excIngrSearchText = '';
     public $excIngrSearchResults = '';
     public $excIngrSelecteds = [];
-    public $excIngrSearchRemoveIds = [];
+    public $excIngrSearchRemove = [];
     public $excIngrShow = false;
     public $excIngrCheck;
+    public $excIngrSearchId = 1;
 
     public $methodSearchText = '';
     public $methodSearchResults = '';
     public $methodSelecteds = [];
-    public $methodSearchRemoveIds = [];
+    public $methodSearchRemove = [];
     public $methodShow = false;
     public $methodCheck;
+    public $methodSearchId = 1;
 
     public function generateSlug()
     {
@@ -108,6 +111,9 @@ class HeadingsCreateParam extends Component
             }
             $this->rubricSearchResults = $results;
         }
+
+        $this->sectionSearchResults = '';
+        $this->breadcrumbSearchResults = '';
     }
 
     public function rubricLiClick($id, $name): void
@@ -147,6 +153,9 @@ class HeadingsCreateParam extends Component
             }
             $this->sectionSearchResults = $results;
         }
+
+        $this->rubricSearchResults = '';
+        $this->breadcrumbSearchResults = '';
     }
 
     public function sectionLiClick($id, $name): void
@@ -186,6 +195,9 @@ class HeadingsCreateParam extends Component
             }
             $this->breadcrumbSearchResults = $results;
         }
+
+        $this->rubricSearchResults = '';
+        $this->sectionSearchResults = '';
     }
 
     public function breadcrumbLiClick($id, $name): void
@@ -217,12 +229,18 @@ class HeadingsCreateParam extends Component
     {
         if($this->cookSearchText != ''){
             $results = '';
-            //$res = DB::table('cooks')->select("id","name")->whereNotIn('id', $this->cookSearchRemoveIds)->where('name','LIKE',"%$this->cookSearchText%")->orderBy('name', 'ASC')->limit(50)->get();
-            $res = DB::table('cooks')->select("id","name")->whereNotIn('id', $this->cookSearchRemoveIds)->where('name','LIKE',"%$this->cookSearchText%")->orderBy('name', 'ASC')->limit(50)->get();
+            $res = DB::table('cooks')->select("id","name")->where('name','LIKE',"%$this->cookSearchText%")->orderBy('name', 'ASC')->limit(50)->get();
             if($res){
+                $k = $this->cookSearchId;
                 foreach ($res as $r) {
-                    $results .= '<li wire:click="cookLiClick('.$r->id.', \''.$r->name.'\')" class="py-1 px-2" id="' . $r->id . '">' . $r->name . '</li>';
+                    $class = '';
+                    if(in_array($r->name, $this->cookSearchRemove)){
+                        $class = 'hidden';
+                    }
+                    $results .= '<li wire:click="cookLiClick('.$k.', \''.$r->name.'\')" class="py-1 px-2 '.$class.'" id="' . $k . '">' . $r->name . '</li>';
+                    $k++;
                 }
+                $this->cookSearchId = $k;
             }
             $this->cookSearchResults = $results;
         }
@@ -236,8 +254,8 @@ class HeadingsCreateParam extends Component
             if($this->cookCheck){
                 $dop = 'или';
             }
-            $this->cookSelecteds[$id] = '<div class="flex items-center"><div class="text-[16px] mr-2">'.$dop.'</div><div class="block-item w-fit bg-gray-300 text-black border border-black p-1.5 select-none rounded-[2px]"><div class="item flex text-[16px]"><span id="'.$id.'">'.$name.'</span><i wire:click="cookRemoveItemId('.$id.')" class="ti removeItem ti-square-letter-x ml-2 cursor-pointer text-red-600"></i></div></div></div>';
-            $this->cookSearchRemoveIds[$id] = $id;
+            $this->cookSelecteds[$id] = '<div class="flex items-center"><div class="text-[16px] mr-2">'.$dop.'</div><div class="block-item w-fit bg-gray-300 text-black border border-black p-1.5 select-none rounded-[2px]"><div class="item flex text-[16px]"><span id="'.$id.'">'.$name.'</span><i wire:click="cookRemoveItemId('.$id.', \''.$name.'\')" class="ti removeItem ti-square-letter-x ml-2 cursor-pointer text-red-600"></i></div></div></div>';
+            $this->cookSearchRemove[] = $name;
             $this->cookSearchResults = '';
             $this->cookSearchText = '';
             $this->cookShow = false;
@@ -246,22 +264,16 @@ class HeadingsCreateParam extends Component
     }
 
     public function cookAdd(){
-        $res = Cook::where('name', '=', $this->cookSearchText)->first();
-
-        if($res == null){
-            $name = $this->cookSearchText;
-            $id = rand(9000, 9999);
-        } else {
-            $name = $res->name;
-            $id = $res->id;
-        }
+        $name = $this->cookSearchText;
+        $id = $this->cookSearchId + 1;
+        $this->cookSearchId = $id + 1;
 
         $dop = 'и';
         if($this->cookCheck){
             $dop = 'или';
         }
 
-        $this->cookSelecteds[$id] = '<div class="flex items-center"><div class="text-[16px] mr-2">'.$dop.'</div><div class="block-item w-fit bg-gray-300 text-black border border-black p-1.5 select-none rounded-[2px]"><div class="item flex text-[16px]"><span id="'.$id.'">'.$name.'</span><i wire:click="cookRemoveItemId('.$id.')" class="ti removeItem ti-square-letter-x ml-2 cursor-pointer text-red-600"></i></div></div></div>';
+        $this->cookSelecteds[$id] = '<div class="flex items-center"><div class="text-[16px] mr-2">'.$dop.'</div><div class="block-item w-fit bg-gray-300 text-black border border-black p-1.5 select-none rounded-[2px]"><div class="item flex text-[16px]"><span id="'.$id.'">'.$name.'</span><i wire:click="cookRemoveItemId('.$id.', \''.$name.'\')" class="ti removeItem ti-square-letter-x ml-2 cursor-pointer text-red-600"></i></div></div></div>';
         $this->cookSearchResults = '';
         $this->cookSearchText = '';
         $this->cookShow = false;
@@ -275,13 +287,23 @@ class HeadingsCreateParam extends Component
         $this->methodShow = false;
     }
 
-    public function cookRemoveItemId($id): void
+    public function cookRemoveItemId($id, $name): void
     {
         if($id){
+            $key = array_search($name, $this->cookSearchRemove);
             $this->cookSearchResults = '';
-            unset($this->cookSelecteds[$id]);
-            unset($this->cookSearchRemoveIds[$id]);
-            unset($this->cook[$id]);
+
+            if (array_key_exists($id, $this->cookSelecteds)) {
+                unset($this->cookSelecteds[$id]);
+            }
+
+            if($key !== false){
+                unset($this->cookSearchRemove[$key]);
+            }
+
+            if (array_key_exists($id, $this->cook)) {
+                unset($this->cook[$id]);
+            }
         }
     }
 
@@ -293,11 +315,18 @@ class HeadingsCreateParam extends Component
     {
         if($this->incIngrSearchText != ''){
             $results = '';
-            $res = DB::table('ingredients')->select("id","name")->whereNotIn('id', $this->incIngrSearchRemoveIds)->where('name','LIKE',"$this->incIngrSearchText%")->orWhere('name','LIKE',"% $this->incIngrSearchText%")->orderByRaw('CHAR_LENGTH(name) ASC')->limit(50)->get();
+            $res = DB::table('ingredients')->select("id","name")->where('name','LIKE',"$this->incIngrSearchText%")->orWhere('name','LIKE',"% $this->incIngrSearchText%")->orderByRaw('CHAR_LENGTH(name) ASC')->limit(50)->get();
             if($res){
+                $k = $this->incIngrSearchId;
                 foreach ($res as $r) {
-                    $results .= '<li wire:click="incIngrLiClick('.$r->id.', \''.$r->name.'\')" class="py-1 px-2" id="' . $r->id . '">' . $r->name . '</li>';
+                    $class = '';
+                    if(in_array($r->name, $this->incIngrSearchRemove)){
+                        $class = 'hidden';
+                    }
+                    $results .= '<li wire:click="incIngrLiClick('.$k.', \''.$r->name.'\')" class="py-1 px-2 '.$class.'" id="' . $k . '">' . $r->name . '</li>';
+                    $k++;
                 }
+                $this->incIngrSearchId = $k;
             }
             $this->incIngrSearchResults = $results;
         }
@@ -311,8 +340,8 @@ class HeadingsCreateParam extends Component
             if($this->incIngrCheck){
                 $dop = 'или';
             }
-            $this->incIngrSelecteds[$id] = '<div class="flex items-center"><div class="text-[16px] mr-2">'.$dop.'</div><div class="block-item w-fit bg-gray-300 text-black border border-black p-1.5 select-none rounded-[2px]"><div class="item flex text-[16px]"><span id="'.$id.'">'.$name.'</span><i wire:click="incIngrRemoveItemId('.$id.')" class="ti removeItem ti-square-letter-x ml-2 cursor-pointer text-red-600"></i></div></div></div>';
-            $this->incIngrSearchRemoveIds[$id] = $id;
+            $this->incIngrSelecteds[$id] = '<div class="flex items-center"><div class="text-[16px] mr-2">'.$dop.'</div><div class="block-item w-fit bg-gray-300 text-black border border-black p-1.5 select-none rounded-[2px]"><div class="item flex text-[16px]"><span id="'.$id.'">'.$name.'</span><i wire:click="incIngrRemoveItemId('.$id.', \''.$name.'\')" class="ti removeItem ti-square-letter-x ml-2 cursor-pointer text-red-600"></i></div></div></div>';
+            $this->incIngrSearchRemove[] = $name;
             $this->incIngrSearchResults = '';
             $this->incIngrSearchText = '';
             $this->incIngrShow = false;
@@ -321,23 +350,16 @@ class HeadingsCreateParam extends Component
     }
 
     public function incIngrAdd(){
-
-        $res = Ingredient::where('name', '=', $this->incIngrSearchText)->first();
-
-        if($res == null){
-            $name = $this->incIngrSearchText;
-            $id = rand(9000, 9999);
-        } else {
-            $name = $res->name;
-            $id = $res->id;
-        }
+        $name = $this->incIngrSearchText;
+        $id = $this->incIngrSearchId + 1;
+        $this->incIngrSearchId = $id + 1;
 
         $dop = 'и';
         if($this->incIngrCheck){
             $dop = 'или';
         }
 
-        $this->incIngrSelecteds[$id] = '<div class="flex items-center"><div class="text-[16px] mr-2">'.$dop.'</div><div class="block-item w-fit bg-gray-300 text-black border border-black p-1.5 select-none rounded-[2px]"><div class="item flex text-[16px]"><span id="'.$id.'">'.$name.'</span><i wire:click="incIngrRemoveItemId('.$id.')" class="ti removeItem ti-square-letter-x ml-2 cursor-pointer text-red-600"></i></div></div></div>';
+        $this->incIngrSelecteds[$id] = '<div class="flex items-center"><div class="text-[16px] mr-2">'.$dop.'</div><div class="block-item w-fit bg-gray-300 text-black border border-black p-1.5 select-none rounded-[2px]"><div class="item flex text-[16px]"><span id="'.$id.'">'.$name.'</span><i wire:click="incIngrRemoveItemId('.$id.', \''.$name.'\')" class="ti removeItem ti-square-letter-x ml-2 cursor-pointer text-red-600"></i></div></div></div>';
         $this->incIngrSearchResults = '';
         $this->incIngrSearchText = '';
         $this->incIngrShow = false;
@@ -351,16 +373,18 @@ class HeadingsCreateParam extends Component
         $this->methodShow = false;
     }
 
-    public function incIngrRemoveItemId($id): void
+    public function incIngrRemoveItemId($id, $name): void
     {
         if($id){
+            $key = array_search($name, $this->incIngrSearchRemove);
             $this->incIngrSearchResults = '';
+
             if (array_key_exists($id, $this->incIngrSelecteds)) {
                 unset($this->incIngrSelecteds[$id]);
             }
 
-            if (array_key_exists($id, $this->incIngrSearchRemoveIds)) {
-                unset($this->incIngrSelecteds[$id]);
+            if($key !== false){
+                unset($this->incIngrSearchRemove[$key]);
             }
 
             if (array_key_exists($id, $this->incIngr)) {
@@ -377,11 +401,18 @@ class HeadingsCreateParam extends Component
     {
         if($this->excIngrSearchText != ''){
             $results = '';
-            $res = DB::table('ingredients')->select("id","name")->whereNotIn('id', $this->excIngrSearchRemoveIds)->where('name','LIKE',"$this->excIngrSearchText%")->orWhere('name','LIKE',"% $this->excIngrSearchText%")->orderByRaw('CHAR_LENGTH(name) ASC')->limit(50)->get();
+            $res = DB::table('ingredients')->select("id","name")->where('name','LIKE',"$this->excIngrSearchText%")->orWhere('name','LIKE',"% $this->excIngrSearchText%")->orderByRaw('CHAR_LENGTH(name) ASC')->limit(50)->get();
             if($res){
+                $k = $this->excIngrSearchId;
                 foreach ($res as $r) {
-                    $results .= '<li wire:click="excIngrLiClick('.$r->id.', \''.$r->name.'\')" class="py-1 px-2" id="' . $r->id . '">' . $r->name . '</li>';
+                    $class = '';
+                    if(in_array($r->name, $this->excIngrSearchRemove)){
+                        $class = 'hidden';
+                    }
+                    $results .= '<li wire:click="excIngrLiClick('.$k.', \''.$r->name.'\')" class="py-1 px-2 '.$class.'" id="' . $k . '">' . $r->name . '</li>';
+                    $k++;
                 }
+                $this->excIngrSearchId = $k;
             }
             $this->excIngrSearchResults = $results;
         }
@@ -395,8 +426,8 @@ class HeadingsCreateParam extends Component
             if($this->excIngrCheck){
                 $dop = 'или';
             }
-            $this->excIngrSelecteds[$id] = '<div class="flex items-center"><div class="text-[16px] mr-2">'.$dop.'</div><div class="block-item w-fit bg-gray-300 text-black border border-black p-1.5 select-none rounded-[2px]"><div class="item flex text-[16px]"><span id="'.$id.'">'.$name.'</span><i wire:click="excIngrRemoveItemId('.$id.')" class="ti removeItem ti-square-letter-x ml-2 cursor-pointer text-red-600"></i></div></div></div>';
-            $this->excIngrSearchRemoveIds[$id] = $id;
+            $this->excIngrSelecteds[$id] = '<div class="flex items-center"><div class="text-[16px] mr-2">'.$dop.'</div><div class="block-item w-fit bg-gray-300 text-black border border-black p-1.5 select-none rounded-[2px]"><div class="item flex text-[16px]"><span id="'.$id.'">'.$name.'</span><i wire:click="excIngrRemoveItemId('.$id.', \''.$name.'\')" class="ti removeItem ti-square-letter-x ml-2 cursor-pointer text-red-600"></i></div></div></div>';
+            $this->excIngrSearchRemove[] = $name;
             $this->excIngrSearchResults = '';
             $this->excIngrSearchText = '';
             $this->excIngrShow = false;
@@ -405,22 +436,16 @@ class HeadingsCreateParam extends Component
     }
 
     public function excIngrAdd(){
-        $res = Ingredient::where('name', '=', $this->excIngrSearchText)->first();
-
-        if($res == null){
-            $name = $this->excIngrSearchText;
-            $id = rand(9000, 9999);
-        } else {
-            $name = $res->name;
-            $id = $res->id;
-        }
+        $name = $this->excIngrSearchText;
+        $id = $this->excIngrSearchId + 1;
+        $this->excIngrSearchId = $id + 1;
 
         $dop = 'и';
         if($this->excIngrCheck){
             $dop = 'или';
         }
 
-        $this->excIngrSelecteds[$id] = '<div class="flex items-center"><div class="text-[16px] mr-2">'.$dop.'</div><div class="block-item w-fit bg-gray-300 text-black border border-black p-1.5 select-none rounded-[2px]"><div class="item flex text-[16px]"><span id="'.$id.'">'.$name.'</span><i wire:click="excIngrRemoveItemId('.$id.')" class="ti removeItem ti-square-letter-x ml-2 cursor-pointer text-red-600"></i></div></div></div>';
+        $this->excIngrSelecteds[$id] = '<div class="flex items-center"><div class="text-[16px] mr-2">'.$dop.'</div><div class="block-item w-fit bg-gray-300 text-black border border-black p-1.5 select-none rounded-[2px]"><div class="item flex text-[16px]"><span id="'.$id.'">'.$name.'</span><i wire:click="excIngrRemoveItemId('.$id.', \''.$name.'\')" class="ti removeItem ti-square-letter-x ml-2 cursor-pointer text-red-600"></i></div></div></div>';
         $this->excIngrSearchResults = '';
         $this->excIngrSearchText = '';
         $this->excIngrShow = false;
@@ -429,18 +454,28 @@ class HeadingsCreateParam extends Component
 
     public function excIngrShowCheck(){
         $this->cookShow = false;
-        $this->incIngrShow = false;
         $this->excIngrShow = true;
+        $this->incIngrShow = false;
         $this->methodShow = false;
     }
 
-    public function excIngrRemoveItemId($id): void
+    public function excIngrRemoveItemId($id, $name): void
     {
         if($id){
+            $key = array_search($name, $this->excIngrSearchRemove);
             $this->excIngrSearchResults = '';
-            unset($this->excIngrSelecteds[$id]);
-            unset($this->excIngrSearchRemoveIds[$id]);
-            unset($this->excIngr[$id]);
+
+            if (array_key_exists($id, $this->excIngrSelecteds)) {
+                unset($this->excIngrSelecteds[$id]);
+            }
+
+            if($key !== false){
+                unset($this->excIngrSearchRemove[$key]);
+            }
+
+            if (array_key_exists($id, $this->excIngr)) {
+                unset($this->excIngr[$id]);
+            }
         }
     }
 
@@ -452,11 +487,18 @@ class HeadingsCreateParam extends Component
     {
         if($this->methodSearchText != ''){
             $results = '';
-            $res = DB::table('methods')->select("id","name")->whereNotIn('id', $this->methodSearchRemoveIds)->where('name','LIKE',"%$this->methodSearchText%")->limit(50)->get();
+            $res = DB::table('methods')->select("id","name")->where('name','LIKE',"%$this->methodSearchText%")->limit(50)->get();
             if($res){
+                $k = $this->methodSearchId;
                 foreach ($res as $r) {
-                    $results .= '<li wire:click="methodLiClick('.$r->id.', \''.$r->name.'\')" class="py-1 px-2" id="' . $r->id . '">' . $r->name . '</li>';
+                    $class = '';
+                    if(in_array($r->name, $this->methodSearchRemove)){
+                        $class = 'hidden';
+                    }
+                    $results .= '<li wire:click="methodLiClick('.$k.', \''.$r->name.'\')" class="py-1 px-2 '.$class.'" id="' . $k . '">' . $r->name . '</li>';
+                    $k++;
                 }
+                $this->methodSearchId = $k;
             }
             $this->methodSearchResults = $results;
         }
@@ -470,8 +512,8 @@ class HeadingsCreateParam extends Component
             if($this->methodCheck){
                 $dop = 'или';
             }
-            $this->methodSelecteds[$id] = '<div class="flex items-center"><div class="text-[16px] mr-2">'.$dop.'</div><div class="block-item w-fit bg-gray-300 text-black border border-black p-1.5 select-none rounded-[2px]"><div class="item flex text-[16px]"><span id="'.$id.'">'.$name.'</span><i wire:click="methodRemoveItemId('.$id.')" class="ti removeItem ti-square-letter-x ml-2 cursor-pointer text-red-600"></i></div></div></div>';
-            $this->methodSearchRemoveIds[$id] = $id;
+            $this->methodSelecteds[$id] = '<div class="flex items-center"><div class="text-[16px] mr-2">'.$dop.'</div><div class="block-item w-fit bg-gray-300 text-black border border-black p-1.5 select-none rounded-[2px]"><div class="item flex text-[16px]"><span id="'.$id.'">'.$name.'</span><i wire:click="methodRemoveItemId('.$id.', \''.$name.'\')" class="ti removeItem ti-square-letter-x ml-2 cursor-pointer text-red-600"></i></div></div></div>';
+            $this->methodSearchRemove[] = $name;
             $this->methodSearchResults = '';
             $this->methodSearchText = '';
             $this->methodShow = false;
@@ -480,22 +522,16 @@ class HeadingsCreateParam extends Component
     }
 
     public function methodAdd(){
-        $res = Method::where('name', '=', $this->methodSearchText)->first();
-
-        if($res == null){
-            $name = $this->methodSearchText;
-            $id = rand(9000, 9999);
-        } else {
-            $name = $res->name;
-            $id = $res->id;
-        }
+        $name = $this->methodSearchText;
+        $id = $this->methodSearchId + 1;
+        $this->methodSearchId = $id + 1;
 
         $dop = 'и';
         if($this->methodCheck){
             $dop = 'или';
         }
 
-        $this->methodSelecteds[$id] = '<div class="flex items-center"><div class="text-[16px] mr-2">'.$dop.'</div><div class="block-item w-fit bg-gray-300 text-black border border-black p-1.5 select-none rounded-[2px]"><div class="item flex text-[16px] capitalize"><span id="'.$id.'" class="capitalize">'.$name.'</span><i wire:click="methodRemoveItemId('.$id.')" class="ti removeItem ti-square-letter-x ml-2 cursor-pointer text-red-600"></i></div></div></div>';
+        $this->methodSelecteds[$id] = '<div class="flex items-center"><div class="text-[16px] mr-2">'.$dop.'</div><div class="block-item w-fit bg-gray-300 text-black border border-black p-1.5 select-none rounded-[2px]"><div class="item flex text-[16px] capitalize"><span id="'.$id.'" class="capitalize">'.$name.'</span><i wire:click="methodRemoveItemId('.$id.', \''.$name.'\')" class="ti removeItem ti-square-letter-x ml-2 cursor-pointer text-red-600"></i></div></div></div>';
         $this->methodSearchResults = '';
         $this->methodSearchText = '';
         $this->methodShow = false;
@@ -509,13 +545,24 @@ class HeadingsCreateParam extends Component
         $this->methodShow = true;
     }
 
-    public function methodRemoveItemId($id): void
+    public function methodRemoveItemId($id, $name): void
     {
         if($id){
+            $key = array_search($name, $this->methodSearchRemove);
             $this->methodSearchResults = '';
-            unset($this->methodSelecteds[$id]);
-            unset($this->methodSearchRemoveIds[$id]);
-            unset($this->method[$id]);
+
+            if (array_key_exists($id, $this->methodSelecteds)) {
+                unset($this->methodSelecteds[$id]);
+            }
+
+            if($key !== false){
+                unset($this->methodSearchRemove[$key]);
+            }
+
+            if (array_key_exists($id, $this->method)) {
+                unset($this->method[$id]);
+            }
+
         }
     }
 

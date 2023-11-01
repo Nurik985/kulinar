@@ -158,6 +158,11 @@ class HeadingsEditManul extends Component
         $this->temporaryUrl = true;
     }
 
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName);
+    }
+
     /********************************** RUBRICS ******************************/
 
     public function rubricSearchFunc(): void

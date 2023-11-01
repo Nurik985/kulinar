@@ -10,7 +10,7 @@
 
         <span class="sr-only">Success</span>
         <div class="ml-3 text-sm font-medium">
-            {{ $message }}
+            {!!  $message !!}
         </div>
         <button type="button"
             class="-mx-1.5 -my-1.5 ml-auto inline-flex h-8 w-8 items-center justify-center rounded-lg bg-green-200 p-1.5 text-green-500 hover:bg-green-200 focus:ring-2 focus:ring-green-400 dark:bg-gray-800 dark:text-green-400 dark:hover:bg-gray-700"

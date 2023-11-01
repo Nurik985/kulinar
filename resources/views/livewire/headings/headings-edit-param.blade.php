@@ -2,7 +2,7 @@
     <div class="flex  w-full justify-center">
         <div class="w-full rounded-[4px] border bg-white dark:bg-gray-700">
             <div class="px-6 py-6 lg:px-8">
-                <form wire:submit="saveHeading" class="space-y-6" onkeydown="return event.key != 'Enter';">
+                <form wire:submit="updateHeading" class="space-y-6" onkeydown="return event.key != 'Enter';">
                     <div class="grid gap-2 sm:grid-cols-2 sm:gap-4">
                         <div class="sm:col-span-2">
                             <label for="name"
@@ -275,7 +275,7 @@
                         <div class="flex">
                             <button type="submit" class="inline-flex items-center  justify-center px-5 py-2.5 text-sm font-medium text-center text-white bg-green-600 rounded-[4px] focus:ring-4 focus:ring-gray-200 dark:focus:ring-primary-900 hover:bg-gray-800">
                                 <i class="ti ti-device-floppy mr-1"></i>
-                                Добавить рубрику
+                                Изменить рубрику
                             </button>
                         </div>
                     </div>
@@ -285,7 +285,6 @@
     </div>
 </div>
 @push('scripts')
-    <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
     <script>
         ClassicEditor
             .create( document.querySelector( '#editorFirst' ) )
