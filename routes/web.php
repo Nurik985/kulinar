@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\RecipeController;
 use App\Http\Controllers\Admin\RedirectController;
 use App\Http\Controllers\Admin\SectionController;
 use App\Http\Controllers\Admin\UnitController;
+use App\Models\Heading;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -87,7 +88,29 @@ Route::group(['prefix' => 'admin', 'name' => 'admin.', 'middleware' => ['auth', 
 
     Route::view('rubrica/param', 'admin.headings.param-create')->name('rubrica.param-create');
     Route::view('rubrica/manual', 'admin.headings.manual-create')->name('rubrica.manual-create');
-    Route::get('test', [CategoryController::class, 'index']);
+    Route::get('tests', function(){
+
+        $res['url'] = 'pashalnye-kulichi-v-duhovke';
+
+        $result = Heading::where('url', '=', $res['url'])->count();
+
+        echo $result;
+//        if($result){
+//
+//        } else {
+//            echo "<pre>";
+//            print_r($result->getDates());
+//            echo"</pre>";
+//        }
+
+//
+//        Heading::where('url', '=', $res['url'])->firstOr(function () use($res) {
+//            $res['url'] = 'pashalnye-kulichi-v-duhovke3';
+//            return $res['url'];
+//        });
+//
+//        echo $res['url'];
+    });
 
     Route::post('/get-rubrics', [HeadingController::class, 'getRubrics'])->name('get-rubrics');
     Route::post('/get-sections', [HeadingController::class, 'getSections'])->name('get-sections');

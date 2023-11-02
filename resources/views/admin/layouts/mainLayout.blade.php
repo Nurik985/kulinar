@@ -37,11 +37,9 @@ $isFront = ($isFront ?? '') == true ? 'Front' : '';
     <?php endif; ?>
 
 
-    <div
-        class="wrapper <?php if(!$isFront): ?>max-w-[95rem] mx-auto border-x-gray-200 xl:border-x dark:bg-gray-800 dark:border-x-gray-700 <?php endif; ?>">
+    <div class="wrapper <?php if(!$isFront): ?>max-w-[95rem] mx-auto border-x-gray-200 xl:border-x dark:bg-gray-800 dark:border-x-gray-700 <?php endif; ?>">
         <main id="content" role="main" class="bg-white">
             @yield('layoutContent')
-
         </main>
     </div>
 

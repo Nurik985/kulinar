@@ -9,6 +9,9 @@ module.exports = {
     ],
     theme: {
         extend: {
+            gridTemplateColumns: {
+                'custom': '50px 50px 100px auto 30px',
+            },
             colors: {
                 primary: {
                     50: '#eff6ff',
