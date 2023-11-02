@@ -13,7 +13,7 @@
     <div class="p-4 lg:ml-64 min-h-screen">
         @include('admin.layouts.sections.breadcrumb', $data)
         @include('admin.layouts.sections.successAlert')
-        <livewire:recipes.recipes/>
+        <livewire:recipes.recipes />
     </div>
 @endsection
 

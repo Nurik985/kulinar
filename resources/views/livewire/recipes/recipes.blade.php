@@ -23,16 +23,16 @@
                     </div>
                 </div>
                 <div class="flex">
-                    <button type="button" class="inline-flex items-center border px-4 py-2 mr-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-[4px] hover:bg-gray-200 hover:text-gray-700 focus:bg-gray-200 focus:text-gray-700 dark:bg-blue-600 dark:hover:bg-blue-700 ">
+                    <button wire:click='statusBtn(2)' type="button" class="inline-flex items-center border px-4 py-2 mr-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-[4px] hover:bg-gray-200 hover:text-gray-700 focus:bg-gray-200 focus:text-gray-700 dark:bg-blue-600 dark:hover:bg-blue-700 ">
                         Черновик <span class="text-xs ml-1 text-gray-500"> {{$statusDraft}}</span>
                     </button>
-                    <button type="button" class="inline-flex items-center border px-4 py-2 mr-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-[4px] hover:bg-gray-200 hover:text-gray-700 focus:bg-gray-200 focus:text-gray-700 dark:bg-blue-600 dark:hover:bg-blue-700">
+                    <button wire:click='statusBtn(6)' type="button" class="inline-flex items-center border px-4 py-2 mr-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-[4px] hover:bg-gray-200 hover:text-gray-700 focus:bg-gray-200 focus:text-gray-700 dark:bg-blue-600 dark:hover:bg-blue-700">
                         На утверждении <span class="text-xs ml-1 text-gray-500"> {{$statusPending}}</span>
                     </button>
-                    <button type="button" class="inline-flex items-center border px-4 py-2 mr-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-[4px] hover:bg-gray-200 hover:text-gray-700 focus:bg-gray-200 focus:text-gray-700 dark:bg-blue-600 dark:hover:bg-blue-700">
+                    <button wire:click='statusBtn(1)' type="button" class="inline-flex items-center border px-4 py-2 mr-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-[4px] hover:bg-gray-200 hover:text-gray-700 focus:bg-gray-200 focus:text-gray-700 dark:bg-blue-600 dark:hover:bg-blue-700">
                         Опубликован <span class="text-xs ml-1 text-gray-500"> {{$statusPublished}}</span>
                     </button>
-                    <button type="button" class="inline-flex items-center border px-4 py-2 mr-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-[4px] hover:bg-gray-200 hover:text-gray-700 focus:bg-gray-200 focus:text-gray-700 dark:bg-blue-600 dark:hover:bg-blue-700">
+                    <button wire:click='statusBtn(4)' type="button" class="inline-flex items-center border px-4 py-2 mr-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-[4px] hover:bg-gray-200 hover:text-gray-700 focus:bg-gray-200 focus:text-gray-700 dark:bg-blue-600 dark:hover:bg-blue-700">
                         Корзина <span class="text-xs ml-1 text-gray-500"> {{$statusBasket}}</span>
                     </button>
                 </div>
@@ -61,7 +61,7 @@
                     </div>
                     <div
                         class="flex w-full flex-shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0">
-                        <a href="{{ route('razdel.create') }}"
+                        <a href="{{ route('recipe.create') }}"
                            class="flex items-center justify-center rounded-lg bg-green-500 px-4 py-2 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                             <svg class="mr-2 h-3.5 w-3.5" fill="currentColor" viewbox="0 0 20 20"
                                  xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -91,7 +91,7 @@
                                     <th scope="col" class="border border-gray-400 px-4 py-3">
                                         <div class="flex items-center">
                                             {{$rowSows[$key]['name']}}
-                                            <a wire:click="setSortBy('name')" class="cursor-pointer">
+                                            <a wire:click="setSortBy('name')" data-sortdir="{{$sortDir}}" class="cursor-pointer">
                                                 <svg class="ml-1.5 h-3 w-3" aria-hidden="true"
                                                      xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                                      viewBox="0 0 24 24">

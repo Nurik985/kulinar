@@ -32,6 +32,8 @@ class Recipes extends Component
     public $statusPublished = 0; // status - 1
     public $statusBasket = 0; // status - 4
 
+    public $sortBtn = [2,6,1,4];
+
     public $rowSows = [
         [
             'name' => 'Заголовок',
@@ -112,6 +114,20 @@ class Recipes extends Component
 
     }
 
+    public function statusBtn($k){
+
+        $this->sortBtn = [];
+        $this->sortBtn[] = $k;
+        
+        //$this->reset();
+        //dd($this->sortBtn);
+    }
+
+    public function updatedStatusBtn()
+    {
+        $this->resetPage();
+    }
+
     public function rowShowRender($row){
         if($this->rowSows[$row]['status']){
             $this->rowSows[$row]['status'] = false;
@@ -137,14 +153,20 @@ class Recipes extends Component
 
     public function setSortBy($sortByField)
     {
-
-        if ($this->sortBy === $sortByField) {
-            $this->sortDir = ($this->sortDir == "ASC") ? 'DESC' : "ASC";
-            return;
+        
+        if ($this->sortBy == $sortByField) {
+            $this->sortDir = ($this->sortDir == "ASC") ? "DESC" : "ASC";
+            // if($this->sortDir === "ASC"){
+            //     $this->sortDir = "DESC";
+            // } else{
+            //     $this->sortDir = "ASC";
+            // }
+        } else {
+            $this->sortBy = $sortByField;
+            $this->sortDir = 'DESC';
+            // dd('22222 '.$this->sortDir);
         }
-
-        $this->sortBy = $sortByField;
-        $this->sortDir = 'DESC';
+        
     }
 
     public function openDelModal($sectionId, $text)
@@ -172,7 +194,7 @@ class Recipes extends Component
             [
                 'recipes' => Recipe::search($this->search)
                     ->orderBy($this->sortBy, $this->sortDir)
-                    //->whereIn('status', [1,2,6,4])
+                    ->whereIn('status', $this->sortBtn)
                     ->paginate($this->perPage)
             ]
         );

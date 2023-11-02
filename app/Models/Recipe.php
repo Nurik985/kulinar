@@ -11,6 +11,6 @@ class Recipe extends Model
 
     public function scopeSearch($query, $value)
     {
-        $query->where('name','LIKE',"$value%")->orWhere('name','LIKE',"% $value%")->orderByRaw('CHAR_LENGTH(name) ASC');
+        $query->where('name','LIKE',"$value%")->orWhere('name','LIKE',"% $value%");
     }
 }
