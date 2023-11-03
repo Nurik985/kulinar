@@ -1,6 +1,6 @@
 <div>
     <div class="relative flex w-full justify-center">
-        <div class="w-full rounded-[4px] mr-3 border bg-white dark:bg-gray-700">
+        <div class="w-full rounded-[4px] mr-3 mb-10 border bg-white dark:bg-gray-700">
             <div class="px-6 py-6 lg:px-8">
                 <form wire:submit="saveHeading" class="space-y-6">
                     <div class="grid gap-2 sm:grid-cols-2 sm:gap-4">
@@ -179,86 +179,39 @@
                         </div>
 
                     </div>
-                    <div class="flex justify-between items-center">
-                        <div class="flex  mr-4">
-                            <a href="{{ route('rubrica.index') }}" class="inline-flex items-center  justify-center px-5 py-2.5 text-sm font-medium text-center text-white bg-green-600 rounded-[4px]">
-                                <i class="ti ti-arrow-badge-left"></i>
-                                Вернуться назад
-                            </a>
-                        </div>
-                        <div class="flex">
-                            <button type="submit" class="inline-flex items-center  justify-center px-5 py-2.5 text-sm font-medium text-center text-white bg-green-600 rounded-[4px]">
-                                <i class="ti ti-device-floppy mr-1"></i>
-                                Добавить рубрику
-                            </button>
-                        </div>
-                    </div>
                 </form>
             </div>
         </div>
-        <div class="fixed bottom-0 left-1/2 -translate-x-1/2 z-[49] w-[95rem] mx-auto text-center border border-grey p-4 bg-gray-400">
-            <ul class="grid w-full gap-6 grid-cols-3">
-                <li>
-                    <input type="radio" id="hosting-small" name="hosting" value="hosting-small" class="hidden peer" required>
-                    <label for="hosting-small" class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
-                        <div class="block">
-                            <div class="w-full text-lg font-semibold">Черновик</div>
+        <div class="fixed bottom-0 left-1/2 -translate-x-1/2 z-[49] w-[95rem] mx-auto text-center p-3 backdrop-blur-2xl content-end">
+            <div class="w-[45rem]">
+                <ul class="grid w-full gap-4 grid-cols-4">
+                    <li>
+                        <div class="flex items-center pl-4 border border-gray-700 rounded-[6px] bg-white hover:bg-gray-50 cursor-pointer">
+                            <input id="status1" type="radio" value="1" name="status" class="w-4 h-4 text-green-700 bg-gray-100 border-gray-300 " checked>
+                            <label for="status1" class="cursor-pointer w-full py-2 ml-2 text-sm font-lighr text-black dark:text-gray-300">Черновик</label>
                         </div>
-                        <svg class="w-5 h-5 ml-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                        </svg>
-                    </label>
-                </li>
-                <li>
-                    <input type="radio" id="hosting-big" name="hosting" value="hosting-big" class="hidden peer">
-                    <label for="hosting-big" class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
-                        <div class="block">
-                            <div class="w-full text-lg font-semibold">На утверждении</div>
+                    </li>
+                    <li>
+                        <div class="flex items-center pl-4 border border-gray-700 rounded-[6px] bg-white hover:bg-gray-50 cursor-pointer">
+                            <input id="status2" type="radio" value="2" name="status" class="w-4 h-4 text-green-700 bg-gray-100 border-gray-300 ">
+                            <label for="status2" class="cursor-pointer w-full py-2 ml-2 text-sm font-lighr text-black dark:text-gray-300">Опубликовано</label>
                         </div>
-                        <svg class="w-5 h-5 ml-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                        </svg>
-                    </label>
-                </li>
-                <li>
-                    <input type="radio" id="hosting-big" name="hosting" value="hosting-big" class="hidden peer">
-                    <label for="hosting-big" class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:bg-gray-800 dark:hover:bg-gray-700">
-                        <div class="block">
-                            <div class="w-full text-lg font-semibold">Опубликовать</div>
+                    </li>
+                    <li>
+                        <div class="flex items-center pl-4 border border-gray-700 rounded-[6px] bg-white hover:bg-gray-50 cursor-pointer">
+                            <input id="status3" type="radio" value="3" name="status" class="w-4 h-4 text-green-700 bg-gray-100 border-gray-300 ">
+                            <label for="status3" class="cursor-pointer w-full py-2 ml-2 text-sm font-lighr text-black dark:text-gray-300">На утверждении</label>
                         </div>
-                        <svg class="w-5 h-5 ml-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
-                        </svg>
-                    </label>
-                </li>
-            </ul>
+                    </li>
+                    <li>
+                        <button type="submit" class="w-full inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-center text-white bg-green-600 rounded-[6px]">
+                            <i class="ti ti-device-floppy mr-1"></i>
+                            Сохранить
+                        </button>
+                    </li>
+                </ul>
+            </div>
         </div>
-{{--        <div class="w-1/5 h-[calc(100vh-1rem)] rounded-[4px] border fixed top-5 overflow-y-scroll overscroll-contain">--}}
-{{--            <div class="px-2 py-3">--}}
-{{--                <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" class="w-full flex justify-between text-white bg-gray-500 hover:bg-gray-800 font-medium rounded-[4px] text-sm px-2 py-1 text-center inline-flex items-center " type="button"><span>Статус</span> <svg class="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">--}}
-{{--                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>--}}
-{{--                    </svg>--}}
-{{--                </button>--}}
-
-{{--                <!-- Dropdown menu -->--}}
-{{--                <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">--}}
-{{--                    <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">--}}
-{{--                        <li>--}}
-{{--                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>--}}
-{{--                        </li>--}}
-{{--                        <li>--}}
-{{--                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Settings</a>--}}
-{{--                        </li>--}}
-{{--                        <li>--}}
-{{--                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>--}}
-{{--                        </li>--}}
-{{--                        <li>--}}
-{{--                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Sign out</a>--}}
-{{--                        </li>--}}
-{{--                    </ul>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
     </div>
 </div>
 @push('scripts')
