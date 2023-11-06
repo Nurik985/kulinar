@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreRecipeRequest;
 use App\Http\Requests\UpdateRecipeRequest;
 use App\Models\Recipe;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class RecipeController extends Controller
 {
@@ -63,5 +65,22 @@ class RecipeController extends Controller
     public function destroy(Recipe $recipe)
     {
         //
+    }
+
+    public function upload(Request $request): JsonResponse
+    {
+        if ($request->hasFile('upload')) {
+            $originName = $request->file('upload')->getClientOriginalName();
+            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+            $extension = $request->file('upload')->getClientOriginalExtension();
+            $fileName = $fileName . '_' . time() . '.' . $extension;
+            $god = date("Y");
+            $mes= date("m");
+            $request->file('upload')->move(public_path('recipe/'.$god.'/'.$mes), $fileName);
+            $url = asset('recipe/'.$god .'/'.$mes.'/' . $fileName);
+
+            return response()->json(['fileName' => $fileName, 'uploaded'=> 1, 'url' => $url]);
+        }
+        return response()->json(['error' => 'error']);
     }
 }

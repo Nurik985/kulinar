@@ -33,6 +33,7 @@ return new class extends Migration
             $table->integer('osn_section')->nullable();
             $table->text('parent_bread')->nullable();
             $table->text('firsttext')->nullable();
+            $table->longText('genzapros')->nullable();
             $table->timestamps();
         });
     }

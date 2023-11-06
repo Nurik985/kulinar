@@ -119,14 +119,14 @@
                             <input wire:model="fadeMenu" id="fadeMenu" name="fadeMenu" type="checkbox" class="w-6 h-6 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <label for="fadeMenu" class="ml-2 cursor-pointer text-sm font-medium text-gray-500 dark:text-gray-300">Вывести в верхнее меню</label>
                         </div>
-
+                        {{$firstText}}
                         <div wire:ignore class="sm:col-span-2">
                             <label  for="editorFirst" class="block mb-2 text-sm font-medium text-gray-500 dark:text-white">Текст в начале рубрики</label>
-                            <textarea wire:model="firstText" id="editorFirst" name="editorFirst" rows="8" name="text" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-[4px] border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="">{{ old('text', '') }}</textarea>
+                            <textarea wire:model="firstText" id="editorFirst" name="editorFirst" rows="8" name="text" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-[4px] border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder=""></textarea>
                         </div>
                         <div wire:ignore class="sm:col-span-2">
                             <label  for="editorLast" class="block mb-2 text-sm font-medium text-gray-500 dark:text-white">Текст в конце рубрики</label>
-                            <textarea wire:model="lastText" id="editorLast" name="editorLast" rows="8" name="text" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-[4px] border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="">{{ old('text', '') }}</textarea>
+                            <textarea wire:model="lastText" id="editorLast" name="editorLast" rows="8" name="text" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-[4px] border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder=""></textarea>
                         </div>
                         <div class="sm:col-span-2">
                             <div class="mb-2 block text-sm text-gray-500 font-medium">Изображение записи @if ($rubImg) <sdpan wire:click="delRubImg" class="text-red-500 cursor-pointer ">удалить?</sdpan>@endif</div>
@@ -171,7 +171,7 @@
                             </div>
                         </div>
 
-                        
+
                         <div class="sm:col-span-2">
                             <div class="block mb-2 text-sm font-medium text-gray-500 dark:text-white">Включая ингредиенты</div>
                             <div class="div_mass">

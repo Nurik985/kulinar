@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\AuthorController;
+use App\Http\Controllers\Admin\CalcController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CookController;
 use App\Http\Controllers\Admin\HeadingController;
@@ -33,7 +34,7 @@ Route::get('/clear', function () {
 
 Route::get('stest', function () {
 
-
+    forceRecipeAll(35);
 //    $headings = Heading::all();
 //
 //    foreach ($headings as $v) {
@@ -69,6 +70,7 @@ Route::group(['prefix' => 'admin', 'name' => 'admin.', 'middleware' => ['auth', 
     Route::resource('rubricator', CategoryController::class);
     Route::resource('redirects', RedirectController::class);
     Route::resource('recipe', RecipeController::class);
+    Route::post('recipe/upload', [RecipeController::class, 'upload'])->name('ckeditor.upload');
 
     Route::resource('spisok/ings', IngredientController::class, ['as' => 'spisok']);
     Route::resource('spisok/kitchen', KitchenController::class, ['as' => 'spisok']);
@@ -78,6 +80,7 @@ Route::group(['prefix' => 'admin', 'name' => 'admin.', 'middleware' => ['auth', 
     Route::resource('spisok/portions', PortionController::class, ['as' => 'spisok']);
     Route::resource('spisok/norms', NormController::class, ['as' => 'spisok']);
     Route::resource('spisok/authors', AuthorController::class, ['as' => 'spisok']);
+    Route::resource('spisok/calc', CalcController::class, ['as' => 'spisok']);
 
 
     Route::get('rubrica', [HeadingController::class, 'index'])->name('rubrica.index');

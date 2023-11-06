@@ -17,6 +17,10 @@ textarea.select2-search__field{
     background-color: rgb(249 250 251 / var(--tw-bg-opacity)) !important;
 }
 
+.ck-editor__editable_inline {
+    min-height: 200px !important;
+}
+
 .select2-dropdown {
     border: 1px solid #d1d5db !important;
 }

@@ -1,0 +1,22 @@
+@php
+    $data = [['name' => 'Домой', 'link' => route('admin')], ['name' => 'Списки'], ['name' => 'Калькулятор']];
+@endphp
+
+@extends('admin/layouts/authLayout')
+
+@section('title', 'Калькулятор')
+
+@section('page-style')
+    @livewireStyles
+@endsection
+
+@section('content')
+    <div class="min-h-screen p-4 lg:ml-64">
+        @include('admin.layouts.sections.breadcrumb', $data)
+        @include('admin.layouts.sections.successAlert')
+        <livewire:spiski.calc.calc />
+    </div>
+@endsection
+@section('page-script')
+    @livewireScripts
+@endsection

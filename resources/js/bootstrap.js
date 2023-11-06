@@ -11,7 +11,7 @@ import select2 from 'select2'
 
 window.$ = jQuery;
 window.jQuery = jQuery;
-window.axios = axios
+window.axios = axios;
 select2()
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'

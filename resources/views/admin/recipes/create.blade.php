@@ -19,7 +19,6 @@
 @endsection
 
 @section('page-script')
-    @vite('resources/js/headings.js')
     @livewireScripts
     @stack('scripts')
 @endsection

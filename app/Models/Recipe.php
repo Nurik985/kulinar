@@ -9,6 +9,8 @@ class Recipe extends Model
 {
     use HasFactory;
 
+    protected $guarded = [];
+
     public function scopeSearch($query, $value)
     {
         $query->where('name','LIKE',"$value%")->orWhere('name','LIKE',"% $value%");

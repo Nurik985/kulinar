@@ -1,4 +1,6 @@
 import './bootstrap'
+import '@nextapps-be/livewire-sortablejs';
+import './ckeditor/ru';
 
 import.meta.glob(['../images/**'])
 

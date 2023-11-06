@@ -9,8 +9,11 @@ module.exports = {
     ],
     theme: {
         extend: {
+            animation: {
+                'fadeIn': 'fadeIn 3s linear infinite',
+            },
             gridTemplateColumns: {
-                'custom': '50px 50px 100px auto 30px',
+                'custom': '50px 100px 150px auto 30px',
             },
             colors: {
                 primary: {
