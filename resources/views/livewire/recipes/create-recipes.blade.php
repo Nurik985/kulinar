@@ -492,8 +492,8 @@
                         </div>
                     </li>
                     <li>
-                        <button wire:click="saveRecipe" type="button"
-                                class="w-full inline-flex items-center justify-center px-5 py-2.5 text-sm font-medium text-center text-white bg-green-600 rounded-[6px]">
+                        <button wire:click="saveRecipe" @if($disabledBtn) disabled @endif type="button"
+                                class="w-full inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-center  @if($disabledBtn) border border-gray-700 text-gray-400 bg-gray-200 @else text-white cursor-pointer bg-green-600 @endif rounded-[6px]">
                             <i class="ti ti-device-floppy mr-1"></i>
                             Сохранить
                         </button>

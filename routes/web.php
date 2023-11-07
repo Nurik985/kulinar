@@ -34,7 +34,7 @@ Route::get('/clear', function () {
 
 Route::get('stest', function () {
 
-    forceRecipeAll(35);
+    forceRecipeAll(28298);
 //    $headings = Heading::all();
 //
 //    foreach ($headings as $v) {

@@ -84,6 +84,8 @@ class CreateRecipes extends Component
 
     public $status = 2;
 
+    public $disabledBtn = false;
+
     public function mount()
     {
         $this->addAutoIngRowRes = '<div class="block mb-2 text-sm font-light text-gray-500">Автозаполнение ингредиетов:</div>';
@@ -645,7 +647,11 @@ class CreateRecipes extends Component
 
     public function saveRecipe()
     {
-        //$this->validate();
+
+        $this->validate();
+
+        $this->disabledBtn = true;
+
 
         $total_steps = 0;
 
