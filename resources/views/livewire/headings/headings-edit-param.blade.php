@@ -122,18 +122,19 @@
 
                         <div wire:ignore class="sm:col-span-2">
                             <label  for="editorFirst" class="block mb-2 text-sm font-medium text-gray-500 dark:text-white">Текст в начале рубрики</label>
-                            <textarea wire:model="firstText" id="editorFirst" name="editorFirst" rows="8" name="text" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-[4px] border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="">{{ old('text', '') }}</textarea>
+                            <textarea wire:model="firstText" id="editorFirst" name="editorFirst" rows="8" name="text" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-[4px] border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder=""></textarea>
                         </div>
                         <div wire:ignore class="sm:col-span-2">
                             <label  for="editorLast" class="block mb-2 text-sm font-medium text-gray-500 dark:text-white">Текст в конце рубрики</label>
-                            <textarea wire:model="lastText" id="editorLast" name="editorLast" rows="8" name="text" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-[4px] border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="">{{ old('text', '') }}</textarea>
+                            <textarea wire:model="lastText" id="editorLast" name="editorLast" rows="8" name="text" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-[4px] border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder=""></textarea>
                         </div>
-                        <div class="sm:col-span-2">
+                        <div class="w-full">
                             <div class="mb-2 block text-sm font-medium text-gray-500">Изображение записи @if ($rubImg) <sdpan wire:click="delRubImg" class="text-red-500 cursor-pointer ">удалить?</sdpan>@endif</div>
                             @if ($rubImg)
-                                <img class="w-1/4 h-auto relative block bg-gray-50 border border-gray-300 rounded-[4px]"  src="{{ $temporaryUrl? $rubImg->temporaryUrl() :  asset('storage/'.$rubImg)  }}">
+                                <img class="w-[200px] h-[200px] object-cover relative block bg-gray-50 border border-gray-300 rounded-[4px]"  src="{{ $temporaryUrl? $rubImg->temporaryUrl() :  asset('storage/'.$rubImg)  }}">
                             @else
-                                <div class="w-full h-[200px] relative block bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px]" style="background-image:url('{{ Vite::asset('resources/images/plus.svg') }}'); background-position: center; background-size: 3%; background-repeat: no-repeat; background-color: #f9fafb; border-style: dashed; border-width: medium; border-color: #ccc">
+                                <div class="w-1/3 h-[200px] relative block bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px]"
+                                     style="background-image:url('{{ Vite::asset('resources/images/plus.svg') }}'); background-position: center; background-size: 20%; background-repeat: no-repeat; background-color: #f9fafb; border-style: dashed; border-width: medium; border-color: #ccc">
                                     <input type="file" wire:model="rubImg" class="absolute top-0 left-0 w-full h-full opacity-0 cursor-pointer">
                                 </div>
                             @endif
@@ -285,26 +286,52 @@
     </div>
 </div>
 @push('scripts')
+    <script src="{{asset('ckeditor/ckeditor.js')}}"></script>
     <script>
         ClassicEditor
-            .create( document.querySelector( '#editorFirst' ) )
-            .then( editor => {
+            .create(document.querySelector('#editorFirst'),{
+                config:{
+                    height: 500,
+                },
+                language: 'ru',
+                removePlugins: [
+                    'MediaEmbedToolbar',
+                    'Title'
+                ],
+                placeholder: '',
+                ckfinder: {
+                    uploadUrl: '{{route('ckeditor.upload').'?_token='.csrf_token()}}',
+                }
+            })
+            .then(editor => {
                 editor.model.document.on('change:data', () => {
                     @this.set('firstText', editor.getData());
                 })
-            } )
-            .catch( error => {
-            } );
-
+            })
+            .catch(error => {
+            });
         ClassicEditor
-            .create( document.querySelector( '#editorLast' ) )
-            .then( editor => {
+            .create(document.querySelector('#editorLast'),{
+                config:{
+                    height: 500,
+                },
+                language: 'ru',
+                removePlugins: [
+                    'MediaEmbedToolbar',
+                    'Title'
+                ],
+                placeholder: '',
+                ckfinder: {
+                    uploadUrl: '{{route('ckeditor.upload').'?_token='.csrf_token()}}',
+                }
+            })
+            .then(editor => {
                 editor.model.document.on('change:data', () => {
                     @this.set('lastText', editor.getData());
                 })
-            } )
-            .catch( error => {
-            } );
+            })
+            .catch(error => {
+            });
         Livewire.hook('commit', ({ succeed }) => {
             succeed(() => {
                 setTimeout(() => {

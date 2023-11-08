@@ -93,13 +93,13 @@ use App\Models\Section;
                                         <td class="m-w-[80px] h-full px-4 py-3">
                                             <div class="flex">
                                                 <a href="{{ route('rubrica.edit', $heading->id) }}"
-                                                    class="btn btn-sm btn-icon item-edit mr-2"><i
+                                                    class="btn btn-sm btn-icon item-edit mr-2 !p-0"><i
                                                         class="ti ti-pencil text-green-500"></i></a>
-                                                <a href="javascript:;" class="btn btn-sm btn-icon item-edit mr-2"><i
+                                                <a href="javascript:;" class="btn btn-sm btn-icon item-edit mr-2 !p-0"><i
                                                         class="ti ti-eye text-purple-500"></i></a>
                                                 <span
                                                     wire:click="openDelModal({{ $heading->id }}, '{{ $heading->name }}')"
-                                                    class="btn btn-sm btn-icon item-edit cursor-pointer"><i
+                                                    class="btn btn-sm btn-icon item-edit cursor-pointer !p-0"><i
                                                         class="ti ti-trash text-red-800"></i></span>
                                             </div>
                                         </td>

@@ -6,6 +6,7 @@
 @section('title', 'Изменение рубрики')
 
 @section('page-style')
+    @vite(['resources/scss/editor.css'])
     @livewireStyles
 @endsection
 
@@ -23,8 +24,6 @@
 @endsection
 
 @section('page-script')
-    <script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
     @livewireScripts
-
     @stack('scripts')
 @endsection

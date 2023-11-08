@@ -1,8 +1,7 @@
 <div>
-    <form class="space-y-6">
+    <form wire:submit="saveRecipe" class="space-y-6">
         <div class="w-full rounded-[4px] mr-3 mb-10 border bg-white dark:bg-gray-700">
             <div class="px-6 py-6 lg:px-8">
-
                 <div class="grid gap-2 sm:grid-cols-2 sm:gap-4">
                     <div class="sm:col-span-2">
                         <label for="name"
@@ -41,12 +40,11 @@
                         <input wire:model="linkSource" type="text" name="linkSource" id="linkSource"
                                class="block w-full rounded-[4px] border border-gray-300 bg-gray-50 p-2.5 text-sm focus:outline-none">
                     </div>
-                    {{$beforeText}}
                     <div wire:ignore class="sm:col-span-2">
                         <label for="beforeText" class="block mb-2 text-sm font-light text-gray-500 dark:text-white">Текст-вступление
                             до шагов приготовления:</label>
                         <textarea wire:model="beforeText" id="beforeText" name="beforeText" rows="8"
-                                  class="block p-2.5 w-full text-xs bg-gray-50 rounded-[4px] border border-gray-300 focus:outline-none"></textarea>
+                                  class="block p-2.5 w-full text-xs bg-gray-50 rounded-[4px] border border-gray-300"></textarea>
                     </div>
                     <div class="sm:col-span-2">
                         <div class="flex justify-between items-center">
@@ -355,11 +353,6 @@
                                 class="font-medium">{{ $message }}</p>
                         @enderror
                     </div>
-                    @php
-//                        echo "<pre>";
-//                        print_r($cook);
-//                        echo "</pre>";
-                    @endphp
                     <div class="sm:col-span-2">
                         <div class="block mb-2 text-sm font-light text-gray-500 dark:text-white">Что готовим:</div>
                         <div class="div_mass">
@@ -451,51 +444,59 @@
                 </div>
             </div>
         </div>
-        <div class="fixed bottom-0 left-1/2 -translate-x-1/2 z-[49] w-[95rem] p-3 backdrop-blur-2xl ">
+        <div class="fixed bottom-0 left-1/2 -translate-x-1/2 z-[49] border w-[95rem] p-3 backdrop-blur-2xl ">
             <div class="flex content-end flex-wrap justify-end items-end">
                 <ul class="grid w-[60rem] gap-4 grid-cols-5">
                     <li>
-                        <div
-                            class="flex items-center pl-4 border border-gray-700 rounded-[6px] bg-white hover:bg-gray-50 cursor-pointer">
-                            <input wire:click="statusChange(2)" id="status1" type="radio" value="1" name="status"
-                                   class="w-4 h-4 text-green-700 bg-gray-100 border-gray-300 " checked>
-                            <label for="status1"
-                                   class="cursor-pointer w-full py-2 ml-2 text-sm font-lighr text-black dark:text-gray-300">Черновик</label>
-                        </div>
+                        <label class="cursor-pointer w-full text-sm font-lighr text-black dark:text-gray-300">
+                            <div
+                                class="flex items-center pl-4 py-2 border border-gray-700 rounded-[6px] bg-white hover:bg-gray-50 cursor-pointer">
+                                <input wire:click="statusChange(2)" id="status1" type="radio" value="1" name="status"
+                                       class="w-4 h-4 text-green-700 bg-gray-100 border-gray-300 mr-2" checked>
+                                Черновик
+                            </div>
+                        </label>
                     </li>
                     <li>
-                        <div
-                            class="flex items-center pl-4 border border-gray-700 rounded-[6px] bg-white hover:bg-gray-50 cursor-pointer">
-                            <input wire:click="statusChange(1)" id="status2" type="radio" value="2" name="status"
-                                   class="w-4 h-4 text-green-700 bg-gray-100 border-gray-300 ">
-                            <label for="status2"
-                                   class="cursor-pointer w-full py-2 ml-2 text-sm font-lighr text-black dark:text-gray-300">Опубликовать</label>
-                        </div>
+                        <label class="cursor-pointer w-full text-sm font-lighr text-black dark:text-gray-300">
+                            <div
+                                class="flex items-center pl-4 py-2 border border-gray-700 rounded-[6px] bg-white hover:bg-gray-50 cursor-pointer">
+                                <input wire:click="statusChange(1)" id="status2" type="radio" value="2" name="status"
+                                       class="w-4 h-4 text-green-700 bg-gray-100 border-gray-300 mr-2">
+                                Опубликовать
+                            </div>
+                        </label>
                     </li>
                     <li>
-                        <div
-                            class="flex items-center pl-4 border border-gray-700 rounded-[6px] bg-white hover:bg-gray-50 cursor-pointer">
-                            <input wire:click="statusChange(6)" id="status3" type="radio" value="3" name="status"
-                                   class="w-4 h-4 text-green-700 bg-gray-100 border-gray-300 ">
-                            <label for="status3"
-                                   class="cursor-pointer w-full py-2 ml-2 text-sm font-lighr text-black dark:text-gray-300">На
-                                утверждении</label>
-                        </div>
+                        <label class="cursor-pointer w-full text-sm font-lighr text-black dark:text-gray-300">
+                            <div
+                                class="flex items-center pl-4 py-2 border border-gray-700 rounded-[6px] bg-white hover:bg-gray-50 cursor-pointer">
+                                <input wire:click="statusChange(6)" id="status3" type="radio" value="3" name="status"
+                                       class="w-4 h-4 text-green-700 bg-gray-100 border-gray-300 mr-2">
+                                На утверждении
+                            </div>
+                        </label>
                     </li>
                     <li>
-                        <div
-                            class="flex items-center pl-4 border border-gray-700 rounded-[6px] bg-white hover:bg-gray-50 cursor-pointer">
-                            <input wire:click="statusChange(4)" id="status4" type="radio" value="3" name="status"
-                                   class="w-4 h-4 text-green-700 bg-gray-100 border-gray-300 ">
-                            <label for="status4"
-                                   class="cursor-pointer w-full py-2 ml-2 text-sm font-lighr text-black dark:text-gray-300">Корзина</label>
-                        </div>
+                        <label class="cursor-pointer w-full text-sm font-lighr text-black dark:text-gray-300">
+                            <div
+                                class="flex items-center pl-4 py-2 border border-gray-700 rounded-[6px] bg-white hover:bg-gray-50 cursor-pointer">
+                                <input wire:click="statusChange(4)" id="status4" type="radio" value="3" name="status"
+                                       class="w-4 h-4 text-green-700 bg-gray-100 border-gray-300 mr-2">
+                                Корзина
+                            </div>
+                        </label>
                     </li>
                     <li>
-                        <button wire:click="saveRecipe" @if($disabledBtn) disabled @endif type="button"
-                                class="w-full inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-center  @if($disabledBtn) border border-gray-700 text-gray-400 bg-gray-200 @else text-white cursor-pointer bg-green-600 @endif rounded-[6px]">
-                            <i class="ti ti-device-floppy mr-1"></i>
+                        <button  wire:loading.attr="disabled" wire:target="saveRecipe" type="submit"
+                                class="border border-green-600 w-full inline-flex items-center justify-center px-5 py-2 text-sm font-medium text-center text-white cursor-pointer bg-green-600 rounded-[6px] hover:bg-green-800" wire:loading.class="!border !border-gray-700 !text-gray-400 bg-gray-200" wire:loading.class.remove="cursor-pointer bg-green-600 hover:bg-green-800">
+                            <svg wire:loading wire:target="saveRecipe" fill='none' class="w-5 h-5 animate-spin mr-2" viewBox="0 0 32 32" xmlns='http://www.w3.org/2000/svg'>
+                                <path clip-rule='evenodd'
+                                      d='M15.165 8.53a.5.5 0 01-.404.58A7 7 0 1023 16a.5.5 0 011 0 8 8 0 11-9.416-7.874.5.5 0 01.58.404z'
+                                      fill='currentColor' fill-rule='evenodd' />
+                            </svg>
                             Сохранить
+
                         </button>
                     </li>
                 </ul>
@@ -508,6 +509,17 @@
 @push('scripts')
     <script src="{{asset('ckeditor/ckeditor.js')}}"></script>
     <script>
+        Livewire.hook('commit', ({ succeed }) => {
+            succeed(() => {
+                setTimeout(() => {
+                    const firstErrorMessage = document.querySelector('.error-message')
+
+                    if (firstErrorMessage !== null) {
+                        firstErrorMessage.scrollIntoView({ block: 'center', inline: 'center' })
+                    }
+                }, 0)
+            })
+        })
         ClassicEditor
             .create(document.querySelector('#beforeText'),{
                 config:{
@@ -554,5 +566,6 @@
             })
             .catch(error => {
             });
+
     </script>
 @endpush

@@ -10,6 +10,8 @@ class Heading extends Model
 {
     use HasFactory;
 
+    use InsertOnDuplicateKey;
+
     protected $guarded = [];
 
 
@@ -33,6 +35,6 @@ class Heading extends Model
 
     public function scopeSearch($query, $value)
     {
-        $query->where('name', 'like', "%{$value}%");
+        $res = $query->where('name', 'like', "%{$value}%");
     }
 }

@@ -644,142 +644,13 @@ class HeadingsCreateParam extends Component
         $osn_section = array_first($this->parentSec);
 
         /*********************************************************/
-        $items = $incIngr;
-        $no_items = $excIngr;
-        $w_k =  $cook;
-        $row_search = '';
 
-        $items = str_replace('/', '', $items);
-        $items = str_replace('|', '', $items);
 
-        $items = explode(' и ', $items);
-        $no_items = explode(' и ', $no_items);
-        $w_k = explode(' и ', $w_k);
-        $method = explode(' и ', $method);
-
-        if (!empty($items)) {
-            foreach ($items as $key => $value) {
-                $value = explode(' или ', $value);
-
-                if (!empty($value[0])) {
-                    if (empty($row_search)) {
-                        $row_search = 'WHERE (';
-                    } else {
-                        $row_search .= ' and (';
-                    }
-
-                    foreach ($value as $key1 => $value1) {
-                        $value1 = preg_replace('/или (.*)/', '$1', $value1);
-                        $value1 = preg_replace('/и (.*)/', '$1', $value1);
-                        $value1 = str_replace('/', '', $value1);
-                        $value1 = str_replace('|', '', $value1);
-                        $value1 = trim($value1);
-
-                        if ($key1 == 0) {
-                            $row_search .= 'ingridients LIKE "%' . $value1 . '%"';
-                        } else {
-                            $row_search .= ' OR ingridients LIKE "%' . $value1 . '%"';
-                        }
-                    }
-
-                    $row_search .= ')';
-                }
-            }
-        }
-
-        if (!empty($no_items)) {
-            foreach ($no_items as $key => $value) {
-                $value = explode(' или ', $value);
-
-                if (!empty($value[0])) {
-                    if (empty($row_search)) {
-                        $row_search = 'WHERE (';
-                    } else {
-                        $row_search .= ' and (';
-                    }
-
-                    foreach ($value as $key1 => $value1) {
-                        $value1 = preg_replace('/или (.*)/', '$1', $value1);
-                        $value1 = preg_replace('/и (.*)/', '$1', $value1);
-                        $value1 = str_replace('/', '', $value1);
-                        $value1 = str_replace('|', '', $value1);
-                        $value1 = trim($value1);
-
-                        if ($key1 == 0) {
-                            $row_search .= 'ingridients NOT LIKE "%' . $value1 . '%"';
-                        } else {
-                            $row_search .= ' OR ingridients NOT LIKE "%' . $value1 . '%"';
-                        }
-                    }
-
-                    $row_search .= ')';
-                }
-            }
-        }
-
-        if (!empty($w_k[0])) {
-            foreach ($w_k as $key => $value) {
-                $value = explode(' или ', $value);
-
-                if (!empty($value[0])) {
-                    if (empty($row_search)) {
-                        $row_search = 'WHERE (';
-                    } else {
-                        $row_search .= ' and (';
-                    }
-
-                    foreach ($value as $key1 => $value1) {
-                        $value1 = preg_replace('/или (.*)/', '$1', $value1);
-                        $value1 = preg_replace('/и (.*)/', '$1', $value1);
-                        $value1 = str_replace('/', '', $value1);
-                        $value1 = str_replace('|', '', $value1);
-                        $value1 = trim($value1);
-
-                        if ($key1 == 0) {
-                            $row_search .= 'w_cook LIKE "%' . $value1 . '%"';
-                        } else {
-                            $row_search .= ' OR w_cook LIKE "%' . $value1 . '%"';
-                        }
-                    }
-
-                    $row_search .= ')';
-                }
-            }
-        }
-
-        if (!empty($method[0])) {
-            foreach ($method as $key => $value) {
-                $value = explode(' или ', $value);
-
-                if (!empty($value[0])) {
-                    if (empty($row_search)) {
-                        $row_search = 'WHERE (';
-                    } else {
-                        $row_search .= ' and (';
-                    }
-
-                    foreach ($value as $key1 => $value1) {
-                        $value1 = preg_replace('/или (.*)/', '$1', $value1);
-                        $value1 = preg_replace('/и (.*)/', '$1', $value1);
-                        $value1 = str_replace('/', '', $value1);
-                        $value1 = str_replace('|', '', $value1);
-                        $value1 = trim($value1);
-
-                        if ($key1 == 0) {
-                            $row_search .= 'method LIKE "%' . $value1 . '%"';
-                        } else {
-                            $row_search .= ' OR method LIKE "%' . $value1 . '%"';
-                        }
-                    }
-
-                    $row_search .= ')';
-                }
-            }
-        }
+        $genZapros = genZapros($incIngr, $excIngr, $cook, $method);
 
         $genzapros = '';
-        if (!empty($row_search)) {
-            $genzapros = $row_search;
+        if (!empty($genZapros)) {
+            $genzapros = $genZapros;
         }
         /*********************************************************/
 
@@ -812,7 +683,7 @@ class HeadingsCreateParam extends Component
         $heading->sections()->attach($parentSec);
         forceRecipe($newHeading->id);
 
-        session()->flash('success', "Рубрика успшено создан");
+        session()->flash('success', "Рубрика '<strong>".$heading->name."</strong>' успшено создан");
 
         return redirect()->to(route('rubrica.index'));
     }

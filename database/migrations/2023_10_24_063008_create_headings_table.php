@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('headings', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 250);
-            $table->string('url', 250)->unique('url');
+            $table->string('name', 250)->nullable();
+            $table->string('url', 250)->unique('url')->nullable();
             $table->string('title', 250)->nullable();
             $table->text('text')->nullable();
             $table->text('w_cook')->nullable();

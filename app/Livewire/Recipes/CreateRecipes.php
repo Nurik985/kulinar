@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Recipes;
 
+use App\Models\Heading;
 use App\Models\Ingredient;
 use App\Models\Recipe;
 use App\Models\Unit;
@@ -10,6 +11,7 @@ use Illuminate\Support\Str;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Mavinoo\Batch\Batch;
 
 class CreateRecipes extends Component
 {
@@ -83,8 +85,6 @@ class CreateRecipes extends Component
     public $storedImage;
 
     public $status = 2;
-
-    public $disabledBtn = false;
 
     public function mount()
     {
@@ -636,22 +636,15 @@ class CreateRecipes extends Component
 
     /********************************** KITCHEN INGREDIENT END ******************************/
 
-    protected function updateAfterTextListener($body){
-        $this->body = $body;
-    }
-
     public function statusChange($i)
     {
         $this->status = $i;
     }
 
+
     public function saveRecipe()
     {
-
         $this->validate();
-
-        $this->disabledBtn = true;
-
 
         $total_steps = 0;
 
@@ -776,12 +769,12 @@ class CreateRecipes extends Component
             $carbohydrates_dop = 0;
 
             if (!empty($method)) {
-                $method = json_decode($method, true);
+                //$method = json_decode($method, true);
                 $methodRand = $method[array_rand($method)];
             }
 
             if (!empty($w_cook)) {
-                $w_cook = json_decode($w_cook, true);
+                //$w_cook = json_decode($w_cook, true);
                 $w_cookRand = $w_cook[array_rand($w_cook)];
             }
 
@@ -882,31 +875,6 @@ class CreateRecipes extends Component
         $ingridients = json_encode($ingridients, JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT);
         $steps = json_encode($steps, JSON_UNESCAPED_UNICODE | JSON_FORCE_OBJECT);
 
-//        dump($this->name);
-//        dump($this->url);
-//        dump($this->linkSource);
-//        dump($this->title);
-//        dump($this->beforeText);
-//        dump($ingridients);
-//        dump($cooking_t);
-//        dump($cooking_tg);
-//        dump($this->portion);
-//        dump($calories);
-//        dump($steps);
-//        dump($this->afterText);
-//        dump($this->storedImage);
-//        dump($w_cook);
-//        dump($method);
-//        dump($world);
-//        dump($this->status);
-//        dump($kkal);
-//        dump($prot);
-//        dump($zhir);
-//        dump($ugl);
-//        dump($total_steps);
-//        dump($this->addAutoIngData);
-//        dd();
-
         $newRecipe = Recipe::create([
             'name' => $this->name,
             'url' => $this->url,
@@ -933,17 +901,13 @@ class CreateRecipes extends Component
             'autoingr' => $this->addAutoIngData,
         ]);
 
-        if($this->status == 1){
+        if($newRecipe->status == 1){
             forceRecipeAll($newRecipe->id);
         }
-
         session()->flash('success', "Рецепт успшено создан");
 
         return redirect()->to(route('recipe.index'));
     }
-
-
-
 
     public function render()
     {

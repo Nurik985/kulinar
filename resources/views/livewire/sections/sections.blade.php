@@ -88,15 +88,18 @@
                                         <td class="w-1/3 border px-4 py-3">{{ $section->url }}</td>
                                         <td class="w-fit border px-4 py-3">{{ $section->created_at->format('d-m-Y') }}
                                         </td>
-                                        <td class="w-fit px-4 py-3 text-center">
-                                            <a href="{{ route('razdel.edit', $section->id) }}"
-                                                class="btn btn-sm btn-icon item-edit mr-2"><i
-                                                    class="ti ti-pencil text-green-500"></i></a>
-                                            <a href="javascript:;" class="btn btn-sm btn-icon item-edit mr-2"><i
-                                                    class="ti ti-eye text-purple-500"></i></a>
-                                            <span wire:click="openDelModal({{ $section->id }}, '{{ $section->h1 }}')"
-                                                class="btn btn-sm btn-icon item-edit cursor-pointer"><i
-                                                    class="ti ti-trash text-red-800"></i></span>
+                                        <td class=" max-w-[80px] px-4 py-3 text-center">
+                                            <div class="flex justify-center items-center">
+                                                <a href="{{ route('razdel.edit', $section->id) }}"
+                                                   class="btn btn-sm btn-icon item-edit mr-2 !p-0"><i
+                                                        class="ti ti-pencil text-green-500"></i></a>
+                                                <a href="javascript:;" class="btn btn-sm btn-icon item-edit mr-2 !p-0"><i
+                                                        class="ti ti-eye text-purple-500"></i></a>
+                                                <span wire:click="openDelModal({{ $section->id }}, '{{ $section->h1 }}')"
+                                                      class="btn btn-sm btn-icon item-edit cursor-pointer !p-0"><i
+                                                        class="ti ti-trash text-red-800"></i></span>
+                                            </div>
+
                                         </td>
                                     </tr>
                                 @endforeach

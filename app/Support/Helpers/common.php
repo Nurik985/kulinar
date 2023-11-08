@@ -2,9 +2,11 @@
 
 use App\Models\Heading;
 use App\Models\Recipe;
+use Illuminate\Bus\Batch;
 use Illuminate\Support\Facades\DB;
 
-function forceRecipe($id){
+function forceRecipe($id): void
+{
     $result = Heading::findOrFail($id);
 
     $col_public_recipe = 0;
@@ -153,8 +155,9 @@ function forceRecipe($id){
     DB::table('headings')->where('id', $id)->update(['col_recipe' => $col_recipe, 'col_public_recipe' => $col_public_recipe, 'recept' => $arr_recipe]);
 }
 
-function forceRecipeAll($recipeId){
-     $recipe = (array) DB::table('recipes')->where('id', '=', $recipeId)->first();
+function forceRecipeAll($recipeId): void
+{
+    $recipe = (array) DB::table('recipes')->where('id', '=', $recipeId)->first();
 
     if(!empty($recipe)){
         $arr = [];
@@ -180,6 +183,9 @@ function forceRecipeAll($recipeId){
                         array_push($headingRecept, $recipeId);
                         if ($recipe['status'] == 1) {
                             $updateData[$heading->id]['col_public_recipe'] = $heading->col_public_recipe + 1;
+                            $col_public_recipe = $heading->col_public_recipe + 1;
+                        } else {
+                            $col_public_recipe = $heading->col_public_recipe;
                         }
                     }
 
@@ -198,6 +204,9 @@ function forceRecipeAll($recipeId){
 
                         if ($recipe['status'] == 1) {
                             $updateData[$heading->id]['col_public_recipe'] = $heading->col_public_recipe - 1;
+                            $col_public_recipe = $heading->col_public_recipe - 1;
+                        } else {
+                            $col_public_recipe = $heading->col_public_recipe;
                         }
                     }
 
@@ -206,16 +215,22 @@ function forceRecipeAll($recipeId){
             }
         }
 
+        $updateRow = [];
+        $i = 0;
         foreach ($updateData as $key => $value) {
-            $id = $key;
-            $col_public_recipe = $value['col_public_recipe'];
+            $updateRow[$i]['id'] = $key;
+            $updateRow[$i]['col_public_recipe'] = $value['col_public_recipe'];
             if (!empty($value['recept'])) {
                 $col_recipe = count($value['recept']);
             } else {
                 $col_recipe = 0;
             }
-            $headingRecept = json_encode($value['recept']);
+            $updateRow[$i]['col_recipe'] = $col_recipe;
+            $updateRow[$i]['recept'] =  json_encode($value['recept']);
+            $i++;
         }
+
+        batch()->update(new Heading, $updateRow, 'id');
     }
 }
 
@@ -274,4 +289,164 @@ function array_first($array, $default = null)
         return $item;
     }
     return $default;
+}
+
+function genZapros($items, $no_items, $w_k, $method){
+    $newData = [];
+    $row_search = '';
+
+    $items = str_replace('/', '', $items);
+    $items = str_replace('|', '', $items);
+
+    $items = explode(' и ', $items);
+    $no_items = explode(' и ', $no_items);
+    $w_k = explode(' и ', $w_k);
+    $method = explode(' и ', $method);
+
+    if (!empty($items)) {
+        foreach ($items as $key => $value) {
+            $value = explode(' или ', $value);
+
+            if (!empty($value[0])) {
+                $newEl = [];
+                if (empty($row_search)) {
+                    $group =
+                    $row_search = 'WHERE (';
+                } else {
+                    $row_search .= ' and (';
+                }
+
+                foreach ($value as $key1 => $value1) {
+                    $value1 = preg_replace('/или (.*)/', '$1', $value1);
+                    $value1 = preg_replace('/и (.*)/', '$1', $value1);
+                    $value1 = str_replace('/', '', $value1);
+                    $value1 = str_replace('|', '', $value1);
+                    $value1 = trim($value1);
+
+                    if ($key1 == 0) {
+                        $row_search .= 'ingridients LIKE "%' . $value1 . '%"';
+                    } else {
+                        $row_search .= ' OR ingridients LIKE "%' . $value1 . '%"';
+                    }
+                    $newEl[] = 'ingridients LIKE '. $value1;
+                }
+
+                $row_search .= ')';
+                if(!empty($newEl)){
+                    $newData[] = $newEl;
+                }
+            }
+        }
+    }
+
+    if (!empty($no_items)) {
+        foreach ($no_items as $key => $value) {
+            $value = explode(' или ', $value);
+
+            if (!empty($value[0])) {
+                $newEl = [];
+                if (empty($row_search)) {
+                    $row_search = 'WHERE (';
+                } else {
+                    $row_search .= ' and (';
+                }
+
+                foreach ($value as $key1 => $value1) {
+                    $value1 = preg_replace('/или (.*)/', '$1', $value1);
+                    $value1 = preg_replace('/и (.*)/', '$1', $value1);
+                    $value1 = str_replace('/', '', $value1);
+                    $value1 = str_replace('|', '', $value1);
+                    $value1 = trim($value1);
+
+                    if ($key1 == 0) {
+                        $row_search .= 'ingridients NOT LIKE "%' . $value1 . '%"';
+                    } else {
+                        $row_search .= ' OR ingridients NOT LIKE "%' . $value1 . '%"';
+                    }
+
+                    $newEl[] = 'ingridients NOT LIKE '. $value1;
+                }
+
+                $row_search .= ')';
+                if(!empty($newEl)){
+                    $newData[] = $newEl;
+                }
+            }
+        }
+    }
+
+    if (!empty($w_k[0])) {
+        foreach ($w_k as $key => $value) {
+            $value = explode(' или ', $value);
+
+            if (!empty($value[0])) {
+                $newEl = [];
+                if (empty($row_search)) {
+                    $row_search = 'WHERE (';
+                } else {
+                    $row_search .= ' and (';
+                }
+
+                foreach ($value as $key1 => $value1) {
+                    $value1 = preg_replace('/или (.*)/', '$1', $value1);
+                    $value1 = preg_replace('/и (.*)/', '$1', $value1);
+                    $value1 = str_replace('/', '', $value1);
+                    $value1 = str_replace('|', '', $value1);
+                    $value1 = trim($value1);
+
+                    if ($key1 == 0) {
+                        $row_search .= 'w_cook LIKE "%' . $value1 . '%"';
+                    } else {
+                        $row_search .= ' OR w_cook LIKE "%' . $value1 . '%"';
+                    }
+
+                    $newEl[] = 'w_cook LIKE '. $value1;
+                }
+
+                $row_search .= ')';
+                if(!empty($newEl)){
+                    $newData[] = $newEl;
+                }
+            }
+        }
+    }
+
+    if (!empty($method[0])) {
+        foreach ($method as $key => $value) {
+            $value = explode(' или ', $value);
+
+            if (!empty($value[0])) {
+                $newEl = [];
+                if (empty($row_search)) {
+                    $row_search = 'WHERE (';
+                } else {
+                    $row_search .= ' and (';
+                }
+
+                foreach ($value as $key1 => $value1) {
+                    $value1 = preg_replace('/или (.*)/', '$1', $value1);
+                    $value1 = preg_replace('/и (.*)/', '$1', $value1);
+                    $value1 = str_replace('/', '', $value1);
+                    $value1 = str_replace('|', '', $value1);
+                    $value1 = trim($value1);
+
+                    if ($key1 == 0) {
+                        $row_search .= 'method LIKE "%' . $value1 . '%"';
+                    } else {
+                        $row_search .= ' OR method LIKE "%' . $value1 . '%"';
+                    }
+
+                    $newEl[] = 'method LIKE '. $value1;
+                }
+
+                $row_search .= ')';
+                if(!empty($newEl)){
+                    $newData[] = $newEl;
+                }
+            }
+        }
+    }
+
+    return $newData;
+
 }

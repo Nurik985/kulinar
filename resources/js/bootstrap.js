@@ -6,13 +6,13 @@
 
 import axios from 'axios'
 import 'flowbite'
-import jQuery from 'jquery';
-import select2 from 'select2'
+//import jQuery from 'jquery';
+//import select2 from 'select2'
 
-window.$ = jQuery;
-window.jQuery = jQuery;
+//window.$ = jQuery;
+//window.jQuery = jQuery;
 window.axios = axios;
-select2()
+//select2()
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 

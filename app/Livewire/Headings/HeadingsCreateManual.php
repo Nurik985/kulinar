@@ -329,7 +329,8 @@ class HeadingsCreateManual extends Component
         ]);
 
         $heading = Heading::find($newHeading->id);
-        $heading->sections()->attach($parentSec);
+        $heading->Sections()->detach();
+        $heading->Sections()->attach($parentSec);
         forceRecipe($newHeading->id);
 
         session()->flash('success', "Рубрика успшено создан");

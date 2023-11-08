@@ -33,12 +33,15 @@ Route::get('/clear', function () {
 
 
 Route::get('stest', function () {
-
-    forceRecipeAll(28298);
+    $headings = Heading::find(4657)->toArray();
+    echo "<pre>";
+    print_r($headings['recept']);
+    echo "</pre>";
+    //forceRecipeAll(39219);
     // $headings = Heading::all();
 
     // foreach ($headings as $heading) {
-    
+
     //     $newData = [];
 
     //     $items = $heading->ingredients_accept;
@@ -91,7 +94,7 @@ Route::get('stest', function () {
     //         }
     //     }
 
-        
+
 
     //     if (!empty($no_items)) {
     //         foreach ($no_items as $key => $value) {
@@ -128,7 +131,7 @@ Route::get('stest', function () {
     //             }
     //         }
 
-            
+
     //     }
 
     //     if (!empty($w_k[0])) {
@@ -165,7 +168,7 @@ Route::get('stest', function () {
     //                 }
     //             }
     //         }
-            
+
     //     }
 
     //     if (!empty($method[0])) {
@@ -200,7 +203,7 @@ Route::get('stest', function () {
     //                 if(!empty($newEl)){
     //                     $newData[] = $newEl;
     //                 }
-                    
+
     //             }
     //         }
     //     }

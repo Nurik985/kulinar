@@ -170,6 +170,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\TelescopeServiceProvider::class,
         App\Providers\MenuServiceProvider::class,
+        Mavinoo\Batch\BatchServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -184,6 +185,7 @@ return [
     */
 
     'aliases' => Facade::defaultAliases()->merge([
+        'Batch' => Mavinoo\Batch\BatchFacade::class,
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
