@@ -35,6 +35,180 @@ Route::get('/clear', function () {
 Route::get('stest', function () {
 
     forceRecipeAll(28298);
+    // $headings = Heading::all();
+
+    // foreach ($headings as $heading) {
+    
+    //     $newData = [];
+
+    //     $items = $heading->ingredients_accept;
+    //     $no_items = $heading->ingredients_block;
+    //     $w_k =  $heading->w_cook;
+    //     $method = $heading->cooking_m;
+    //     $row_search = '';
+
+    //     $items = str_replace('/', '', $items);
+    //     $items = str_replace('|', '', $items);
+
+    //     $items = explode(' и ', $items);
+    //     $no_items = explode(' и ', $no_items);
+    //     $w_k = explode(' и ', $w_k);
+    //     $method = explode(' и ', $method);
+
+    //     if (!empty($items)) {
+    //         foreach ($items as $key => $value) {
+    //             $value = explode(' или ', $value);
+
+    //             if (!empty($value[0])) {
+    //                 $newEl = [];
+    //                 if (empty($row_search)) {
+    //                     $group =
+    //                     $row_search = 'WHERE (';
+    //                 } else {
+    //                     $row_search .= ' and (';
+    //                 }
+
+    //                 foreach ($value as $key1 => $value1) {
+    //                     $value1 = preg_replace('/или (.*)/', '$1', $value1);
+    //                     $value1 = preg_replace('/и (.*)/', '$1', $value1);
+    //                     $value1 = str_replace('/', '', $value1);
+    //                     $value1 = str_replace('|', '', $value1);
+    //                     $value1 = trim($value1);
+
+    //                     if ($key1 == 0) {
+    //                         $row_search .= 'ingridients LIKE "%' . $value1 . '%"';
+    //                     } else {
+    //                         $row_search .= ' OR ingridients LIKE "%' . $value1 . '%"';
+    //                     }
+    //                     $newEl[] = 'ingridients LIKE '. $value1;
+    //                 }
+
+    //                 $row_search .= ')';
+    //                 if(!empty($newEl)){
+    //                     $newData[] = $newEl;
+    //                 }
+    //             }
+    //         }
+    //     }
+
+        
+
+    //     if (!empty($no_items)) {
+    //         foreach ($no_items as $key => $value) {
+    //             $value = explode(' или ', $value);
+
+    //             if (!empty($value[0])) {
+    //                 $newEl = [];
+    //                 if (empty($row_search)) {
+    //                     $row_search = 'WHERE (';
+    //                 } else {
+    //                     $row_search .= ' and (';
+    //                 }
+
+    //                 foreach ($value as $key1 => $value1) {
+    //                     $value1 = preg_replace('/или (.*)/', '$1', $value1);
+    //                     $value1 = preg_replace('/и (.*)/', '$1', $value1);
+    //                     $value1 = str_replace('/', '', $value1);
+    //                     $value1 = str_replace('|', '', $value1);
+    //                     $value1 = trim($value1);
+
+    //                     if ($key1 == 0) {
+    //                         $row_search .= 'ingridients NOT LIKE "%' . $value1 . '%"';
+    //                     } else {
+    //                         $row_search .= ' OR ingridients NOT LIKE "%' . $value1 . '%"';
+    //                     }
+
+    //                     $newEl[] = 'ingridients NOT LIKE '. $value1;
+    //                 }
+
+    //                 $row_search .= ')';
+    //                 if(!empty($newEl)){
+    //                     $newData[] = $newEl;
+    //                 }
+    //             }
+    //         }
+
+            
+    //     }
+
+    //     if (!empty($w_k[0])) {
+    //         foreach ($w_k as $key => $value) {
+    //             $value = explode(' или ', $value);
+
+    //             if (!empty($value[0])) {
+    //                 $newEl = [];
+    //                 if (empty($row_search)) {
+    //                     $row_search = 'WHERE (';
+    //                 } else {
+    //                     $row_search .= ' and (';
+    //                 }
+
+    //                 foreach ($value as $key1 => $value1) {
+    //                     $value1 = preg_replace('/или (.*)/', '$1', $value1);
+    //                     $value1 = preg_replace('/и (.*)/', '$1', $value1);
+    //                     $value1 = str_replace('/', '', $value1);
+    //                     $value1 = str_replace('|', '', $value1);
+    //                     $value1 = trim($value1);
+
+    //                     if ($key1 == 0) {
+    //                         $row_search .= 'w_cook LIKE "%' . $value1 . '%"';
+    //                     } else {
+    //                         $row_search .= ' OR w_cook LIKE "%' . $value1 . '%"';
+    //                     }
+
+    //                     $newEl[] = 'w_cook LIKE '. $value1;
+    //                 }
+
+    //                 $row_search .= ')';
+    //                 if(!empty($newEl)){
+    //                     $newData[] = $newEl;
+    //                 }
+    //             }
+    //         }
+            
+    //     }
+
+    //     if (!empty($method[0])) {
+    //         foreach ($method as $key => $value) {
+    //             $value = explode(' или ', $value);
+
+    //             if (!empty($value[0])) {
+    //                 $newEl = [];
+    //                 if (empty($row_search)) {
+    //                     $row_search = 'WHERE (';
+    //                 } else {
+    //                     $row_search .= ' and (';
+    //                 }
+
+    //                 foreach ($value as $key1 => $value1) {
+    //                     $value1 = preg_replace('/или (.*)/', '$1', $value1);
+    //                     $value1 = preg_replace('/и (.*)/', '$1', $value1);
+    //                     $value1 = str_replace('/', '', $value1);
+    //                     $value1 = str_replace('|', '', $value1);
+    //                     $value1 = trim($value1);
+
+    //                     if ($key1 == 0) {
+    //                         $row_search .= 'method LIKE "%' . $value1 . '%"';
+    //                     } else {
+    //                         $row_search .= ' OR method LIKE "%' . $value1 . '%"';
+    //                     }
+
+    //                     $newEl[] = 'method LIKE '. $value1;
+    //                 }
+
+    //                 $row_search .= ')';
+    //                 if(!empty($newEl)){
+    //                     $newData[] = $newEl;
+    //                 }
+                    
+    //             }
+    //         }
+    //     }
+
+    //    echo '<pre>';
+    //    print_r($newData);
+    //    echo '</pre>';
+    // }
 //    $headings = Heading::all();
 //
 //    foreach ($headings as $v) {

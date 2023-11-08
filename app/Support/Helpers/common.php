@@ -154,8 +154,7 @@ function forceRecipe($id){
 }
 
 function forceRecipeAll($recipeId){
-    $recipe = DB::table('recipes')->where('id', '=', $recipeId)->first();
-    $recipe = json_decode(json_encode($recipe), true);
+     $recipe = (array) DB::table('recipes')->where('id', '=', $recipeId)->first();
 
     if(!empty($recipe)){
         $arr = [];
@@ -164,114 +163,94 @@ function forceRecipeAll($recipeId){
 
         $headings = DB::table('headings')->where('type', '=', 1)->get();
 
-        foreach ($headings as $heading) {
-            $arr[$heading->id] = $heading;
-            $arrLikes[$heading->id] = $heading->genzapros;
-        }
+        $updateData = [];
 
-        $arr = json_decode(json_encode($arr), true);
-
-        foreach ($arrLikes as $arrLikeKey => $arrLikeVal) {
-
-            $res = arrayCostomSearch((array) $recipe, $arrLikeVal, $arrLikeKey);
+        foreach ($headings as  $heading) {
+            $res = arrayCostomSearch($recipe, json_decode($heading->genzapros, 1));
             if ($res == 'true') {
-                if (!empty($arr[$arrLikeKey]['recept'])) {
-                    $arr_recept = json_decode($arr[$arrLikeKey]['recept'], true);
+                if (!empty($heading->recept)) {
+                    $headingRecept = json_decode($heading->recept, true);
                 } else {
-                    $arr_recept = [];
+                    $headingRecept = [];
                 }
 
-                if (!in_array($recipeId, $arr_recept)) {
-                    array_push($arr_recept, $recipeId);
-                    if ($recipe['status'] == 1) {
-                        $arr[$arrLikeKey]['col_public_recipe'] = $arr[$arrLikeKey]['col_public_recipe'] + 1;
+                if (!empty($headingRecept)) {
+
+                    if (!in_array($recipeId, $headingRecept)) {
+                        array_push($headingRecept, $recipeId);
+                        if ($recipe['status'] == 1) {
+                            $updateData[$heading->id]['col_public_recipe'] = $heading->col_public_recipe + 1;
+                        }
                     }
-                }
-                if (!empty($arr_recept)) {
-                    $arr[$arrLikeKey]['recept'] = $arr_recept;
+
+                    $updateData[$heading->id]['recept'] = $headingRecept;
                 }
             } elseif ($res == 'false' or $recipe['status'] == 4) {
-                if (!empty($arr[$arrLikeKey]['recept'])) {
-                    $arr_recept = json_decode($arr[$arrLikeKey]['recept'], true);
+                if (!empty($heading->recept)) {
+                    $headingRecept = json_decode($heading->recept, true);
                 } else {
-                    $arr_recept = [];
+                    $headingRecept = [];
                 }
 
-                if (in_array($recipeId, $arr_recept)) {
-                    unset($arr_recept[array_search($recipeId, $arr_recept)]);
-                    if ($recipe['status'] == 1) {
-                        $arr[$arrLikeKey]['col_public_recipe'] = $arr[$arrLikeKey]['col_public_recipe'] - 1;
+                if (!empty($headingRecept)) {
+                    if (!in_array($recipeId, $headingRecept)) {
+                        unset($headingRecept[array_search($recipeId, $headingRecept)]);
+
+                        if ($recipe['status'] == 1) {
+                            $updateData[$heading->id]['col_public_recipe'] = $heading->col_public_recipe - 1;
+                        }
                     }
-                }
-                if (!empty($arr_recept)) {
-                    $arr[$arrLikeKey]['recept'] = $arr_recept;
+
+                    $updateData[$heading->id]['recept'] = $headingRecept;
                 }
             }
         }
 
-
-        foreach ($arr as $key => $value) {
-            $id = $value['id'];
+        foreach ($updateData as $key => $value) {
+            $id = $key;
             $col_public_recipe = $value['col_public_recipe'];
-            if (!empty($value['recept']) && is_array($value['recept'])) {
+            if (!empty($value['recept'])) {
                 $col_recipe = count($value['recept']);
             } else {
                 $col_recipe = 0;
             }
-            $arr_recipe = json_encode($value['recept']);
-
-            $heading = Heading::find($id);
-
-            $heading->update([
-                'recept' => $arr_recipe,
-                'col_recipe' => $col_recipe,
-                'col_public_recipe' => $col_public_recipe,
-            ]);
+            $headingRecept = json_encode($value['recept']);
         }
-
     }
 }
 
-function arrayCostomSearch($arr, $row, $rubkey = false){
+function arrayCostomSearch($recipe, $arrLikeVal){
 
-    $row = str_replace('WHERE', '', $row);
-    $row = trim($row);
-    $row = explode('and', $row);
-
-    $col = count($row);
+    $col = count($arrLikeVal);
     $col_row = 0;
     $not_like = 0;
 
-    foreach ($row as $key => $value) {
-        $value = explode('OR', $value);
-        $value = str_replace('(', '', $value);
-        $value = str_replace(')', '', $value);
-
-
+    foreach ($arrLikeVal as $itemsKey => $items) {
         $or = 0;
-        foreach ($value as $key1 => $value1) {
-            $value1 = trim($value1);
-            if (stripos($value1, 'NOT LIKE')) {
-                $value1 = explode('NOT LIKE', $value1);
-                $value1[1] = str_replace('"', '', $value1[1]);
-                $value1[1] = str_replace('%', '', $value1[1]);
+        foreach ($items as $itemKey => $item) {
+            $item = trim($item);
 
-                $value1[0] = mb_strtolower(trim($value1[0]));
-                $value1[1] = mb_strtolower(trim($value1[1]));
+            if (stripos($item, 'NOT LIKE')) {
+                $item = explode('NOT LIKE', $item);
+                $item[1] = str_replace('"', '', $item[1]);
+                $item[1] = str_replace('%', '', $item[1]);
 
-                if (stripos($arr[$value1[0]], $value1[1]) !== false) {
+                $item[0] = mb_strtolower(trim($item[0]));
+                $item[1] = mb_strtolower(trim($item[1]));
+
+                if (stripos($recipe[$item[0]], $item[1]) !== false) {
                     $not_like = 1;
                 } else {
                     $col_row++;
                 }
             } else {
-                $value1 = explode('LIKE', $value1);
-                $value1[1] = str_replace('"', '', $value1[1]);
-                $value1[1] = str_replace('%', '', $value1[1]);
-                $value1[0] = mb_strtolower(trim($value1[0]));
-                $value1[1] = mb_strtolower(trim($value1[1]));
+                $item = explode('LIKE', $item);
+                $item[1] = str_replace('"', '', $item[1]);
+                $item[1] = str_replace('%', '', $item[1]);
+                $item[0] = mb_strtolower(trim($item[0]));
+                $item[1] = mb_strtolower(trim($item[1]));
 
-                if (stripos(mb_strtolower($arr[$value1[0]]), $value1[1]) !== false && $or == 0) {
+                if (stripos(mb_strtolower($recipe[$item[0]]), $item[1]) !== false && $or == 0) {
                     $or = 1;
                     $col_row++;
                 }
