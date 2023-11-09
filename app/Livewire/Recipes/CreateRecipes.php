@@ -664,7 +664,9 @@ class CreateRecipes extends Component
         if(!empty($this->stepLists)){
             $total_steps = count($this->stepLists);
             foreach ($this->stepLists as $k => $stepList) {
-                $steps[$k]['text'] = $stepList['desc'];
+                if(!empty($stepList['desc'])) {
+                    $steps[$k]['text'] = $stepList['desc'];
+                }
                 if(!empty($stepList['img'])){
                     foreach ($stepList['img'] as $key => $img){
                         $link = $stepList['img'][$key]->store('recipe/'.$god.'/'.$mes, 'public');
@@ -675,7 +677,9 @@ class CreateRecipes extends Component
         }
 
         $ingridients = [];
+        $zapIngr = '';
         if(!empty($this->ingLists)){
+            $zapIngr = json_encode($this->ingLists);
             foreach ($this->ingLists as $k => $ingList) {
                 if(!empty($ingList['inglists'][0])){
                     $ingridients[$k][0] = '';
@@ -899,6 +903,7 @@ class CreateRecipes extends Component
             'ugl' => $ugl,
             'total_steps' => $total_steps,
             'autoingr' => $this->addAutoIngData,
+            'zapIngr' => $zapIngr,
         ]);
 
         if($newRecipe->status == 1){

@@ -168,12 +168,12 @@
                                     @endforeach
                                         <td class="max-w-[80px] px-4 py-3 text-center">
                                             <div class="flex">
-                                            <a href="{{ route('razdel.edit', $recipe->id) }}"
+                                            <a href="{{ route('recipe.edit', $recipe->id) }}"
                                                class="btn btn-sm btn-icon item-edit mr-2 !p-0"><i
                                                     class="ti ti-pencil text-green-500"></i></a>
                                             <a href="javascript:;" class="btn btn-sm btn-icon item-edit mr-2 !p-0"><i
                                                     class="ti ti-eye text-purple-500"></i></a>
-                                            <span wire:click="openDelModal({{ $recipe->id }}, '{{ $recipe->h1 }}')"
+                                            <span wire:click="openDelModal({{ $recipe->id }}, '{{ $recipe->name }}')"
                                                   class="btn btn-sm btn-icon item-edit cursor-pointer !p-0"><i
                                                     class="ti ti-trash text-red-800"></i></span>
                                             </div>

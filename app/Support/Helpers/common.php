@@ -182,11 +182,11 @@ function forceRecipeAll($recipeId): void
                     if (!in_array($recipeId, $headingRecept)) {
                         array_push($headingRecept, $recipeId);
                         if ($recipe['status'] == 1) {
-                            $updateData[$heading->id]['col_public_recipe'] = $heading->col_public_recipe + 1;
                             $col_public_recipe = $heading->col_public_recipe + 1;
                         } else {
                             $col_public_recipe = $heading->col_public_recipe;
                         }
+                        $updateData[$heading->id]['col_public_recipe'] = $col_public_recipe;
                     }
 
                     $updateData[$heading->id]['recept'] = $headingRecept;
@@ -203,11 +203,11 @@ function forceRecipeAll($recipeId): void
                         unset($headingRecept[array_search($recipeId, $headingRecept)]);
 
                         if ($recipe['status'] == 1) {
-                            $updateData[$heading->id]['col_public_recipe'] = $heading->col_public_recipe - 1;
                             $col_public_recipe = $heading->col_public_recipe - 1;
                         } else {
                             $col_public_recipe = $heading->col_public_recipe;
                         }
+                        $updateData[$heading->id]['col_public_recipe'] = $col_public_recipe;
                     }
 
                     $updateData[$heading->id]['recept'] = $headingRecept;

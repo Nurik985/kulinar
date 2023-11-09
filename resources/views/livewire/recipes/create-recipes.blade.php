@@ -149,7 +149,7 @@
                                                     <div class="relative">
                                                         <input wire:model="ingLists.{{$i}}.inglists.3.name" type="text"
                                                                disabled
-                                                               class="block h-7 py-[0.5px] px-[10px] w-full text-[12px] text-gray-900 border border-gray-300 @if(!empty($ingLists[$i]['inglists'][3]['bd']) && $ingLists[$i]['inglists'][3]['bd'] == 'yes')bg-gray-50 @else bg-red-200 @endif rounded-[2px] ">
+                                                               class="block h-7 py-[0.5px] px-[10px] w-full text-[12px] text-gray-900 border border-gray-300  bg-gray-50 rounded-[2px] ">
                                                         @if(!empty($units) && !empty($ingLists[$i]['unitsShow']))
                                                             <i wire:click="getUnits({{$i}}, 'close')"
                                                                class="ti ti-arrow-bar-to-up ti ti-arrow-bar-to-down absolute top-1 right-2 cursor-pointer"></i>
@@ -217,7 +217,6 @@
                                     <input wire:model="vremyPrigotovleniya" min="1" type="number" id="addIngInput"
                                            class="h-7 block w-[100px] p-2 text-gray-900 border border-gray-300 rounded-[2px] bg-gray-50 sm:text-xs focus:outline-none">
                                 </div>
-                                {{$vremyGotovki}}
                                 <select wire:model="vremyPrigotovleniyaTime"
                                         class="block h-7 py-[0.5px] px-[10px] w-w-1/3 text-[12px] text-gray-900 border border-gray-300 rounded-[2px] bg-gray-50 ">
                                     <option value="мин">мин</option>

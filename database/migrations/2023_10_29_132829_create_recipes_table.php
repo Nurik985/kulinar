@@ -50,6 +50,7 @@ return new class extends Migration
             $table->integer('for_author')->nullable()->default(0);
             $table->integer('for_admin')->nullable()->default(0);
             $table->text('autoingr')->nullable()->default(null);
+            $table->text('zapingr')->nullable()->default(null);
             $table->timestamps();
         });
     }
