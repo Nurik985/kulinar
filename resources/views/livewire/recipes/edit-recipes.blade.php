@@ -1,12 +1,12 @@
 <div>
-    <form wire:submit="updateRecipe" class="space-y-6">
+    <form wire:submit="updateRecipe" class="space-y-6" onkeydown="enterRemove(event, event.key)">
         <div class="w-full rounded-[4px] mr-3 mb-10 border bg-white dark:bg-gray-700">
             <div class="px-6 py-6 lg:px-8">
                 <div class="grid gap-2 sm:grid-cols-2 sm:gap-4">
                     <div class="sm:col-span-2">
-                        <label for="name"
+                        <label for="name1"
                                class="@error('name')text-red-700 @enderror mb-2 block font-light text-sm text-gray-500">Название:</label>
-                        <input wire:model.live="name" wire:keyup="generateSlug" type="text" name="name" id="name"
+                        <input wire:model.live="name" wire:keyup="generateSlug" type="text" name="name" id="name1"
                                class="@error('name') bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-[4px] dark:bg-gray-700 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500 @enderror block w-full rounded-[4px] border border-gray-300 bg-gray-50 p-2.5 text-sm focus:outline-none ">
                         @error('name')
                         <p class="mt-1 text-xs text-red-600 dark:text-red-500 error-message"><span
@@ -52,7 +52,7 @@
                         </div>
                         <div>
                             <textarea wire:input="addAutoIngBtn" wire:model="addAutoIngData" rows="6"
-                                      class="@if($autoIngDataFilled) user-select-none @endif block p-2.5 w-full text-sm bg-gray-50 rounded-[4px] border border-gray-300 focus:outline-none"></textarea>
+                                      class=" @if($autoIngDataFilled) user-select-none @endif block p-2.5 w-full text-sm bg-gray-50 rounded-[4px] border border-gray-300 focus:outline-none"></textarea>
                         </div>
                         <div class="text-sm font-light text-gray-500 mt-3">
                             <button wire:click="addAutoIngBtn" type="button"
@@ -64,7 +64,11 @@
                     <div class="sm:col-span-2">
                         <div class="mb-2 block text-sm font-light text-gray-500 dark:text-white">
                             Ингредиенты:
-
+                            @php 
+                            echo '<pre>';
+                            print_r($ingLists);
+                            echo '</pre>';
+                            @endphp
                         </div>
                         <div class="ing-div">
                             @if($ingLists)
@@ -150,7 +154,7 @@
                                                     <div class="relative">
                                                         <input wire:model="ingLists.{{$i}}.inglists.3.name" type="text"
                                                                disabled
-                                                               class="block h-7 py-[0.5px] px-[10px] w-full text-[12px] text-gray-900 border border-gray-300 @if(!empty($ingLists[$i]['inglists'][3]['bd']) && $ingLists[$i]['inglists'][3]['bd'] == 'yes')bg-gray-50 @else bg-red-200 @endif rounded-[2px] ">
+                                                               class="block h-7 py-[0.5px] px-[10px] w-full text-[12px] text-gray-900 border border-gray-300 bg-gray-50 rounded-[2px] ">
                                                         @if(!empty($units) && !empty($ingLists[$i]['unitsShow']))
                                                             <i wire:click="getUnits({{$i}}, 'close')"
                                                                class="ti ti-arrow-bar-to-up ti ti-arrow-bar-to-down absolute top-1 right-2 cursor-pointer"></i>
@@ -509,6 +513,25 @@
 @push('scripts')
     <script src="{{asset('ckeditor/ckeditor.js')}}"></script>
     <script>
+        function enterRemove(event, key){
+
+            console.log(event)
+
+            if(event.target.classList.contains('enterRemove')){
+                if(key == 'Enter'){
+                    event.preventDefault();
+                }
+                console.log('yes');
+            } else {
+                console.log('not');
+            }
+
+
+            // console.log(event);
+            // if(key == 'enter'){
+            //     event.preventDefault();
+            // }
+        }
         Livewire.hook('commit', ({ succeed }) => {
             succeed(() => {
                 setTimeout(() => {

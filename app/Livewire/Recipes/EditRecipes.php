@@ -124,6 +124,53 @@ class EditRecipes extends Component
 
         if(!empty($recipe->zapingr)){
             $this->ingLists = json_decode($recipe->zapingr, 1);
+        } elseif(!empty($recipe->ingridients)){
+            $ingridients = json_decode($recipe->ingridients, 1);
+ 
+            foreach ($ingridients as $key => $ingridient) {
+
+                $ing = explode("|", $ingridient[0]);
+
+                if(!empty($ing)){
+                    foreach ($ing as $k => $v) {
+                        $this->ingLists[$key]['ingSearchRemove'][$k] =  $v;
+                        $this->ingLists[$key]['inglists'][0][$k] =  $v;
+
+                        $this->ingLists[$key]['selected'][0]['id'] = $k;
+                        $this->ingLists[$key]['selected'][0]['name'] = $v;
+
+                        $res = DB::table('ingredients')->where('name', '=', $v)->first();
+                        $this->ingLists[$key]['selected'][0]['bd'] = $res ? true :false;
+                    }
+                }
+
+                $this->ingLists[$key]['ingSearchId'] =  count($ing);
+
+                if(!empty($ingridient[1])){
+                    $this->ingLists[$key]['inglists'][1] =  $ingridient[1];
+                }
+
+                if(!empty($ingridient[2])){
+                    $this->ingLists[$key]['inglists'][2] =  $ingridient[2];
+                }
+
+                if(!empty($ingridient[3])){
+
+                    $res = DB::table('units')->where('name', '=', $ingridient[3])->first();
+                    $this->ingLists[$key]['inglists'][3]['bd'] =  $res ? 'yes' : 'net';
+                    $this->ingLists[$key]['inglists'][3]['name'] =  $ingridient[3];
+                }
+
+                if(!empty($ingridient[4])){
+                    $this->ingLists[$key]['inglists'][4] =  $ingridient[4];
+                }
+                
+                // $this->ingLists[$key]['inglists'][3] =  $ingridient[2];
+                
+                
+            }
+
+            //dd($this->ingLists);
         }
 
         if(!empty($recipe->cooking_t)){
@@ -161,13 +208,15 @@ class EditRecipes extends Component
 
         if(!empty($recipe->steps)){
             $steps = json_decode($recipe->steps, 1);
-            foreach ($steps as $key => $step) {
-                if(!empty($step['text'])) {
-                    $this->stepLists[$key]['text'] = $step['text'];
-                }
-                if(!empty($step['imgs'])){
-                    foreach ($step['imgs'] as $k => $img) {
-                        $this->stepLists[$key]['img'][$k] = $img;
+            if(!empty($steps)){
+                foreach ($steps as $key => $step) {
+                    if(!empty($step['text'])) {
+                        $this->stepLists[$key]['text'] = $step['text'];
+                    }
+                    if(!empty($step['imgs'])){
+                        foreach ($step['imgs'] as $k => $img) {
+                            $this->stepLists[$key]['img'][$k] = $img;
+                        }
                     }
                 }
             }

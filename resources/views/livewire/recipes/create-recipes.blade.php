@@ -1,5 +1,5 @@
 <div>
-    <form wire:submit="saveRecipe" class="space-y-6">
+    <form wire:submit="saveRecipe" class="space-y-6" onkeydown="enterRemove(event, event.key)">
         <div class="w-full rounded-[4px] mr-3 mb-10 border bg-white dark:bg-gray-700">
             <div class="px-6 py-6 lg:px-8">
                 <div class="grid gap-2 sm:grid-cols-2 sm:gap-4">
@@ -113,7 +113,7 @@
                                                             <input wire:input.lazy="ingSearch({{$i}})"
                                                                    wire:model.live="ingLists.{{$i}}.ingSearchText"
                                                                    type="text"
-                                                                   class="findRub font-light inpt_text block w-full rounded-[4px] bg-gray-50 border-none m-0 h-7 border-1 p-1 mt-2 text-sm">
+                                                                   class="enterRemove findRub font-light inpt_text block w-full rounded-[4px] bg-gray-50 border-none m-0 h-7 border-1 p-1 mt-2 text-sm">
                                                         </div>
                                                         <div class="relative">
                                                             <div>
@@ -343,9 +343,9 @@
                         @endif
                     </div>
                     <div class="sm:col-span-2">
-                        <label for="name"
+                        <label for="name1"
                                class="@error('name')text-red-700 @enderror mb-2 block font-light text-sm text-gray-500">Название:</label>
-                        <input wire:model.live="name" wire:keyup="generateSlug" type="text" name="name" id="name"
+                        <input wire:model.live="name" wire:keyup="generateSlug" type="text" name="name" id="name1"
                                class="@error('name') bg-red-50 border border-red-500 text-red-900 placeholder-red-700 text-sm rounded-[4px] dark:bg-gray-700 block w-full p-2.5 dark:text-red-500 dark:placeholder-red-500 dark:border-red-500 @enderror block w-full rounded-[4px] border border-gray-300 bg-gray-50 p-2.5 text-sm focus:outline-none ">
                         @error('name')
                         <p class="mt-1 text-xs text-red-600 dark:text-red-500 error-message"><span
@@ -366,7 +366,7 @@
                                 </div>
                                 <input wire:keydown.enter="cookAdd" wire:click="cookShowCheck"
                                        wire:keyup="cookSearchFunc" wire:model="cookSearchText" type="text"
-                                       class="findRub inpt_text block w-full rounded-[4px] border-[#ccc] m-0 h-10 border-1 p-2 mt-2  text-sm text-gray-900">
+                                       class="enterRemove findRub inpt_text block w-full rounded-[4px] border-[#ccc] m-0 h-10 border-1 p-2 mt-2  text-sm text-gray-900">
                             </div>
                             <div class="relative">
                                 <div
@@ -397,7 +397,7 @@
                                 <input wire:keydown.enter="methodAdd" wire:click="methodShowCheck"
                                        wire:keyup="methodSearchFunc" wire:model="methodSearchText" type="text"
                                        name="url"
-                                       class="findRub inpt_text block w-full rounded-[4px] border-[#ccc] m-0 h-10 border-1 p-2 mt-2  text-sm text-gray-900">
+                                       class="enterRemove findRub inpt_text block w-full rounded-[4px] border-[#ccc] m-0 h-10 border-1 p-2 mt-2  text-sm text-gray-900">
                             </div>
                             <div class="relative">
                                 <div
@@ -508,6 +508,25 @@
 @push('scripts')
     <script src="{{asset('ckeditor/ckeditor.js')}}"></script>
     <script>
+        function enterRemove(event, key){
+
+            console.log(event)
+
+            if(event.target.classList.contains('enterRemove')){
+                if(key == 'Enter'){
+                    event.preventDefault();
+                }
+                console.log('yes');
+            } else {
+                console.log('not');
+            }
+
+            
+            // console.log(event);
+            // if(key == 'enter'){
+            //     event.preventDefault();
+            // }
+        }
         Livewire.hook('commit', ({ succeed }) => {
             succeed(() => {
                 setTimeout(() => {
