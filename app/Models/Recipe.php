@@ -11,6 +11,7 @@ class Recipe extends Model
 
     protected $guarded = [];
 
+
     public function scopeSearch($query, $value)
     {
         $query->where('name','LIKE',"$value%")->orWhere('name','LIKE',"% $value%");

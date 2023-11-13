@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Spiski\Methods;
 
+use App\Models\Recipe;
 use Livewire\Component;
 use Livewire\Attributes\Url;
 use Livewire\WithPagination;
@@ -15,16 +16,17 @@ class Methods extends Component
     public $search = '';
 
     #[Url(history: true)]
-    public $sortBy = 'updated_at';
+    public $sortBy = 'name';
 
     #[Url(history: true)]
-    public $sortDir = 'DESC';
+    public $sortDir = 'ASC';
 
     #[Url()]
     public $perPage = 10;
 
     public $selectedItem = 0;
     public $modText;
+    public $met;
 
     public function paginationView()
     {
@@ -74,12 +76,19 @@ class Methods extends Component
 
     public function render()
     {
+        $met = Method::search($this->search)
+            ->orderBy($this->sortBy, $this->sortDir)
+            ->paginate($this->perPage);
+
+        foreach ($met as $item) {
+            $this->met[$item->id]['name'] = $item->name;
+            $this->met[$item->id]['count'] = Recipe::where('method', 'like', '%'.$item->name.'%')->count();
+        }
+
         return view(
             'livewire.spiski.methods.methods',
             [
-                'methods' => Method::search($this->search)
-                    ->orderBy($this->sortBy, $this->sortDir)
-                    ->paginate($this->perPage)
+                'methods' => $met
             ]
         );
     }

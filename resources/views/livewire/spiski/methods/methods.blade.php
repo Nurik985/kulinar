@@ -76,10 +76,12 @@
                                     <tr wire:key="{{ $method->id }}"
                                         class="border-b font-medium text-gray-900 dark:border-gray-700">
                                         <td class="w-1/2 px-4 py-3">{{ $method->name }}</td>
-                                        <td class="-gray-500 w-fit border px-4 py-3">
+                                        <td class="-gray-500 w-fit border px-4 py-3 text-center">
                                             {{ $method->coef ?? 0 }}
                                         </td>
-                                        <td class="w-1/2 border px-4 py-3 text-center text-gray-500"></td>
+                                        <td class="w-1/2 border px-4 py-3 text-center text-gray-500">
+                                            {{$met[$method->id]['count']}}
+                                        </td>
                                         <td class="flex w-fit items-center justify-end px-4 py-3">
                                             <a href="{{ route('spisok.method.edit', $method->id) }}"
                                                 class="www btn btn-sm btn-icon item-edit mr-2"><i

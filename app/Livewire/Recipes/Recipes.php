@@ -32,7 +32,8 @@ class Recipes extends Component
     public $statusPublished = 0; // status - 1
     public $statusBasket = 0; // status - 4
 
-    public $sortBtn = [2,6,1,4];
+    #[Url()]
+    public $sortBtn = 1;
 
     public $rowSows = [
         [
@@ -115,16 +116,7 @@ class Recipes extends Component
     }
 
     public function statusBtn($k){
-
-        $this->sortBtn = [];
-        $this->sortBtn[] = $k;
-        
-        //$this->reset();
-        //dd($this->sortBtn);
-    }
-
-    public function updatedStatusBtn()
-    {
+        $this->sortBtn = $k;
         $this->resetPage();
     }
 
@@ -153,20 +145,14 @@ class Recipes extends Component
 
     public function setSortBy($sortByField)
     {
-        
+
         if ($this->sortBy == $sortByField) {
             $this->sortDir = ($this->sortDir == "ASC") ? "DESC" : "ASC";
-            // if($this->sortDir === "ASC"){
-            //     $this->sortDir = "DESC";
-            // } else{
-            //     $this->sortDir = "ASC";
-            // }
         } else {
             $this->sortBy = $sortByField;
             $this->sortDir = 'DESC';
-            // dd('22222 '.$this->sortDir);
         }
-        
+
     }
 
     public function openDelModal($sectionId, $text)
@@ -182,9 +168,52 @@ class Recipes extends Component
         $this->dispatch('closeDelModal');
     }
 
+    public function recover($recipId)
+    {
+        $updateRecipe = Recipe::find($recipId);
+        $updateRecipe->update([
+            'status' => 2,
+        ]);
+
+        forceRecipeAll($this->selectedItem);
+        session()->flash('success', "Рецепт успшено восстановлен со статусом черновик");
+
+        return redirect()->to(route('recipe.index'));
+    }
+
+    public function basket($recipId)
+    {
+        $updateRecipe = Recipe::find($recipId);
+        $updateRecipe->update([
+            'status' => 4,
+        ]);
+
+        forceRecipeAll($recipId);
+        session()->flash('success', "Рецепт успшено отправлен в корзину");
+
+        return redirect()->to(route('recipe.index'));
+    }
+
     public function destroy()
     {
-        Recipe::destroy($this->selectedItem);
+        $updateRecipe = Recipe::find($this->selectedItem);
+
+        $updateRecipe->update([
+            'status' => 4,
+        ]);
+
+        forceRecipeAll($this->selectedItem);
+
+        $recipes = DB::table('recipes')->select('id', 'status')->get();
+        $this->statusDraft = $recipes->where('status', '=', 2)->count();
+        $this->statusPending = $recipes->where('status', '=', 6)->count();
+        $this->statusPublished = $recipes->where('status', '=', 1)->count();
+        $this->statusBasket = $recipes->where('status', '=', 4)->count();
+
+
+        //$this->reset();
+
+        //Recipe::destroy($this->selectedItem);
         $this->dispatch('closeDelModal');
     }
 
@@ -194,7 +223,7 @@ class Recipes extends Component
             [
                 'recipes' => Recipe::search($this->search)
                     ->orderBy($this->sortBy, $this->sortDir)
-                    ->whereIn('status', $this->sortBtn)
+                    ->where('status', '=', $this->sortBtn)
                     ->paginate($this->perPage)
             ]
         );

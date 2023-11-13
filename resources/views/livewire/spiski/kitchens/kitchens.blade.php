@@ -74,7 +74,9 @@
                                 <tr wire:key="{{ $kitchen->id }}"
                                     class="border-b dark:border-gray-700 text-gray-900 font-medium">
                                     <td class="px-4 py-3 w-1/2">{{ $kitchen->name }}</td>
-                                    <td class="px-4 py-3 w-1/2 border text-gray-500 text-center"></td>
+                                    <td class="px-4 py-3 w-1/2 border text-gray-500 text-center">
+                                        {{$worlds[$kitchen->id]['count']}}
+                                    </td>
                                     <td class="px-4 py-3 flex items-center justify-end w-fit">
                                         <a href="{{ route('spisok.kitchen.edit', $kitchen->id) }}" class=" www btn btn-sm btn-icon item-edit mr-2"><i
                                                 class="text-green-500 ti ti-pencil"></i></a>

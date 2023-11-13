@@ -76,7 +76,10 @@
                                     </td>
                                     <td class="text-gray-500 w-1/2 border px-4 py-3">{{ $author->name }}</td>
                                     <td class="w-1/2 border px-4 py-3 text-gray-500">{{ $author->email }}</td>
-                                    <td class="w-1/2 border px-4 py-3 text-gray-500"></td>
+                                    <td class="w-1/2 border px-4 py-3 text-gray-500">
+
+                                        {{ $aut[$author->id]['count'] }}
+                                    </td>
                                     <td class="w-1/2 border px-4 py-3 text-gray-500"></td>
                                     <td class="flex w-fit items-center justify-end px-4 py-3">
                                         <a href="{{ route('spisok.authors.edit', $author->id) }}"

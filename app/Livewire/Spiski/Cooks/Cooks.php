@@ -3,6 +3,7 @@
 namespace App\Livewire\Spiski\Cooks;
 
 use App\Models\Cook;
+use App\Models\Recipe;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -15,16 +16,17 @@ class Cooks extends Component
     public $search = '';
 
     #[Url(history: true)]
-    public $sortBy = 'updated_at';
+    public $sortBy = 'name';
 
     #[Url(history: true)]
-    public $sortDir = 'DESC';
+    public $sortDir = 'ASC';
 
     #[Url()]
     public $perPage = 10;
 
     public $selectedItem = 0;
     public $modText;
+    public $coo;
 
     public function paginationView()
     {
@@ -74,11 +76,18 @@ class Cooks extends Component
 
     public function render()
     {
+        $coo = Cook::search($this->search)
+            ->orderBy($this->sortBy, $this->sortDir)
+            ->paginate($this->perPage);
+
+        foreach ($coo as $item) {
+            $this->coo[$item->id]['name'] = $item->name;
+            $this->coo[$item->id]['count'] = Recipe::where('w_cook', 'like', '%'.$item->name.'%')->count();
+        }
+
         return view('livewire.spiski.cooks.cooks',
             [
-                'cooks' => Cook::search($this->search)
-                    ->orderBy($this->sortBy, $this->sortDir)
-                    ->paginate($this->perPage)
+                'cooks' => $coo
             ]
         );
     }

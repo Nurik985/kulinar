@@ -909,9 +909,10 @@ class CreateRecipes extends Component
         if($newRecipe->status == 1){
             forceRecipeAll($newRecipe->id);
         }
+
         session()->flash('success', "Рецепт успшено создан");
 
-        return redirect()->to(route('recipe.index'));
+        return redirect()->to(route('recipe.edit', $newRecipe->id));
     }
 
     public function render()

@@ -16,14 +16,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-
-        $res = Heading::where('url', '=', 'pashalnye-kulichi-v-duhovke')->get();
-        if($res){
-            return 'не уникальный';
-        } else {
-            return 'уникальный';
-        }
-
+        return view('admin.categories.index');
     }
 
     /**

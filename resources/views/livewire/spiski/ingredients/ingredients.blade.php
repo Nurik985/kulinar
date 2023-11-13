@@ -86,7 +86,9 @@
                                     <td class="px-4 py-3 w-fit border text-gray-500 text-center">{{ $ingredient->carbohydrates ?? 0  }}</td>
                                     <td class="px-4 py-3 w-fit border text-gray-500 text-center">{{ $ingredient->fiber ?? 0  }}</td>
                                     <td class="px-4 py-3 w-fit border text-gray-500 text-center">{{ $ingredient->water ?? 0  }}</td>
-                                    <td class="px-4 py-3 w-fit border text-gray-500 text-center">0</td>
+                                    <td class="px-4 py-3 w-fit border text-gray-500 text-center">
+                                        {{$ing[$ingredient->id]['count']}}
+                                    </td>
                                     <td class="px-4 py-3 flex items-center justify-end w-fit">
                                         <a href="{{ route('spisok.ings.edit', $ingredient->id) }}" class=" www btn btn-sm btn-icon item-edit mr-2"><i
                                                 class="text-green-500 ti ti-pencil"></i></a>

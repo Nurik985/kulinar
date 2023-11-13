@@ -62,8 +62,8 @@
                                     </a>
                                 </div>
                             </th>
-                            <th scope="col" class="border border-gray-400 px-4 py-3 text-xs">Дневная норма</th>
-                            <th scope="col" class="border border-r-0 border-gray-400 px-4 py-3">
+                            <th scope="col" class="w-[200px] w-min-[200px] w-max-[200px] border border-gray-400 px-4 py-3 text-xs">Дневная норма</th>
+                            <th scope="col" class="w-[100px] w-min-[100px] w-max-[100px] border border-r-0 border-gray-400 px-4 py-3">
                                 <span class="sr-only"></span>
                             </th>
                         </tr>
@@ -73,11 +73,11 @@
                             @foreach ($norms as $k => $norm)
                                 <tr wire:key="{{ $norm->id }}"
                                     class="border-b font-medium text-gray-900 dark:border-gray-700">
-                                    <td class="w-1/2 px-4 py-3">{{ $norm->name }}</td>
-                                    <td class="text-gray-500 w-fit border px-4 py-3">
+                                    <td class="w-auto px-4 py-3">{{ $norm->name }}</td>
+                                    <td class="w-[200px] w-min-[200px] w-max-[200px] text-gray-500 w-fit border px-4 py-3">
                                         {{ $norm->value  }}
                                     </td>
-                                    <td class="flex w-fit items-center justify-end px-4 py-3">
+                                    <td class="w-[100px] w-min-[100px] w-max-[100px] flex w-fit items-center justify-end px-4 py-3">
                                         <a href="{{ route('spisok.norms.edit', $norm->id) }}"
                                            class="www btn btn-sm btn-icon item-edit mr-2"><i
                                                 class="ti ti-pencil text-green-500"></i></a>

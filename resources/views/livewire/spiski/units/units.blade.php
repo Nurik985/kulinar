@@ -62,10 +62,10 @@
                                     </a>
                                 </div>
                             </th>
-                            <th scope="col" class="border border-gray-400 px-4 py-3 text-xs">Грамм</th>
+                            <th scope="col" class="w-[100px] w-min-[100px] w-max-[100px] border border-gray-400 px-4 py-3 text-xs">Грамм</th>
                             <th scope="col" class="border border-gray-400 px-4 py-3 text-xs">Слова для склонения
                             </th>
-                            <th scope="col" class="border border-r-0 border-gray-400 px-4 py-3">
+                            <th scope="col" class="w-[100px] w-min-[100px] w-max-[100px] border border-r-0 border-gray-400 px-4 py-3">
                                 <span class="sr-only"></span>
                             </th>
                         </tr>
@@ -76,11 +76,11 @@
                                 <tr wire:key="{{ $unit->id }}"
                                     class="border-b font-medium text-gray-900 dark:border-gray-700">
                                     <td class="w-1/2 px-4 py-3">{{ $unit->name }}</td>
-                                    <td class="text-gray-500 w-fit border px-4 py-3">
+                                    <td class="w-[100px] w-min-[100px] w-max-[100px] text-gray-500 border px-4 py-3">
                                         {{ $unit->weight  }}
                                     </td>
-                                    <td class=" border w-1/6 px-4 py-3 text-center text-gray-500">{{ $unit->form_word  }}</td>
-                                    <td class="flex w-fit items-center justify-end px-4 py-3">
+                                    <td class="border w-auto px-4 py-3 text-center text-gray-500">{{ $unit->form_word  }}</td>
+                                    <td class="w-[100px] w-min-[100px] w-max-[100px] flex items-center justify-end px-4 py-3">
                                         <a href="{{ route('spisok.units.edit', $unit->id) }}"
                                            class="www btn btn-sm btn-icon item-edit mr-2"><i
                                                 class="ti ti-pencil text-green-500"></i></a>

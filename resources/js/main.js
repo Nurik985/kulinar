@@ -23,3 +23,8 @@ window.addEventListener('closeDelModal', function (e) {
 })
 
 window.csrf = document.querySelector('meta[name="csrf-token"]').content;
+
+window.addEventListener('hideAlert', (e) => {
+    const hideAlert = document.getElementById("hideAlert");
+    setInterval(() => hideAlert.style.opacity = '0', 3000)
+});

@@ -15,6 +15,6 @@ class Kitchen extends Model
 
     public function scopeSearch($query, $value)
     {
-        $query->where('name', 'like', "%{$value}%");
+        $res = $query->where('name', 'like', "%{$value}%");
     }
 }

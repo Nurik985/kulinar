@@ -215,11 +215,12 @@ function forceRecipeAll($recipeId): void
             }
         }
 
-        $updateRow = [];
         $i = 0;
         foreach ($updateData as $key => $value) {
             $updateRow[$i]['id'] = $key;
-            $updateRow[$i]['col_public_recipe'] = $value['col_public_recipe'];
+            if(!empty($value['col_public_recipe'])){
+                $updateRow[$i]['col_public_recipe'] = $value['col_public_recipe'];
+            }
             if (!empty($value['recept'])) {
                 $col_recipe = count($value['recept']);
             } else {
@@ -449,4 +450,16 @@ function genZapros($items, $no_items, $w_k, $method){
 
     return $newData;
 
+}
+
+function filter_mas($arr){
+    if(count($arr)>0){
+        foreach ($arr as $key => $value) {
+            if(empty($value)) unset($arr[$key]); else $arr[$key] = htmlspecialchars($value);
+        }
+        if(!empty($arr)) $arr = json_encode($arr); else $arr='';
+    } else {
+        $arr='';
+    };
+    return $arr;
 }

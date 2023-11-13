@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Recipes;
 
+use App\Livewire\Spiski\Authors\Authors;
 use App\Models\Ingredient;
 use App\Models\Recipe;
 use App\Models\Unit;
@@ -16,6 +17,7 @@ class EditRecipes extends Component
     use WithFileUploads;
 
     public $id;
+    public $recipeIdForDel;
 
     protected function rules()
     {
@@ -53,6 +55,11 @@ class EditRecipes extends Component
     public $addAutoIngRow;
     public $autoIngDataFilled = false;
     public $addAutoIngRowRes;
+    public $positiveRating = 0;
+    public $negativeRating = 0;
+    public $approv;
+    public $checked = 0;
+    public $author = 1177;
 
     public $vremyGotovki;
     public $vremyGotovkiTime = 'мин';
@@ -99,16 +106,27 @@ class EditRecipes extends Component
 
     public $status = 2;
 
-    public $temporaryUrl = false;
+    public $createDate;
+
+    public $authors;
 
     public function mount($recipeId)
     {
+
+        $this->authors = DB::table('authors')->select('id', 'name')->where('is_author', '=', 1)->orderBy('name', 'ASC')->get();
         $this->id = $recipeId;
+        $this->recipeIdForDel = $recipeId;
         $recipe = DB::table('recipes')->where('id', '=', $recipeId)->first();
 
         $this->name = $recipe->name;
         $this->title = $recipe->title;
         $this->url = $recipe->url;
+        $this->createDate = $recipe->created_at;
+        $this->positiveRating = $recipe->positive_rating;
+        $this->negativeRating = $recipe->negative_rating;
+        $this->approv = $recipe->approv;
+        $this->checked = $recipe->checked;
+        $this->author = $recipe->author_id;
 
         if(!empty($recipe->link_source)){
             $this->linkSource = $recipe->link_source;
@@ -126,7 +144,7 @@ class EditRecipes extends Component
             $this->ingLists = json_decode($recipe->zapingr, 1);
         } elseif(!empty($recipe->ingridients)){
             $ingridients = json_decode($recipe->ingridients, 1);
- 
+
             foreach ($ingridients as $key => $ingridient) {
 
                 $ing = explode("|", $ingridient[0]);
@@ -164,10 +182,10 @@ class EditRecipes extends Component
                 if(!empty($ingridient[4])){
                     $this->ingLists[$key]['inglists'][4] =  $ingridient[4];
                 }
-                
+
                 // $this->ingLists[$key]['inglists'][3] =  $ingridient[2];
-                
-                
+
+
             }
 
             //dd($this->ingLists);
@@ -211,7 +229,7 @@ class EditRecipes extends Component
             if(!empty($steps)){
                 foreach ($steps as $key => $step) {
                     if(!empty($step['text'])) {
-                        $this->stepLists[$key]['text'] = $step['text'];
+                        $this->stepLists[$key]['desc'] = $step['text'];
                     }
                     if(!empty($step['imgs'])){
                         foreach ($step['imgs'] as $k => $img) {
@@ -228,8 +246,6 @@ class EditRecipes extends Component
 
         if($recipe->img){
             $this->recipeImg = $recipe->img;
-        } else {
-            $this->temporaryUrl = true;
         }
 
         if(!empty($recipe->w_cook)){
@@ -592,6 +608,19 @@ class EditRecipes extends Component
         $this->recipeImg = '';
     }
 
+    public function basket($recipId)
+    {
+        $updateRecipe = Recipe::find($recipId);
+        $updateRecipe->update([
+            'status' => 4,
+        ]);
+
+        forceRecipeAll($recipId);
+        session()->flash('success', "Рецепт успшено отправлен в корзину");
+
+        return redirect()->to(route('recipe.index'));
+    }
+
     /********************************** COOK ******************************/
 
     public function cookSearchFunc(): void
@@ -835,8 +864,10 @@ class EditRecipes extends Component
         $zhir = 0;
         $ugl = 0;
 
-        if(!empty($this->recipeImg)){
+        if(is_object($this->recipeImg)){
             $this->storedImage = $this->recipeImg->store('recipe', 'public');
+        } else {
+            $this->storedImage = $this->recipeImg;
         }
 
         $god = date("Y");
@@ -851,15 +882,21 @@ class EditRecipes extends Component
                 }
                 if(!empty($stepList['img'])){
                     foreach ($stepList['img'] as $key => $img){
-                        $link = $stepList['img'][$key]->store('recipe/'.$god.'/'.$mes, 'public');
-                        $steps[$k]['imgs'][$key] = $link;
+                        if(is_object($img)){
+                            $link = $stepList['img'][$key]->store('recipe/'.$god.'/'.$mes, 'public');
+                            $steps[$k]['imgs'][$key] = $link;
+                        } else {
+                            $steps[$k]['imgs'][$key] = $img;
+                        }
                     }
                 }
             }
         }
 
         $ingridients = [];
+        $zapIngr = '';
         if(!empty($this->ingLists)){
+            $zapIngr = json_encode($this->ingLists, JSON_UNESCAPED_UNICODE);
             foreach ($this->ingLists as $k => $ingList) {
                 if(!empty($ingList['inglists'][0])){
                     $ingridients[$k][0] = '';
@@ -1073,6 +1110,11 @@ class EditRecipes extends Component
             'cooking_tg' => $cooking_tg,
             'portion' => $this->portion,
             'calories' => $calories,
+            'positive_rating' => $this->positiveRating,
+            'negative_rating' => $this->negativeRating,
+            'author_id' => $this->author,
+            'approv' => $this->approv,
+            'checked' => $this->checked,
             'steps' => $steps,
             'end_text' => $this->afterText,
             'img' => $this->storedImage,
@@ -1086,6 +1128,7 @@ class EditRecipes extends Component
             'ugl' => $ugl,
             'total_steps' => $total_steps,
             'autoingr' => $this->addAutoIngData,
+            'zapIngr' => $zapIngr,
         ]);
 
         if($this->status == 1){

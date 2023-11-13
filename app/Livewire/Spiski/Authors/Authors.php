@@ -3,6 +3,7 @@
 namespace App\Livewire\Spiski\Authors;
 
 use App\Models\Author;
+use App\Models\Recipe;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -15,16 +16,17 @@ class Authors extends Component
     public $search = '';
 
     #[Url(history: true)]
-    public $sortBy = 'updated_at';
+    public $sortBy = 'name';
 
     #[Url(history: true)]
-    public $sortDir = 'DESC';
+    public $sortDir = 'ASC';
 
     #[Url()]
     public $perPage = 10;
 
     public $selectedItem = 0;
     public $modText;
+    public $aut;
 
     public function paginationView()
     {
@@ -73,11 +75,19 @@ class Authors extends Component
     }
     public function render()
     {
+        $aut = Author::search($this->search)
+            ->orderBy($this->sortBy, $this->sortDir)
+            ->paginate($this->perPage);
+
+        foreach ($aut as $item) {
+            $this->aut[$item->id]['name'] = $item->name;
+            $this->aut[$item->id]['count'] = Recipe::where('author_id', '=', $item->id)->count();
+            $this->aut[$item->id]['id'] = $item->id;
+        }
+
         return view('livewire.spiski.authors.authors',
             [
-                'authors' => Author::search($this->search)
-                    ->orderBy($this->sortBy, $this->sortDir)
-                    ->paginate($this->perPage)
+                'authors' => $aut
             ]
         );
     }

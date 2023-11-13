@@ -12,6 +12,8 @@ class Redirects extends Component
     public $selectedItem = 0;
     public $delRedirect = false;
     public $mod = 'delMod';
+    public $old;
+    public $new;
 
     public function destroy()
     {
@@ -36,11 +38,23 @@ class Redirects extends Component
         $this->dispatch('closeDelModal');
     }
 
+    public function saveRedirect(){
+        Redirect::create([
+            'old-url' => $this->old,
+            'new-url' => $this->new,
+        ]);
+
+        $this->reset();
+
+        session()->flash('success', "Редирект успешно добавлен");
+
+    }
+
     public function render()
     {
         return view('livewire.redirects.redirects',
             [
-                'redirects' => Redirect::all()
+                'redirects' => Redirect::all()->sortByDesc("created_at")
             ]
         );
     }

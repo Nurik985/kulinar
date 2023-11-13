@@ -26,6 +26,8 @@ class DatabaseSeeder extends Seeder
         $this->call(AuthorSeeder::class);
         $this->call(RecipeSeeder::class);
         $this->call(CalcColumnSeeder::class);
+        $this->call(CategorySeeder::class);
+        $this->call(AdSeeder::class);
         User::factory()->create([
             'name' => 'nurik',
             'email' => 'nurik@mail.ru',

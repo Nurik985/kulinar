@@ -23,16 +23,16 @@
                     </div>
                 </div>
                 <div class="flex">
-                    <button wire:click='statusBtn(2)' type="button" class="inline-flex items-center border px-4 py-2 mr-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-[4px] hover:bg-gray-200 hover:text-gray-700 focus:bg-gray-200 focus:text-gray-700 dark:bg-blue-600 dark:hover:bg-blue-700 ">
+                    <button wire:click='statusBtn(2)' type="button" class="inline-flex items-center border px-4 py-2 mr-2 text-sm font-medium text-center text-gray-500 rounded-[4px] hover:bg-gray-200 hover:text-gray-700  @if($sortBtn == 2) bg-gray-300  @else bg-gray-100 @endif">
                         Черновик <span class="text-xs ml-1 text-gray-500"> {{$statusDraft}}</span>
                     </button>
-                    <button wire:click='statusBtn(6)' type="button" class="inline-flex items-center border px-4 py-2 mr-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-[4px] hover:bg-gray-200 hover:text-gray-700 focus:bg-gray-200 focus:text-gray-700 dark:bg-blue-600 dark:hover:bg-blue-700">
+                    <button wire:click='statusBtn(6)' type="button" class="inline-flex items-center border px-4 py-2 mr-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-[4px] hover:bg-gray-200 hover:text-gray-700 @if($sortBtn == 6) bg-gray-300 @else bg-gray-100 @endif">
                         На утверждении <span class="text-xs ml-1 text-gray-500"> {{$statusPending}}</span>
                     </button>
-                    <button wire:click='statusBtn(1)' type="button" class="inline-flex items-center border px-4 py-2 mr-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-[4px] hover:bg-gray-200 hover:text-gray-700 focus:bg-gray-200 focus:text-gray-700 dark:bg-blue-600 dark:hover:bg-blue-700">
+                    <button wire:click='statusBtn(1)' type="button" class="inline-flex items-center border px-4 py-2 mr-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-[4px] hover:bg-gray-200 hover:text-gray-700 @if($sortBtn == 1) bg-gray-300 @else bg-gray-100 @endif">
                         Опубликован <span class="text-xs ml-1 text-gray-500"> {{$statusPublished}}</span>
                     </button>
-                    <button wire:click='statusBtn(4)' type="button" class="inline-flex items-center border px-4 py-2 mr-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-[4px] hover:bg-gray-200 hover:text-gray-700 focus:bg-gray-200 focus:text-gray-700 dark:bg-blue-600 dark:hover:bg-blue-700">
+                    <button wire:click='statusBtn(4)' type="button" class="inline-flex items-center border px-4 py-2 mr-2 text-sm font-medium text-center text-gray-500 bg-gray-100 rounded-[4px] hover:bg-gray-200 hover:text-gray-700 @if($sortBtn == 4) bg-gray-300 @else bg-gray-100 @endif">
                         Корзина <span class="text-xs ml-1 text-gray-500"> {{$statusBasket}}</span>
                     </button>
                 </div>
@@ -70,6 +70,13 @@
                             </svg>
                             Добавить рецепт
                         </a>
+                        @if($sortBtn == 4)
+                        <div
+                           class="flex items-center justify-center rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-800 focus:outline-none cursor-pointer">
+                            <i class="mr-2 ti ti-trash-x-filled"></i>
+                            Очистить корзину
+                        </div>
+                        @endif
                         <div class="flex w-full items-center space-x-3 md:w-auto">
                             <select wire:model.live="perPage"
                                     class="flex w-full items-center justify-center rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:w-auto">
@@ -173,9 +180,17 @@
                                                     class="ti ti-pencil text-green-500"></i></a>
                                             <a href="javascript:;" class="btn btn-sm btn-icon item-edit mr-2 !p-0"><i
                                                     class="ti ti-eye text-purple-500"></i></a>
-                                            <span wire:click="openDelModal({{ $recipe->id }}, '{{ $recipe->name }}')"
-                                                  class="btn btn-sm btn-icon item-edit cursor-pointer !p-0"><i
-                                                    class="ti ti-trash text-red-800"></i></span>
+                                                @if($sortBtn == 4)
+                                                    <span wire:click="recover({{ $recipe->id }})"
+                                                          class="btn btn-sm btn-icon item-edit cursor-pointer !p-0"><i class="ti ti-arrow-bar-up text-green-800"></i></span>
+                                                @else
+                                                    <span wire:loading.remove wire:target="basket({{ $recipe->id }})" wire:click="basket({{ $recipe->id }})"
+                                                          class="btn btn-sm btn-icon item-edit cursor-pointer !p-0"><i
+                                                            class="ti ti-trash text-red-800"></i></span>
+                                                    <span wire:loading.block wire:loading.delay.shortest wire:target="basket({{ $recipe->id }})" class="hidden">
+                                                        <i class="animate-spin ti ti-loader"></i>
+                                                    </span>
+                                                @endif
                                             </div>
                                         </td>
                                 </tr>
@@ -203,7 +218,7 @@
                               d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
                               clip-rule="evenodd"></path>
                     </svg>
-                    <p class="mb-4 text-gray-500 dark:text-gray-300">Вы точно хотите удалить раздел <br>
+                    <p class="mb-4 text-gray-500 dark:text-gray-300">Вы точно хотите удалить рецепт <br>
                         <span wire:model.live="modText" class="text-lg font-medium">{{ $modText }}</span>?
                     </p>
                     <div class="flex items-center justify-center space-x-4">

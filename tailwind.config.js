@@ -14,6 +14,7 @@ module.exports = {
             },
             gridTemplateColumns: {
                 'custom': '50px 100px 150px auto 30px',
+                'custom2': '80% auto'
             },
             colors: {
                 primary: {
@@ -42,6 +43,7 @@ module.exports = {
                     900: '#164e63',
                     950: '#083344',
                 },
+                cred: '#ED1951'
             },
         },
         fontFamily: {

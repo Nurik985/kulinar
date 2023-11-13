@@ -3,6 +3,8 @@
 namespace App\Livewire\Spiski\Kitchens;
 
 use App\Models\Kitchen;
+use App\Models\Recipe;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -25,6 +27,17 @@ class Kitchens extends Component
 
     public $selectedItem = 0;
     public $modText;
+    public $worlds = [];
+
+    public function mount()
+    {
+        $kithens = DB::table('kitchens')->select('id', 'name')->get();
+
+        foreach ($kithens as $k => $kithen) {
+            $this->worlds[$kithen->id]['name'] = $kithen->name;
+            $this->worlds[$kithen->id]['count'] = Recipe::where('world', 'like', '%'.$kithen->name.'%')->count();
+        }
+    }
 
     public function paginationView()
     {

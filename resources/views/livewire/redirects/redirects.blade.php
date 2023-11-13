@@ -1,23 +1,23 @@
 <div>
     <section class="bg-white dark:bg-gray-900">
         <div class="mx-auto max-w-screen-xl">
-            <!-- Start coding here -->
+            @include('admin.layouts.sections.successAlert')
             <div class="bg-white dark:bg-gray-800 relative border rounded-lg overflow-hidden">
-                <form wire:submit="saveSection" class="p-4">
+                <form wire:submit="saveRedirect" class="p-4">
                     @csrf
                     <div class="grid gap-2 grid-cols-3 sm:gap-6 m-5">
                         <div class=" w-full">
-                            <input type="email" name="email" id="email"
+                            <input wire:model="old" type="text"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                   placeholder="name@company.com" required>
+                                   required>
                         </div>
                         <div class=" w-full">
-                            <input type="email" name="email" id="email"
+                            <input wire:model="new" type="text"
                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                                   placeholder="name@company.com" required>
+                                   required>
                         </div>
                         <div class="w-full">
-                            <button wire:click="openDelModal(0)"
+                            <button
                                     class="flex items-center justify-center text-white bg-green-500 hover:bg-green-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
                                 <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20"
                                      xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

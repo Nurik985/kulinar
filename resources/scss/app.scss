@@ -18,8 +18,8 @@ textarea.select2-search__field{
 }
 
 .ck-editor__editable_inline {
-    max-height: 200px;
-    min-height: 200px !important;
+    max-height: 400px;
+    min-height: 400px !important;
 }
 
 .select2-dropdown {
@@ -72,11 +72,18 @@ ul#select2-select_parent_sec-results {
 }
 
 .div_mass .check-logic {
-
     width: 15px;
     height: 15px;
     flex: none;
     margin-left: 7px;
     position: relative;
     z-index: 5;
+}
+
+.editor__editable, main .ck-editor[role='application'] .ck.ck-content, .ck.editor__editable[role='textbox'], .ck.ck-editor__editable[role='textbox'], .ck.editor[role='textbox'] {
+    padding: 0.5em 0.5em !important;
+}
+
+#hideAlert {
+    transition: opacity 1s;
 }
