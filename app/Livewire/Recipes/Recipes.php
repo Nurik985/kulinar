@@ -217,6 +217,13 @@ class Recipes extends Component
         $this->dispatch('closeDelModal');
     }
 
+    public function clearBasket()
+    {
+        DB::table('recipes')->where('status', 4)->delete();
+
+        $this->statusBasket = 0;
+    }
+
     public function render()
     {
         return view('livewire.recipes.recipes',

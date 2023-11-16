@@ -5,13 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Calc extends Model
+class Page extends Model
 {
+
     use HasFactory;
 
     protected $fillable = [
-        'ing_id',
-        'datas',
+        'name',
+        'title',
+        'text',
+        'url',
+        'status',
     ];
 
     public function scopeSearch($query, $value)

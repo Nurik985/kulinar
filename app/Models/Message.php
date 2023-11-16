@@ -5,17 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Calc extends Model
+class Message extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'ing_id',
-        'datas',
-    ];
+    protected $guarded = [];
 
     public function scopeSearch($query, $value)
     {
-        $query->where('name', 'like', "%{$value}%");
+        $query->where('text', 'like', "%{$value}%");
     }
 }

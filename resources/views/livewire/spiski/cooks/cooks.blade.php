@@ -49,7 +49,7 @@
                     <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
                         <thead class="bg-gray-200 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" class="border border-l-0 border-gray-400 px-4 py-3">
+                            <th scope="col" class="border w-auto border-l-0 border-gray-400 px-4 py-3">
                                 <div class="flex items-center">
                                     Название
                                     <a wire:click="setSortBy('name')" class="cursor-pointer">
@@ -62,10 +62,10 @@
                                     </a>
                                 </div>
                             </th>
-                            <th scope="col" class="border border-gray-400 px-4 py-3 text-xs">Коэффициент</th>
-                            <th scope="col" class="border border-gray-400 px-4 py-3 text-xs">Количество рецептов
+                            <th scope="col" class="w-150 border border-gray-400 px-4 py-3 text-xs">Коэффициент</th>
+                            <th scope="col" class="w-150  border border-gray-400 px-4 py-3 text-xs">Количество рецептов
                             </th>
-                            <th scope="col" class="border border-r-0 border-gray-400 px-4 py-3">
+                            <th scope="col" class="w-100  border border-r-0 border-gray-400 px-4 py-3">
                                 <span class="sr-only"></span>
                             </th>
                         </tr>
@@ -75,14 +75,14 @@
                             @foreach ($cooks as $k => $cook)
                                 <tr wire:key="{{ $cook->id }}"
                                     class="border-b font-medium text-gray-900 dark:border-gray-700">
-                                    <td class="w-1/2 px-4 py-3">{{ $cook->name }}</td>
-                                    <td class="min-w-[50px] max-w-[50px] text-gray-500 w-fit border px-4 py-3">
+                                    <td class="w-auto px-4 py-3">{{ $cook->name }}</td>
+                                    <td class="w-150  text-gray-500 text-center border px-4 py-3">
                                         {{ $cook->coef ?? 0 }}
                                     </td>
-                                    <td class="min-w-[50px] max-w-[50px] border px-4 py-3 text-center text-gray-500">
+                                    <td class="w-150  border px-4 py-3 text-center text-gray-500">
                                         {{$coo[$cook->id]['count']}}
                                     </td>
-                                    <td class="flex w-fit items-center justify-end px-4 py-3">
+                                    <td class="flex w-100  items-center justify-end px-4 py-3">
                                         <a href="{{ route('spisok.cook.edit', $cook->id) }}"
                                            class="www btn btn-sm btn-icon item-edit mr-2"><i
                                                 class="ti ti-pencil text-green-500"></i></a>

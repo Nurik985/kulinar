@@ -4,7 +4,7 @@
             <div class="relative overflow-hidden rounded-[4px] border bg-white dark:bg-gray-800">
                 <div
                     class="flex flex-col items-center justify-between space-y-3 p-4 md:flex-row md:space-x-4 md:space-y-0">
-                    <div class="w-full md:w-1/3">
+                    <div class="w-full md:w-1/2">
                         <div class="m-0 flex items-center">
                             <label for="search" class="sr-only">Поиск...</label>
                             <div class="relative w-full">
@@ -24,38 +24,15 @@
                     </div>
                     <div
                         class="flex w-full flex-shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0">
-                        @php
-//                            echo "<pre>";
-//                            print_r($rcolumns);
-//                            echo "</pre>";
-//
-//                            echo "<pre>";
-//                            print_r($units);
-//                            echo "</pre>";
-                        @endphp
-                        <div>
-                            <select wire:model.live="selectUnit" class="flex w-full items-center justify-center rounded-[4px] border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 md:w-auto">
-                                <option value="net">Выбрать</option>
-                                @foreach($units as $k => $unit)
-                                    <option value="{{$unit}}">{{$unit}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <button wire:click="addUnitInColumn()" @if($selectUnit == 'net') disabled @endif type="button"
-                           class="flex items-center justify-center rounded-[4px] bg-gray-300  px-4 py-2 text-sm font-medium text-white @if($selectUnit  != 'net') bg-green-500 hover:bg-green-800 @endif  focus:outline-none">
+                        <a href="{{ route('pages.create') }}"
+                           class="flex items-center justify-center rounded-lg bg-green-500 px-4 py-2 text-sm font-medium text-white hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
                             <svg class="mr-2 h-3.5 w-3.5" fill="currentColor" viewbox="0 0 20 20"
                                  xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                 <path clip-rule="evenodd" fill-rule="evenodd"
                                       d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
                             </svg>
-                            Добавить столбец
-                        </button>
-                        <button wire:loading.attr="disabled" wire:loading.class="!bg-gray-300" wire:target="saveCalc()" wire:click="saveCalc()" type="button"
-                                class="flex items-center justify-center rounded-[4px] px-4 py-2 text-sm font-medium text-white  bg-green-500 hover:bg-green-800   focus:outline-none">
-                            <i wire:loading.class="!hidden" wire:target="saveCalc()" class="ti mr-2 ti-database-import"></i>
-                            <i wire:loading wire:target="saveCalc()" class="ti mr-2 ti-rotate-clockwise-2 animate-spin"></i>
-                            Сохранить
-                        </button>
+                            Добавить страницу
+                        </a>
                         <div class="flex w-full items-center space-x-3 md:w-auto">
                             <select wire:model.live="perPage"
                                     class="flex w-full items-center justify-center rounded-[4px] border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white md:w-auto">
@@ -72,30 +49,44 @@
                     <table class="w-full text-left text-sm text-gray-500 dark:text-gray-400">
                         <thead class="bg-gray-200 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th class="w-1/2 border border-l-0 border-gray-400 px-4 py-3">Название</th>
-                            @if($columns)
-                                @foreach($columns as $k => $column)
-                                    <th wire:key="{{$k}}" class="w-120 relative text-center border border-gray-400 px-2 py-1 text-xs">{{$column}} <br><a wire:click="openDelModal({{$k}}, '{{$column}}')" class=" top-1 right-1 cursor-pointer"><i class="ti !text-[13px] text-red-600 ti-x"></i></a></th>
-                                @endforeach
-                            @endif
+                            <th scope="col" class="border border-l-0 border-gray-400 px-4 py-3">
+                                <div class="flex items-center">
+                                    Заголовок
+                                    <a wire:click="setSortBy('name')" class="cursor-pointer">
+                                        <svg class="ml-1.5 h-3 w-3" aria-hidden="true"
+                                             xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                             viewBox="0 0 24 24">
+                                            <path
+                                                d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </th>
+                            <th scope="col" class="border border-gray-400 px-4 py-3 text-xs">URL</th>
+                            <th scope="col" class="w-100 border border-r-0 border-gray-400 px-4 py-3">
+                                <span class="sr-only"></span>
+                            </th>
                         </tr>
                         </thead>
-                        <tbody class="">
-                        @if (count($ingredients) > 0)
-                            @foreach ($ingredients as $k => $ingredient)
-                                <tr wire:key="{{ $ingredient->id }}"
-                                    class="border-b font-medium text-gray-900 mb-2">
-                                    <td class="w-1/2 text-gray-500 border px-4 py-2">
-                                        {{ $ingredient->name }}
+                        <tbody>
+                        @if (count($pages) > 0)
+                            @foreach ($pages as $k => $page)
+                                <tr wire:key="{{ $page->id }}"
+                                    class="border-b font-medium text-gray-900 dark:border-gray-700">
+                                    <td class="w-auto px-4 py-3">{{ $page->name }}</td>
+                                    <td class="text-gray-500 w-auto border px-4 py-3 text-left">
+                                        {{ $page->url ?? 0 }}
                                     </td>
-
-                                    @if(!empty($columns))
-                                        @foreach($columns as $key => $column)
-                                            <td class="w-120 border px-2 py-1 text-gray-500">
-                                                <input wire:model="calcValues.{{$ingredient->id}}.{{$key}}" class="w-80 border text-[12px] border-gray-200 bg-gray-100 h-[30px] rounded-[4px] hover:border-gray-400 hover:bg-white" type="number" min="0" value="{{$calcValues[$ingredient->id][$key] ?? ''}}">
-                                            </td>
-                                        @endforeach
-                                    @endif
+                                    <td class="flex w-100 items-center justify-end px-4 py-3">
+                                        <a href="{{ route('pages.edit', $page->id) }}"
+                                           class="btn btn-sm btn-icon item-edit mr-2"><i
+                                                class="ti ti-pencil text-green-500"></i></a>
+                                        <a target="_blank" href="/{{$page->url}}" class="btn btn-sm btn-icon item-edit mr-2"><i
+                                                class="ti ti-eye text-purple-500"></i></a>
+                                        <span wire:click="openDelModal({{ $page->id }}, '{{ $page->name }}')"
+                                              class="btn btn-sm btn-icon item-edit cursor-pointer"><i
+                                                class="ti ti-trash text-red-800"></i></span>
+                                    </td>
                                 </tr>
                             @endforeach
                         @else
@@ -107,7 +98,7 @@
                         </tbody>
                     </table>
                 </div>
-                {{ $ingredients->links() }}
+                {{ $pages->links() }}
             </div>
         </div>
 
@@ -121,7 +112,7 @@
                               d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
                               clip-rule="evenodd"></path>
                     </svg>
-                    <p class="mb-4 text-gray-500 dark:text-gray-300">Вы точно хотите удалить столбец <br>
+                    <p class="mb-4 text-gray-500 dark:text-gray-300">Вы точно хотите удалить страницу <br>
                         <span wire:model="modText" class="text-lg font-medium">{{ $modText }}</span>?
                     </p>
                     <div class="flex items-center justify-center space-x-4">
@@ -129,13 +120,8 @@
                                 class="w-20 rounded-lg border border-gray-200 bg-gray-700 px-3 py-2 text-sm font-medium text-white hover:bg-gray-500 hover:text-white focus:z-10 focus:outline-none focus:ring-4 focus:ring-primary-300 dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white dark:focus:ring-gray-600">
                             Нет
                         </button>
-                        <button wire:loading.attr="disabled" wire:click="destroy()" wire:target="destroy" type="button"
-                                class="w-20 rounded-lg bg-red-600 px-3 py-2 text-center text-sm font-medium text-white hover:bg-red-700 focus:outline-none">
-                                <svg wire:loading fill='none' class="w-5 h-5 animate-spin mr-2" viewBox="0 0 32 32" xmlns='http://www.w3.org/2000/svg'>
-                                    <path clip-rule='evenodd'
-                                      d='M15.165 8.53a.5.5 0 01-.404.58A7 7 0 1023 16a.5.5 0 011 0 8 8 0 11-9.416-7.874.5.5 0 01.58.404z'
-                                      fill='currentColor' fill-rule='evenodd' />
-                                </svg>
+                        <button wire:click="destroy()" wire:loading.attr="disabled" type="button"
+                                class="w-20 rounded-lg bg-red-600 px-3 py-2 text-center text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-900">
                             Да
                         </button>
                     </div>

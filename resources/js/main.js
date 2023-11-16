@@ -9,9 +9,15 @@ const modal = new Modal(delModal)
 
 window.onload = function () {
     const preloader = document.getElementById('preloader')
+    const successAlert = document.getElementById("successAlert");
     window.setTimeout(function () {
         preloader.classList.add('hidden')
     }, 500)
+    if (successAlert != null) {
+        window.setTimeout(function () {
+            successAlert.classList.add('hidden')
+        }, 2000)
+    }
 }
 
 window.addEventListener('openDelModal', function (e) {

@@ -11,10 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('calcs', function (Blueprint $table) {
+        Schema::create('mineral_columns', function (Blueprint $table) {
             $table->id();
-            $table->integer('ing_id')->nullable();
-            $table->text('datas')->nullable();
+            $table->string('name', 250);
             $table->timestamps();
         });
     }
@@ -24,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('calcs');
+        Schema::dropIfExists('mineral_columns');
     }
 };

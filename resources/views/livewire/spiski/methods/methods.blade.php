@@ -50,7 +50,7 @@
                         <thead class="bg-gray-200 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="border border-l-0 border-gray-400 px-4 py-3">
-                                    <div class="flex items-center">
+                                    <div class="flex w-auto items-center">
                                         Название
                                         <a wire:click="setSortBy('name')" class="cursor-pointer">
                                             <svg class="ml-1.5 h-3 w-3" aria-hidden="true"
@@ -62,10 +62,10 @@
                                         </a>
                                     </div>
                                 </th>
-                                <th scope="col" class="border border-gray-400 px-4 py-3 text-xs">Коэффициент</th>
-                                <th scope="col" class="border border-gray-400 px-4 py-3 text-xs">Количество рецептов
+                                <th scope="col" class="w-150 border border-gray-400 px-4 py-3 text-xs">Коэффициент</th>
+                                <th scope="col" class="w-150 border border-gray-400 px-4 py-3 text-xs">Количество рецептов
                                 </th>
-                                <th scope="col" class="border border-r-0 border-gray-400 px-4 py-3">
+                                <th scope="col" class="w-100 border border-r-0 border-gray-400 px-4 py-3">
                                     <span class="sr-only"></span>
                                 </th>
                             </tr>
@@ -75,14 +75,14 @@
                                 @foreach ($methods as $k => $method)
                                     <tr wire:key="{{ $method->id }}"
                                         class="border-b font-medium text-gray-900 dark:border-gray-700">
-                                        <td class="w-1/2 px-4 py-3">{{ $method->name }}</td>
-                                        <td class="-gray-500 w-fit border px-4 py-3 text-center">
+                                        <td class="w-auto px-4 py-3">{{ $method->name }}</td>
+                                        <td class="w-150 border px-4 py-3 text-gray-500 text-center">
                                             {{ $method->coef ?? 0 }}
                                         </td>
-                                        <td class="w-1/2 border px-4 py-3 text-center text-gray-500">
+                                        <td class="w-150 border px-4 py-3 text-center text-gray-500">
                                             {{$met[$method->id]['count']}}
                                         </td>
-                                        <td class="flex w-fit items-center justify-end px-4 py-3">
+                                        <td class="flex w-100 items-center justify-end px-4 py-3">
                                             <a href="{{ route('spisok.method.edit', $method->id) }}"
                                                 class="www btn btn-sm btn-icon item-edit mr-2"><i
                                                     class="ti ti-pencil text-green-500"></i></a>

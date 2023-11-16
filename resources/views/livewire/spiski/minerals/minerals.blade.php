@@ -24,25 +24,11 @@
                     </div>
                     <div
                         class="flex w-full flex-shrink-0 flex-col items-stretch justify-end space-y-2 md:w-auto md:flex-row md:items-center md:space-x-3 md:space-y-0">
-                        @php
-//                            echo "<pre>";
-//                            print_r($rcolumns);
-//                            echo "</pre>";
-//
-//                            echo "<pre>";
-//                            print_r($units);
-//                            echo "</pre>";
-                        @endphp
                         <div>
-                            <select wire:model.live="selectUnit" class="flex w-full items-center justify-center rounded-[4px] border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-primary-700 md:w-auto">
-                                <option value="net">Выбрать</option>
-                                @foreach($units as $k => $unit)
-                                    <option value="{{$unit}}">{{$unit}}</option>
-                                @endforeach
-                            </select>
+                            <input wire:model.live.defer="column" type="text" class="h-[35px] rounded-[4px] border border-gray-400 {{$columnClass}}" />
                         </div>
-                        <button wire:click="addUnitInColumn()" @if($selectUnit == 'net') disabled @endif type="button"
-                           class="flex items-center justify-center rounded-[4px] bg-gray-300  px-4 py-2 text-sm font-medium text-white @if($selectUnit  != 'net') bg-green-500 hover:bg-green-800 @endif  focus:outline-none">
+                        <button wire:click="addColumn()" type="button"
+                                class="flex items-center justify-center  rounded-[4px]  px-4 py-2 bg-green-500 hover:bg-green-800 text-sm font-medium text-white focus:outline-none">
                             <svg class="mr-2 h-3.5 w-3.5" fill="currentColor" viewbox="0 0 20 20"
                                  xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                 <path clip-rule="evenodd" fill-rule="evenodd"
@@ -50,10 +36,10 @@
                             </svg>
                             Добавить столбец
                         </button>
-                        <button wire:loading.attr="disabled" wire:loading.class="!bg-gray-300" wire:target="saveCalc()" wire:click="saveCalc()" type="button"
+                        <button wire:loading.attr="disabled" wire:loading.class="!bg-gray-300" wire:target="saveMinerals()" wire:click="saveMinerals()" type="button"
                                 class="flex items-center justify-center rounded-[4px] px-4 py-2 text-sm font-medium text-white  bg-green-500 hover:bg-green-800   focus:outline-none">
-                            <i wire:loading.class="!hidden" wire:target="saveCalc()" class="ti mr-2 ti-database-import"></i>
-                            <i wire:loading wire:target="saveCalc()" class="ti mr-2 ti-rotate-clockwise-2 animate-spin"></i>
+                            <i wire:loading.class="!hidden" wire:target="saveMinerals()" class="ti mr-2 ti-database-import"></i>
+                            <i wire:loading wire:target="saveMinerals()" class="ti mr-2 ti-rotate-clockwise-2 animate-spin"></i>
                             Сохранить
                         </button>
                         <div class="flex w-full items-center space-x-3 md:w-auto">
@@ -88,11 +74,10 @@
                                     <td class="w-1/2 text-gray-500 border px-4 py-2">
                                         {{ $ingredient->name }}
                                     </td>
-
                                     @if(!empty($columns))
                                         @foreach($columns as $key => $column)
                                             <td class="w-120 border px-2 py-1 text-gray-500">
-                                                <input wire:model="calcValues.{{$ingredient->id}}.{{$key}}" class="w-80 border text-[12px] border-gray-200 bg-gray-100 h-[30px] rounded-[4px] hover:border-gray-400 hover:bg-white" type="number" min="0" value="{{$calcValues[$ingredient->id][$key] ?? ''}}">
+                                                <input wire:model="mineralValues.{{$ingredient->id}}.{{$key}}" class="w-80 border text-[12px] border-gray-200 bg-gray-100 h-[30px] rounded-[4px] hover:border-gray-400 hover:bg-white" type="number" min="0" value="{{$mineralValues[$ingredient->id][$key] ?? ''}}">
                                             </td>
                                         @endforeach
                                     @endif
@@ -131,11 +116,11 @@
                         </button>
                         <button wire:loading.attr="disabled" wire:click="destroy()" wire:target="destroy" type="button"
                                 class="w-20 rounded-lg bg-red-600 px-3 py-2 text-center text-sm font-medium text-white hover:bg-red-700 focus:outline-none">
-                                <svg wire:loading fill='none' class="w-5 h-5 animate-spin mr-2" viewBox="0 0 32 32" xmlns='http://www.w3.org/2000/svg'>
-                                    <path clip-rule='evenodd'
+                            <svg wire:loading fill='none' class="w-5 h-5 animate-spin mr-2" viewBox="0 0 32 32" xmlns='http://www.w3.org/2000/svg'>
+                                <path clip-rule='evenodd'
                                       d='M15.165 8.53a.5.5 0 01-.404.58A7 7 0 1023 16a.5.5 0 011 0 8 8 0 11-9.416-7.874.5.5 0 01.58.404z'
                                       fill='currentColor' fill-rule='evenodd' />
-                                </svg>
+                            </svg>
                             Да
                         </button>
                     </div>

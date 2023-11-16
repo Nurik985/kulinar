@@ -60,7 +60,7 @@
                         </div>
                     </div>
                     <div>
-                        <button wire:click="addBannerMenu()"
+                        <button wire:click="addBannerMenu()" type="button"
                             class="flex items-center justify-center rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-300 focus:outline-none">
                             <svg class="mr-2 h-3.5 w-3.5" fill="currentColor" viewbox="0 0 20 20"
                                  xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -119,7 +119,7 @@
                         </div>
                     </div>
                     <div>
-                        <button wire:click="addSideBarBlock()"
+                        <button wire:click="addSideBarBlock()" type="button"
                             class="flex items-center justify-center rounded-lg bg-gray-200 px-4 py-2 text-sm font-medium text-gray-800 hover:bg-gray-300 focus:outline-none">
                             <svg class="mr-2 h-3.5 w-3.5" fill="currentColor" viewbox="0 0 20 20"
                                  xmlns="http://www.w3.org/2000/svg" aria-hidden="true">

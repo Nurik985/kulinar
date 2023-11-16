@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('calcs', function (Blueprint $table) {
+        Schema::create('pages', function (Blueprint $table) {
             $table->id();
-            $table->integer('ing_id')->nullable();
-            $table->text('datas')->nullable();
+            $table->text('name');
+            $table->text('title');
+            $table->text('text');
+            $table->string('url', 255)->unique();
+            $table->integer('status');
             $table->timestamps();
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('calcs');
+        Schema::dropIfExists('pages');
     }
 };

@@ -5,20 +5,20 @@
             <div class="bg-white dark:bg-gray-800 relative border rounded-lg overflow-hidden">
                 <form wire:submit="saveRedirect" class="p-4">
                     @csrf
-                    <div class="grid gap-2 grid-cols-3 sm:gap-6 m-5">
-                        <div class=" w-full">
+                    <div class="grid gap-2 grid-cols-5 sm:gap-6 m-5">
+                        <div class="col-span-2">
                             <input wire:model="old" type="text"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:outline-none block w-full p-2.5 " placeholder="ИСХОДНЫЙ URL"
                                    required>
                         </div>
-                        <div class=" w-full">
+                        <div class="col-span-2">
                             <input wire:model="new" type="text"
-                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-[4px] focus:outline-none block w-full p-2.5 " placeholder="URL КУДА БУДЕТ РЕДИРЕКТ"
                                    required>
                         </div>
-                        <div class="w-full">
+                        <div class="col-span-1">
                             <button
-                                    class="flex items-center justify-center text-white bg-green-500 hover:bg-green-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none dark:focus:ring-primary-800">
+                                    class="w-full flex items-center h-[43px] justify-center text-white bg-green-500 hover:bg-green-800 focus:ring-4 focus:ring-primary-300 font-medium rounded-[4px] text-sm px-4 py-2 dark:bg-primary-600 dark:hover:bg-primary-700 focus:outline-none ">
                                 <svg class="h-3.5 w-3.5 mr-2" fill="currentColor" viewbox="0 0 20 20"
                                      xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                     <path clip-rule="evenodd" fill-rule="evenodd"

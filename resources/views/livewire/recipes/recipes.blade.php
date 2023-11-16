@@ -71,7 +71,7 @@
                             Добавить рецепт
                         </a>
                         @if($sortBtn == 4)
-                        <div
+                        <div wire:click="clearBasket()"
                            class="flex items-center justify-center rounded-lg bg-red-500 px-4 py-2 text-sm font-medium text-white hover:bg-red-800 focus:outline-none cursor-pointer">
                             <i class="mr-2 ti ti-trash-x-filled"></i>
                             Очистить корзину
@@ -142,11 +142,11 @@
                                         @elseif($rowSows[$key]['name'] == 'Кухня' && $rowSows[$key]['status'] == true)
                                             <td class="w-fit border px-4 py-3">
                                                 @php
-                                                    $methods = json_decode(preg_replace("/[\r\n]+/", "<br>",$recipe->world),true);
-                                                    if($methods){
-                                                        $methods = implode('<br>', $methods);
+                                                    $kitchens = json_decode(preg_replace("/[\r\n]+/", "<br>",$recipe->world),true);
+                                                    if($kitchens){
+                                                        $kitchens = implode('<br>', $kitchens);
                                                     }
-                                                    echo $methods;
+                                                    echo $kitchens;
                                                 @endphp
                                             </td>
                                         @elseif($rowSows[$key]['name'] == 'Статус' && $rowSows[$key]['status'] == true)
@@ -158,19 +158,43 @@
                                         @elseif($rowSows[$key]['name'] == 'Автор' && $rowSows[$key]['status'] == true)
                                             <td class="w-fit border px-4 py-3">{{ $recipe->author_id }}</td>
                                         @elseif($rowSows[$key]['name'] == 'Время готовки' && $rowSows[$key]['status'] == true)
-                                            <td class="w-fit border px-4 py-3">Время готовки</td>
+                                            <td class="w-fit border px-4 py-3">
+                                                @php
+                                                    $vgt = json_decode($recipe->cooking_tg, 1);
+                                                    echo $vgt['time'] .' '.$vgt['units'];
+                                                @endphp
+                                            </td>
                                         @elseif($rowSows[$key]['name'] == 'Время приготовления' && $rowSows[$key]['status'] == true)
-                                            <td class="w-fit border px-4 py-3">Время приготовления</td>
+                                            <td class="w-fit border px-4 py-3">
+                                                @php
+                                                    $vgt = json_decode($recipe->cooking_t, 1);
+                                                    echo $vgt['time'] .' '.$vgt['units'];
+                                                @endphp
+                                            </td>
                                         @elseif($rowSows[$key]['name'] == 'Порции' && $rowSows[$key]['status'] == true)
-                                            <td class="w-fit border px-4 py-3">Порции</td>
+                                            <td class="w-fit border px-4 py-3">{{ $recipe->portion }}</td>
                                         @elseif($rowSows[$key]['name'] == 'Что готовим' && $rowSows[$key]['status'] == true)
-                                            <td class="w-fit border px-4 py-3">Что готовим</td>
+                                            <td class="w-fit border px-4 py-3">
+                                                @php
+                                                    $tcooks = json_decode($recipe->w_cook, 1);
+                                                    if(!empty($tcooks)){
+                                                        echo implode(', ', $tcooks);
+                                                    }
+                                                @endphp
+                                            </td>
                                         @elseif($rowSows[$key]['name'] == 'Способ приготовления' && $rowSows[$key]['status'] == true)
-                                            <td class="w-fit border px-4 py-3">Способ приготовления</td>
+                                            <td class="w-fit border px-4 py-3">
+                                                @php
+                                                    $tmethods = json_decode($recipe->method, 1);
+                                                    if(!empty($tmethods)){
+                                                        echo implode(', ', $tmethods);
+                                                    }
+                                                @endphp
+                                            </td>
                                         @elseif($rowSows[$key]['name'] == 'Рубрика' && $rowSows[$key]['status'] == true)
                                             <td class="w-fit border px-4 py-3">Рубрика</td>
                                         @elseif($rowSows[$key]['name'] == 'Калорий' && $rowSows[$key]['status'] == true)
-                                            <td class="w-fit border px-4 py-3">Калорий</td>
+                                            <td class="w-fit border px-4 py-3">{{ $recipe->kkal }}</td>
                                         @endif
                                     @endforeach
                                         <td class="max-w-[80px] px-4 py-3 text-center">

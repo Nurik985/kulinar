@@ -9,14 +9,16 @@ use App\Http\Controllers\Admin\HeadingController;
 use App\Http\Controllers\Admin\IngredientController;
 use App\Http\Controllers\Admin\KitchenController;
 use App\Http\Controllers\Admin\MethodController;
+use App\Http\Controllers\Admin\MineralController;
 use App\Http\Controllers\Admin\NormController;
+use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PortionController;
 use App\Http\Controllers\Admin\RecipeController;
 use App\Http\Controllers\Admin\RedirectController;
 use App\Http\Controllers\Admin\ReklamaController;
 use App\Http\Controllers\Admin\SectionController;
 use App\Http\Controllers\Admin\UnitController;
-use App\Models\Recipe;
+use App\Models\Calc;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -34,10 +36,29 @@ Route::get('/clear', function () {
 
 
 Route::get('stest', function () {
-    $headings = Recipe::where('author_id', '=', 1143)->get()->toArray();
-    foreach ($headings as $k => $heading) {
-        echo $k+1 .' - ' .$heading['name']."<br>";
+    $calcs = Calc::all()->toArray();
+
+    $res = 'return [' . PHP_EOL;
+    foreach ($calcs as $key => $result) {
+        $res .= '[' . PHP_EOL;
+        if ($result['id'] != '') {
+            $res .= "'id' => " . "'" . $result['id'] . "'," . PHP_EOL;
+        }
+        if ($result['ing_id'] != '') {
+            $res .= "'ing_id' => '" . $result['ing_id'] . "'," . PHP_EOL;
+        }
+        if ($result['datas'] != '') {
+            $res .= "'datas' => '" . $result['datas'] . "'," . PHP_EOL;
+        }
+        $res .= '],' . PHP_EOL;
     }
+    $res .= '];';
+    echo "<pre>";
+    print_r($res);
+    echo "</pre>";
+//    foreach ($headings as $k => $heading) {
+//        echo $k+1 .' - ' .$heading['name']."<br>";
+//    }
 });
 
 Route::group(['prefix' => 'admin', 'name' => 'admin.', 'middleware' => ['auth', 'auth.session']], function () {
@@ -47,7 +68,9 @@ Route::group(['prefix' => 'admin', 'name' => 'admin.', 'middleware' => ['auth', 
     Route::resource('rubricator', CategoryController::class);
     Route::resource('redirects', RedirectController::class);
     Route::resource('recipe', RecipeController::class);
+    Route::resource('pages', PageController::class);
     Route::get('reklama', [ReklamaController::class, 'index'])->name('reklama');
+    Route::view('message', 'admin.messages.index')->name('messages');
     Route::post('recipe/upload', [RecipeController::class, 'upload'])->name('ckeditor.upload');
 
     Route::resource('spisok/ings', IngredientController::class, ['as' => 'spisok']);
@@ -59,6 +82,7 @@ Route::group(['prefix' => 'admin', 'name' => 'admin.', 'middleware' => ['auth', 
     Route::resource('spisok/norms', NormController::class, ['as' => 'spisok']);
     Route::resource('spisok/authors', AuthorController::class, ['as' => 'spisok']);
     Route::resource('spisok/calc', CalcController::class, ['as' => 'spisok']);
+    Route::resource('spisok/minerals', MineralController::class, ['as' => 'spisok']);
 
 
     Route::get('rubrica', [HeadingController::class, 'index'])->name('rubrica.index');

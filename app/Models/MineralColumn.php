@@ -5,13 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CalcColumn extends Model
+class MineralColumn extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
         'name',
-        'param',
-        'unit_id',
     ];
+    use HasFactory;
 }

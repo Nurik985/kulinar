@@ -1,9 +1,9 @@
 @php
-    $data = [['name' => 'Домой', 'link' => route('admin')], ['name' => 'Рубрики', 'link' => route('rubrica.index')], ['name' => 'Добавление ручной рубрики']];
+    $data = [['name' => 'Домой', 'link' => route('admin')], ['name' => 'Страницы', 'link' => route('pages.index')], ['name' => 'Добавление страницы']];
 @endphp
 @extends('admin/layouts/authLayout')
 
-@section('title', 'Добавление ручной рубрики')
+@section('title', 'Добавление страницы')
 
 @section('page-style')
     @vite(['resources/scss/editor.css'])
@@ -14,7 +14,7 @@
     <div class="p-4 lg:ml-64 min-h-screen">
         @include('admin.layouts.sections.breadcrumb', $data)
         @include('admin.layouts.sections.successAlert')
-        <livewire:headings.headings-create-manual/>
+        <livewire:pages.pages-create />
     </div>
 @endsection
 

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -28,6 +29,11 @@ class DatabaseSeeder extends Seeder
         $this->call(CalcColumnSeeder::class);
         $this->call(CategorySeeder::class);
         $this->call(AdSeeder::class);
+        $this->call(MessageSeeder::class);
+        $this->call(CalcSeeder::class);
+        $this->call(MineralColumnSeeder::class);
+        $this->call(MineralSeeder::class);
+        $this->call(PageSeeder::class);
         User::factory()->create([
             'name' => 'nurik',
             'email' => 'nurik@mail.ru',

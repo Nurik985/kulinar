@@ -120,6 +120,12 @@
             "name": "Редиректы",
             "icon": "menu-icon ti ti-arrows-left-right",
             "slug": "redirects"
+        },
+        {
+            "url": "admin/pages",
+            "name": "Страницы",
+            "icon": "menu-icon ti ti-file-info",
+            "slug": "pages"
         }
     ]
 }
