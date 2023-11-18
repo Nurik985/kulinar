@@ -79,7 +79,7 @@
                                 <tr wire:key="{{ $message->id }}"
                                     class="border-b font-medium text-gray-900 text-center">
                                     <td class="w-50 border-r px-4 py-3 text-gray-500">
-                                        <input wire:model.live="selected" type="checkbox" class="cursor-pointer" value="{{$message->id}}">
+                                        <input wire:model.lazy="selected" type="checkbox" class="cursor-pointer" value="{{$message->id}}">
                                     </td>
                                     <td class="w-200 px-4 py-3 text-xs">
                                         @php

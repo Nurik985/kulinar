@@ -25,10 +25,10 @@
             "slug": "recipe"
         },
         {
-            "url": "admin/coment",
+            "url": "admin/comments",
             "name": "Комментарии",
             "icon": "menu-icon tf-icons ti ti-messages",
-            "slug": "coment"
+            "slug": "comments"
         },
         {
             "url": "admin/message",

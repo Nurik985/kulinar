@@ -463,3 +463,8 @@ function filter_mas($arr){
     };
     return $arr;
 }
+
+function grade_sort($x, $y)
+{
+    return ($x['name'] > $y['name']);
+}

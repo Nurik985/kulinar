@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\AuthorController;
 use App\Http\Controllers\Admin\CalcController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\CommentController;
 use App\Http\Controllers\Admin\CookController;
 use App\Http\Controllers\Admin\HeadingController;
 use App\Http\Controllers\Admin\IngredientController;
@@ -18,6 +19,8 @@ use App\Http\Controllers\Admin\RedirectController;
 use App\Http\Controllers\Admin\ReklamaController;
 use App\Http\Controllers\Admin\SectionController;
 use App\Http\Controllers\Admin\UnitController;
+use App\Http\Controllers\Front\HomeController;
+use App\Http\Controllers\front\MainController;
 use App\Models\Calc;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -36,29 +39,51 @@ Route::get('/clear', function () {
 
 
 Route::get('stest', function () {
-    $calcs = Calc::all()->toArray();
+    phpinfo();
+    $bannerMenu = DB::table('categories')->select('content')->where('name', '=', 'bannerMenu')->first();
+    $row_sea = '';
+    if(!empty($bannerMenu)){
+        $menu = json_decode($bannerMenu->content, true);
+//        $itemArr = [];
+//        foreach ($menu as $k => $item) {
+//            $itemArr = array_merge($itemArr, array_keys($menu[$k]['selecteds']));
+//        }
+//
+//        $headings = DB::table('headings')->whereIn('id', $itemArr)->orderBy('name', 'ASC')->get()->toArray();
 
-    $res = 'return [' . PHP_EOL;
-    foreach ($calcs as $key => $result) {
-        $res .= '[' . PHP_EOL;
-        if ($result['id'] != '') {
-            $res .= "'id' => " . "'" . $result['id'] . "'," . PHP_EOL;
+        foreach ($menu as $key => $item) {
+            foreach ($item['selecteds'] as $k => $selected) {
+                //echo $selected."<br>";
+                $headings = DB::table('headings')->where('id', '=', $k)->first();
+                if(!empty($headings->parent_bread)){
+
+                    $parent_bread = json_decode($headings->parent_bread,true);
+                    $parent_bread_id = $parent_bread[0];
+                    $parent_sect = json_decode($headings->parent_sect,true);
+                    $parent_sect_id = $parent_sect[0];
+
+                    $parent_bread = DB::table('headings')->where('id', '=', $parent_bread_id)->first();
+                    $parent_sect = DB::table('sections')->where('id', '=', $parent_sect_id)->first();
+                    $newLocation   = "/".$parent_sect->url."/".$parent_bread->url."/".$headings->url."/";
+
+                }else{
+                    $parent_sect = json_decode($headings->parent_sect,true);
+                    $parent_sect_id = $parent_sect[0];
+                    $parent_sect = DB::table('sections')->where('id', '=', $parent_sect_id)->first();
+                    $newLocation   = "/".$parent_sect->url."/".$headings->url."/";
+                }
+
+                echo $newLocation."<br>";
+            }
         }
-        if ($result['ing_id'] != '') {
-            $res .= "'ing_id' => '" . $result['ing_id'] . "'," . PHP_EOL;
-        }
-        if ($result['datas'] != '') {
-            $res .= "'datas' => '" . $result['datas'] . "'," . PHP_EOL;
-        }
-        $res .= '],' . PHP_EOL;
     }
-    $res .= '];';
-    echo "<pre>";
-    print_r($res);
-    echo "</pre>";
-//    foreach ($headings as $k => $heading) {
-//        echo $k+1 .' - ' .$heading['name']."<br>";
-//    }
+
+
+
+//    echo "<pre>";
+//    print_r($menu);
+//    echo "</pre>";
+
 });
 
 Route::group(['prefix' => 'admin', 'name' => 'admin.', 'middleware' => ['auth', 'auth.session']], function () {
@@ -69,6 +94,7 @@ Route::group(['prefix' => 'admin', 'name' => 'admin.', 'middleware' => ['auth', 
     Route::resource('redirects', RedirectController::class);
     Route::resource('recipe', RecipeController::class);
     Route::resource('pages', PageController::class);
+    Route::resource('comments', CommentController::class);
     Route::get('reklama', [ReklamaController::class, 'index'])->name('reklama');
     Route::view('message', 'admin.messages.index')->name('messages');
     Route::post('recipe/upload', [RecipeController::class, 'upload'])->name('ckeditor.upload');
@@ -102,3 +128,7 @@ Route::group(['prefix' => 'admin', 'name' => 'admin.', 'middleware' => ['auth', 
 
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
+
+Route::get('/', [HomeController::class, 'index'])->name('front.home');
+Route::get('/{any?}', [MainController::class, 'index'])
+    ->where('any', '^(?!(api|captcha|password|files)\/?)[\/\w\.-]*');

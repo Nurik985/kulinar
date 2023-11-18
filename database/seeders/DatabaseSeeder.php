@@ -34,6 +34,7 @@ class DatabaseSeeder extends Seeder
         $this->call(MineralColumnSeeder::class);
         $this->call(MineralSeeder::class);
         $this->call(PageSeeder::class);
+        $this->call(CommentSeeder::class);
         User::factory()->create([
             'name' => 'nurik',
             'email' => 'nurik@mail.ru',
