@@ -110,8 +110,8 @@
 
                                                             </div>
 
-                                                            <input wire:input.lazy="ingSearch({{$i}})"
-                                                                   wire:model.live="ingLists.{{$i}}.ingSearchText"
+                                                            <input wire:input.lazy.debounce.500ms="ingSearch({{$i}})"
+                                                                   wire:model.live.debounce.500ms="ingLists.{{$i}}.ingSearchText"
                                                                    type="text"
                                                                    class="enterRemove findRub font-light inpt_text block w-full rounded-[4px] bg-gray-50 border-none m-0 h-7 border-1 p-1 mt-2 text-sm">
                                                         </div>
@@ -521,7 +521,7 @@
                 console.log('not');
             }
 
-            
+
             // console.log(event);
             // if(key == 'enter'){
             //     event.preventDefault();

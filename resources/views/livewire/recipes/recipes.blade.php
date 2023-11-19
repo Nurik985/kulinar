@@ -192,7 +192,19 @@
                                                 @endphp
                                             </td>
                                         @elseif($rowSows[$key]['name'] == 'Рубрика' && $rowSows[$key]['status'] == true)
-                                            <td class="w-fit border px-4 py-3">Рубрика</td>
+                                            <td class="w-fit border px-4 py-3 text-[12px]">
+                                                @php
+                                                    $headings = DB::table('headings')->select('name')->whereJsonContains('recept', $recipe->id)->get()->toArray();
+                                                    if(!empty($headings)){
+                                                        for($i=0; $i < count($headings); $i++){
+                                                            if($i > 0){
+                                                                echo '<br><br>';
+                                                            }
+                                                            echo $headings[$i]->name;
+                                                        }
+                                                    }
+                                                @endphp
+                                            </td>
                                         @elseif($rowSows[$key]['name'] == 'Калорий' && $rowSows[$key]['status'] == true)
                                             <td class="w-fit border px-4 py-3">{{ $recipe->kkal }}</td>
                                         @endif

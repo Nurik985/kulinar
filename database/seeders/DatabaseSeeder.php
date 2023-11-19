@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(SectionSeeder::class);
-        $this->call(HeadingSeeder::class);
         $this->call(IngredientSeeder::class);
         $this->call(KitchenSeeder::class);
         $this->call(MethodSeeder::class);
@@ -35,6 +34,7 @@ class DatabaseSeeder extends Seeder
         $this->call(MineralSeeder::class);
         $this->call(PageSeeder::class);
         $this->call(CommentSeeder::class);
+        $this->call(HeadingSeeder::class);
         User::factory()->create([
             'name' => 'nurik',
             'email' => 'nurik@mail.ru',

@@ -78,7 +78,7 @@
 
             $result = DB::table('headings')
                     ->select(\DB::raw("sections.url as securl"), 'headings.*')
-                    ->join('sections', 'headings.parent_sect', 'LIKE', DB::RAW("CONCAT('[\"', sections.id, '\"%')"))
+                    ->join('sections', 'headings.parent_sect', 'LIKE', DB::RAW("CONCAT('[', sections.id, '%')"))
                     ->where('headings.fade', '=', 'true')
                     ->first();
             ?>

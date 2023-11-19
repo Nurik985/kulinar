@@ -188,7 +188,8 @@ class Recipes extends Component
             'status' => 4,
         ]);
 
-        forceRecipeAll($recipId);
+
+        forceRecipeAllRemove($recipId);
         session()->flash('success', "Рецепт успшено отправлен в корзину");
 
         return redirect()->to(route('recipe.index'));

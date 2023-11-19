@@ -136,11 +136,11 @@ function forceRecipe($id): void
             $col_recipe = $res->select('id', 'status')->get();
             $col_public_recipe = $col_recipe->where('status', '=', 1);
             $arr_recipe = $col_public_recipe->pluck('id');
-            $col_recipe = $col_recipe->count();
+            $col_recipe = $arr_recipe->count();
             $col_public_recipe = $col_public_recipe->count();
         }
 
-        $arr_recipe = json_encode($arr_recipe);
+        $arr_recipe = json_encode($arr_recipe, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 
     } elseif ($result->type == 2) {
         $recipe_all = json_decode($result->recept, true);
@@ -155,6 +155,54 @@ function forceRecipe($id): void
     DB::table('headings')->where('id', $id)->update(['col_recipe' => $col_recipe, 'col_public_recipe' => $col_public_recipe, 'recept' => $arr_recipe]);
 }
 
+function forceRecipeAllRemove($recipeId): void
+{
+    $recipe = (array) DB::table('recipes')->where('id', '=', $recipeId)->first();
+    if(!empty($recipe)){
+        $headings = DB::table('headings')->where('type', '=', 1)->get();
+        foreach ($headings as  $heading) {
+            if (!empty($heading->recept)) {
+                $headingRecept = json_decode($heading->recept, true);
+            } else {
+                $headingRecept = [];
+            }
+
+            if (!empty($headingRecept)) {
+
+                if (in_array($recipeId, $headingRecept)) {
+                    unset($headingRecept[array_search($recipeId, $headingRecept)]);
+                    $updateData[$heading->id]['col_public_recipe'] = $heading->col_public_recipe - 1;
+                }
+
+                $updateData[$heading->id]['recept'] = $headingRecept;
+            }
+        }
+
+        if(!empty($updateData)){
+            $i = 0;
+            $updateRow = [];
+            foreach ($updateData as $key => $value) {
+                $updateRow[$i]['id'] = $key;
+                if(!empty($value['col_public_recipe'])){
+                    $updateRow[$i]['col_public_recipe'] = $value['col_public_recipe'];
+                }
+                if (!empty($value['recept'])) {
+                    $col_recipe = count($value['recept']);
+                } else {
+                    $col_recipe = 0;
+                }
+                $updateRow[$i]['col_recipe'] = $col_recipe;
+                $updateRow[$i]['recept'] =  json_encode($value['recept'], JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+                $i++;
+            }
+
+            batch()->update(new Heading, $updateRow, 'id');
+        }
+
+    }
+
+}
+
 function forceRecipeAll($recipeId): void
 {
     $recipe = (array) DB::table('recipes')->where('id', '=', $recipeId)->first();
@@ -162,72 +210,211 @@ function forceRecipeAll($recipeId): void
     if(!empty($recipe)){
         $arr = [];
         $update_arr = [];
-        $arrLikes = [];
+        $arr_like = [];
 
-        $headings = DB::table('headings')->where('type', '=', 1)->get();
-
-        $updateData = [];
+        $headings = DB::table('headings')->where('type', '=', 1)->get()->toArray();
 
         foreach ($headings as  $heading) {
-            $res = arrayCostomSearch($recipe, json_decode($heading->genzapros, 1));
+            $arr[$heading->id] = $heading;
+        }
+
+        foreach ($arr as $key133 => $row) {
+            $row_search = '';
+            $items = $row->ingredients_accept;
+            $no_items = $row->ingredients_block;
+            $w_k = $row->w_cook;
+            $method = $row->cooking_m;
+
+            $items = str_replace('/', '', $items);
+            $items = str_replace('|', '', $items);
+            $items = explode(' и ', $items);
+            $no_items = explode(' и ', $no_items);
+
+            $w_k = explode(' и ', $w_k);
+            $method = explode(' и ', $method);
+
+            if (!empty($items)) {
+                foreach ($items as $key => $value) {
+                    $value = explode(' или ', $value);
+
+                    if (!empty($value[0])) {
+                        if (empty($row_search)) {
+                            $row_search = 'WHERE (';
+                        } else {
+                            $row_search .= ' and (';
+                        }
+
+                        foreach ($value as $key1 => $value1) {
+                            $value1 = preg_replace('/или (.*)/', '$1', $value1);
+                            $value1 = preg_replace('/и (.*)/', '$1', $value1);
+                            $value1 = str_replace('/', '', $value1);
+                            $value1 = str_replace('|', '', $value1);
+                            $value1 = trim($value1);
+
+                            if ($key1 == 0) {
+                                $row_search .= 'ingridients LIKE "%' . $value1 . '%"';
+                            } else {
+                                $row_search .= ' OR ingridients LIKE "%' . $value1 . '%"';
+                            }
+                        }
+
+                        $row_search .= ')';
+                    }
+                }
+            }
+
+            if (!empty($no_items)) {
+                foreach ($no_items as $key => $value) {
+                    $value = explode(' или ', $value);
+
+                    if (!empty($value[0])) {
+                        if (empty($row_search)) {
+                            $row_search = 'WHERE (';
+                        } else {
+                            $row_search .= ' and (';
+                        }
+
+                        foreach ($value as $key1 => $value1) {
+                            $value1 = preg_replace('/или (.*)/', '$1', $value1);
+                            $value1 = preg_replace('/и (.*)/', '$1', $value1);
+                            $value1 = str_replace('/', '', $value1);
+                            $value1 = str_replace('|', '', $value1);
+                            $value1 = trim($value1);
+
+                            if ($key1 == 0) {
+                                $row_search .= 'ingridients NOT LIKE "%' . $value1 . '%"';
+                            } else {
+                                $row_search .= ' OR ingridients NOT LIKE "%' . $value1 . '%"';
+                            }
+                        }
+
+                        $row_search .= ')';
+                    }
+                }
+            }
+
+            if (!empty($w_k[0])) {
+                foreach ($w_k as $key => $value) {
+                    $value = explode(' или ', $value);
+
+                    if (!empty($value[0])) {
+                        if (empty($row_search)) {
+                            $row_search = 'WHERE (';
+                        } else {
+                            $row_search .= ' and (';
+                        }
+
+                        foreach ($value as $key1 => $value1) {
+                            $value1 = preg_replace('/или (.*)/', '$1', $value1);
+                            $value1 = preg_replace('/и (.*)/', '$1', $value1);
+                            $value1 = str_replace('/', '', $value1);
+                            $value1 = str_replace('|', '', $value1);
+                            $value1 = trim($value1);
+
+                            if ($key1 == 0) {
+                                $row_search .= 'w_cook LIKE "%' . $value1 . '%"';
+                            } else {
+                                $row_search .= ' OR w_cook LIKE "%' . $value1 . '%"';
+                            }
+                        }
+
+                        $row_search .= ')';
+                    }
+                }
+            }
+
+            if (!empty($method[0])) {
+                foreach ($method as $key => $value) {
+                    $value = explode(' или ', $value);
+
+                    if (!empty($value[0])) {
+                        if (empty($row_search)) {
+                            $row_search = 'WHERE (';
+                        } else {
+                            $row_search .= ' and (';
+                        }
+
+                        foreach ($value as $key1 => $value1) {
+                            $value1 = preg_replace('/или (.*)/', '$1', $value1);
+                            $value1 = preg_replace('/и (.*)/', '$1', $value1);
+                            $value1 = str_replace('/', '', $value1);
+                            $value1 = str_replace('|', '', $value1);
+                            $value1 = trim($value1);
+
+                            if ($key1 == 0) {
+                                $row_search .= 'method LIKE "%' . $value1 . '%"';
+                            } else {
+                                $row_search .= ' OR method LIKE "%' . $value1 . '%"';
+                            }
+                        }
+
+                        $row_search .= ')';
+                    }
+                }
+            }
+
+            if (!empty($row_search)) {
+                $arr_like[$row->id] = [$row->id, $row_search];
+            }
+        }
+
+        foreach ($arr_like as $key => $value) {
+            $res = arrayCostomSearch($recipe, $value[1], $key);
+
             if ($res == 'true') {
-                if (!empty($heading->recept)) {
-                    $headingRecept = json_decode($heading->recept, true);
+                if (!empty($arr[$value[0]]->recept)) {
+                    $arr_recept = json_decode($arr[$value[0]]->recept, true);
                 } else {
-                    $headingRecept = [];
+                    $arr_recept = [];
                 }
 
-                if (!empty($headingRecept)) {
-
-                    if (!in_array($recipeId, $headingRecept)) {
-                        array_push($headingRecept, $recipeId);
-                        if ($recipe['status'] == 1) {
-                            $col_public_recipe = $heading->col_public_recipe + 1;
-                        } else {
-                            $col_public_recipe = $heading->col_public_recipe;
-                        }
-                        $updateData[$heading->id]['col_public_recipe'] = $col_public_recipe;
+                if (!in_array($recipeId, $arr_recept)) {
+                    $arr_recept[] = $recipeId;
+                    if ($recipe['status'] == 1) {
+                        $arr[$value[0]]->col_public_recipe = $arr[$value[0]]->col_public_recipe + 1;
                     }
-
-                    $updateData[$heading->id]['recept'] = $headingRecept;
+                }
+                if (!empty($arr_recept)) {
+                    $arr[$value[0]]->recept = $arr_recept;
                 }
             } elseif ($res == 'false' or $recipe['status'] == 4) {
-                if (!empty($heading->recept)) {
-                    $headingRecept = json_decode($heading->recept, true);
+                if (!empty($arr[$value[0]]->recept)) {
+                    $arr_recept = json_decode($arr[$value[0]]->recept, true);
                 } else {
-                    $headingRecept = [];
+                    $arr_recept = [];
                 }
 
-                if (!empty($headingRecept)) {
-                    if (!in_array($recipeId, $headingRecept)) {
-                        unset($headingRecept[array_search($recipeId, $headingRecept)]);
-
-                        if ($recipe['status'] == 1) {
-                            $col_public_recipe = $heading->col_public_recipe - 1;
-                        } else {
-                            $col_public_recipe = $heading->col_public_recipe;
-                        }
-                        $updateData[$heading->id]['col_public_recipe'] = $col_public_recipe;
+                if (in_array($recipeId, $arr_recept)) {
+                    unset($arr_recept[array_search($recipeId, $arr_recept)]);
+                    if ($recipe['status'] == 1) {
+                        $arr[$value[0]]->col_public_recipe = $arr[$value[0]]->col_public_recipe - 1;
                     }
-
-                    $updateData[$heading->id]['recept'] = $headingRecept;
+                }
+                if (!empty($arr_recept)) {
+                    $arr[$value[0]]->recept = $arr_recept;
                 }
             }
         }
 
+        //dd($arr);
+
+        $updateRow = [];
         $i = 0;
-        foreach ($updateData as $key => $value) {
-            $updateRow[$i]['id'] = $key;
+        foreach ($arr as $key => $value) {
+            $value = (array) $value;
+            $updateRow[$i]['id'] = $value['id'];
+
             if(!empty($value['col_public_recipe'])){
                 $updateRow[$i]['col_public_recipe'] = $value['col_public_recipe'];
             }
-            if (!empty($value['recept'])) {
-                $col_recipe = count($value['recept']);
+
+            if (!empty($value['recept']) && is_array($value['recept'])) {
+                $updateRow[$i]['col_recipe'] = count($value['recept']);
             } else {
-                $col_recipe = 0;
+                $updateRow[$i]['col_recipe'] = 0;
             }
-            $updateRow[$i]['col_recipe'] = $col_recipe;
-            $updateRow[$i]['recept'] =  json_encode($value['recept']);
+
+            $updateRow[$i]['recept'] =  json_encode($value['recept'], JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
             $i++;
         }
 
@@ -235,38 +422,47 @@ function forceRecipeAll($recipeId): void
     }
 }
 
-function arrayCostomSearch($recipe, $arrLikeVal){
+function arrayCostomSearch($arr, $row, $rubkey = false){
 
-    $col = count($arrLikeVal);
+    $row = str_replace('WHERE', '', $row);
+    $row = trim($row);
+    $rrfsfs = $row;
+    $row = explode('and', $row);
+
+    $col = count($row);
+    $rrfsfs = $col;
     $col_row = 0;
     $not_like = 0;
 
-    foreach ($arrLikeVal as $itemsKey => $items) {
+    foreach ($row as $key => $value) {
+        $value = explode('OR', $value);
+        $value = str_replace('(', '', $value);
+        $value = str_replace(')', '', $value);
+
         $or = 0;
-        foreach ($items as $itemKey => $item) {
-            $item = trim($item);
+        foreach ($value as $key1 => $value1) {
+            $value1 = trim($value1);
+            if (stripos($value1, 'NOT LIKE')) {
+                $value1 = explode('NOT LIKE', $value1);
+                $value1[1] = str_replace('"', '', $value1[1]);
+                $value1[1] = str_replace('%', '', $value1[1]);
 
-            if (stripos($item, 'NOT LIKE')) {
-                $item = explode('NOT LIKE', $item);
-                $item[1] = str_replace('"', '', $item[1]);
-                $item[1] = str_replace('%', '', $item[1]);
+                $value1[0] = mb_strtolower(trim($value1[0]));
+                $value1[1] = mb_strtolower(trim($value1[1]));
 
-                $item[0] = mb_strtolower(trim($item[0]));
-                $item[1] = mb_strtolower(trim($item[1]));
-
-                if (stripos($recipe[$item[0]], $item[1]) !== false) {
+                if (stripos($arr[$value1[0]], $value1[1]) !== false) {
                     $not_like = 1;
                 } else {
                     $col_row++;
                 }
             } else {
-                $item = explode('LIKE', $item);
-                $item[1] = str_replace('"', '', $item[1]);
-                $item[1] = str_replace('%', '', $item[1]);
-                $item[0] = mb_strtolower(trim($item[0]));
-                $item[1] = mb_strtolower(trim($item[1]));
+                $value1 = explode('LIKE', $value1);
+                $value1[1] = str_replace('"', '', $value1[1]);
+                $value1[1] = str_replace('%', '', $value1[1]);
+                $value1[0] = mb_strtolower(trim($value1[0]));
+                $value1[1] = mb_strtolower(trim($value1[1]));
 
-                if (stripos(mb_strtolower($recipe[$item[0]]), $item[1]) !== false && $or == 0) {
+                if (stripos(mb_strtolower($arr[$value1[0]]), $value1[1]) !== false && $or == 0) {
                     $or = 1;
                     $col_row++;
                 }
